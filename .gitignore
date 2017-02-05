@@ -1,4 +1,5 @@
 /node_modules
 /.c9
+/Extra
 /client/bundle.js
-/cliend/bundle.js.map
+/client/bundle.js.map
