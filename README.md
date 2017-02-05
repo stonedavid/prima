@@ -1,3 +1,3 @@
-### Prima!
-# React-based Sight-reading App
+# Prima!
+### React-based Sight-reading App
 
