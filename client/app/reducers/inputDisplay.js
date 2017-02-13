@@ -89,7 +89,7 @@ function keyboard(state = {}, action) {
             let midiValueArray = [...Array(action.size).keys()].map(i => i + action.offset);
             let newKeys = midiValueArray.map(function(midiValue) {
                     return keys(undefined,createKey(midiValue))
-                    })
+                    });
             return Object.assign({},state, {
                 size: action.size,
                 offset: action.offset,
@@ -133,11 +133,7 @@ function inputDisplay(state = {}, action) {
                 {},action, {
                     node: player.play(action.midiValue, ac.currentTime, { release: 0.3 })
                 });
-            return Object.assign({}, state, {
-                queryNote: action.midiValue,
-                keyboard: keyboard(state.keyboard, action)
-            })
-            
+                
         case RELEASE_KEY:
             return Object.assign({}, state, {
                 keyboard: keyboard(state.keyboard, action)

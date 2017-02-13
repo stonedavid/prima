@@ -79,7 +79,7 @@ const Keyboard = ({ keys, onPress, onRelease }) => {
         maxWidth: (keyComponentArray.length * 40) + "px"
     };
     return (
-        <div style={{display:"block"}}>
+        <div style={{display:"block", padding:"18px"}}>
             <div id="p-wrapper" style={wrapperStyle}>
                 <ul id="piano" style={ulStyle}>
                     {keyComponentArray}

@@ -9,16 +9,26 @@ export const RELEASE_KEY = "RELEASE_KEY";
 export const PLAY_MIDI = "PLAY_MIDI";
 export const SET_PLAYER = "SET_PLAYER";
 export const DISPLAY_NOTE = "DISPLAY_NOTE";
-export const EVAL_INPUT_NOTE = "EVAL_INPUT_NOTE";
 
 /*
  * validation actions
  */
  
 export const SUBMIT_USER = "SUBMIT_USER";
+export const SUBMISSION_ERROR ="SUBMISSION_ERROR";
 export const IS_LOGGED_IN = "IS_LOGGED_IN";
 
+/*
+ * navigation actions
+ */
 
+export const CHANGE_URL = "CHANGE_URL";
+
+/*
+ * game actions
+ */
+
+export const EVAL_NOTE = "EVAL_NOTE";
 
 /*
  * action creators
@@ -58,4 +68,16 @@ export function evalInputNote(midiValue) {
 
 export function submitUser(form) {
     return { type: SUBMIT_USER, form };
+}
+
+export function submissionError(errors) {
+    return { type: SUBMISSION_ERROR, errors };
+}
+
+export function changeUrl(url) {
+    return { type: CHANGE_URL, url };
+}
+
+export function evalNote(midiValue) {
+    return { type: EVAL_NOTE, midiValue };
 }

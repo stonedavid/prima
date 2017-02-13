@@ -1,10 +1,12 @@
 import React, { PropTypes, Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
-
+import { changeUrl } from "../actions/actions.js";
 //Ok, so this protects the route well, but doesn't redirect after state change...
 //Literally, all I need is for the submit on login or signup to redirect to interface or whatever after state change
 //ok great, but the reducer doesn't have side-effects!
+
+//needs to be wrapped with connect so
 
 function authContainer(WrappedComponent) {
     
@@ -25,7 +27,7 @@ function authContainer(WrappedComponent) {
         checkAuth() {
             if (!this.props.isAuthenticated) {
                 console.log("redirecting, not logged in");
-                browserHistory.push("/signup");
+                this.props.changeUrl();
             }
         }
         
@@ -49,7 +51,13 @@ function authContainer(WrappedComponent) {
         
     });
     
-    return connect(mapStateToProps)(AuthenticatedComponent);
+    const mapDispatchToProps = (dispatch) => ({
+        changeUrl: () => {
+            dispatch(changeUrl("/login"))
+        }
+    });
+    
+    return connect(mapStateToProps,mapDispatchToProps)(AuthenticatedComponent);
         
 }
 

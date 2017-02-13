@@ -13,35 +13,34 @@ export const createVexFlowChord = (midiNote,duration,accidental) => {
         let octave = Math.floor(midiNote/12)-1;
         if (noteDict[normal] === "x") {
             if (midiNote>59) {
-                return [new StaveNote({
+                return new StaveNote({
                     clef: "treble",
                     keys: [noteDict[normal+accDict[accidental]] + "/" + octave],
                     duration: duration,
                     auto_stem: true
                 })
-                    .addAccidental(0, new Accidental(accidental))];
+                    .addAccidental(0, new Accidental(accidental));
             } else {
-                return [new StaveNote({clef: "bass",
+                return new StaveNote({clef: "bass",
                     keys: [noteDict[normal+accDict[accidental]] + "/" + octave],
                     duration: duration,
                     auto_stem: true
                 })
-                    .addAccidental(0, new Accidental(accidental))];
+                    .addAccidental(0, new Accidental(accidental));
             }
         } else {
             if (midiNote>59) {
-                return [new StaveNote({clef: "treble",
+                return new StaveNote({clef: "treble",
                     keys: [noteDict[normal] + "/" + octave],
                     duration: duration,
                     auto_stem: true
-                })];
+                });
             } else {
-                return [new StaveNote({clef: "bass",
+                return new StaveNote({clef: "bass",
                     keys: [noteDict[normal] + "/" + octave], 
                     duration: duration,
                     auto_stem: true
-                })];
+                });
             }
         }
-        
 };

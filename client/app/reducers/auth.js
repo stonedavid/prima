@@ -1,4 +1,4 @@
-import { SUBMIT_USER, submitUser } from "../actions/actions.js";
+import { SUBMIT_USER, SUBMISSION_ERROR } from "../actions/actions.js";
 
 function auth(state = {}, action) {
     switch (action.type) {
@@ -12,6 +12,13 @@ function auth(state = {}, action) {
                 token: "12345",
                 isAuthenticated: true
             });
+            
+        case SUBMISSION_ERROR:
+            console.log("SUBMISSION ERROR");
+            return Object.assign({}, state, {
+                isAuthenticated: false,
+                errors: action.errors
+            })
             
         default:
             return state;

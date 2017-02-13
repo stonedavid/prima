@@ -10,7 +10,17 @@ const Home = () =>
     <MuiThemeProvider>
       <Card>
         <CardTitle title="Welcome to Prima!" subtitle="Improve your sight-reading" />
-        <Display displayNote={60} />
+        <Display
+          midiValues={
+            [60,67,64,72]
+          } 
+          durations={
+            ["8","8","8","8"]
+          }
+          accidentals={
+            ["","","",""]
+          }
+        />
         <CardActions>
             <FlatButton label="Get Started" onClick={() => browserHistory.push("/signup")}/>
         </CardActions>

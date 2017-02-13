@@ -1,11 +1,12 @@
+
+
 import React, { PropTypes, Component } from 'react';
 import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import Divider from "material-ui/Divider";
 import MuiThemeProvider  from "material-ui/styles/MuiThemeProvider";
 
-class SignUpComponent extends Component {
+class UserForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,8 +21,6 @@ class SignUpComponent extends Component {
     onChange(event) {
         this.setState({
             [event.target.name]: event.target.value,
-        }, function() {
-            console.log(this.state);
         });
         
     }
@@ -29,28 +28,34 @@ class SignUpComponent extends Component {
     render() {
         return (
         <MuiThemeProvider>
-            <form onSubmit={(e) => this.props.onSubmit(e,this.state)} style={{boxShadow: "0px 0px 0px 0px"}}>
+            <form onSubmit={(e) => this.props.onSubmit(e,this.state)}>
                 <Card>
-                    <CardHeader
-                        title="Create a profile:"
-                        style={{textAlign: "left"}}
-                    /><br/>
-                    
                     <TextField
+                        floatingLabelText="Your name"
                         name={"userName"}
                         onChange={this.onChange}
+                        errorText={this.props.errors.userName}
                     /><br/>
                     <TextField
+                        floatingLabelText="Email address"
                         name={"email"}
                         onChange={this.onChange}
+                        errorText={this.props.errors.email}
                     /><br/>
                     <TextField
+                        floatingLabelText="Password"
+                        type="password"
                         name={"password"}
                         onChange={this.onChange}
+                        errorText={this.props.errors.password}
                     />
                     <br/>
                     <CardActions>
-                        <FlatButton label="Submit" type="submit"/>
+                        <FlatButton label="Log In" type="submit" primary={true} />
+                        <CardText>
+                            Don't have a profile?
+                        </CardText>
+                        <FlatButton label="Sign Up" secondary={true} />
                     </CardActions>
                 </Card>
             </form>
@@ -60,4 +65,4 @@ class SignUpComponent extends Component {
 }
 
 
-export default SignUpComponent;
+export default UserForm;
