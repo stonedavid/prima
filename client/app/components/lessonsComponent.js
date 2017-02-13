@@ -13,7 +13,7 @@ const styles = {
     justifyContent: 'space-around',
   },
   gridList: {
-    width: 500,
+    width: 1000,
     height: "auto",
     overflowY: 'auto',
   },
@@ -26,17 +26,37 @@ import Display from "./displayComponent.js";
 const Lessons = () => (
   <div style={styles.root}>
     <GridList
-      cellHeight={"auto"}
+      cellHeight={350}
       style={styles.gridList}
     >
       <GridTile 
-        cols={2}
+        cols={1}
         children={
           <FloatingTile
             initZ = {1}
-            floatZ = {3}
+            floatZ = {5}
             children = {
-              <h1> Float Me! </h1>
+              <Display 
+                midiValues={ [61,62,63,64,65] }
+                durations={ ["q","q","q","q","q"] }
+                accidentals={ ["","","","",""] }
+                />
+            }
+          />
+        }
+      />
+      <GridTile 
+        cols={1}
+        children={
+          <FloatingTile
+            initZ = {1}
+            floatZ = {5}
+            children = {
+              <Display 
+                midiValues={ [61,62,63,64,65] }
+                durations={ ["q","q","q","q","q"] }
+                accidentals={ ["","","","",""] }
+                />
             }
           />
         }
@@ -46,19 +66,7 @@ const Lessons = () => (
         children={
           <FloatingTile
             initZ = {1}
-            floatZ = {3}
-            children = {
-              <h1> Float Me! </h1>
-            }
-          />
-        }
-      />
-      <GridTile 
-        cols={2}
-        children={
-          <FloatingTile
-            initZ = {1}
-            floatZ = {3}
+            floatZ = {2}
             children = {
               <h1> Float Me! </h1>
             }

@@ -30,7 +30,9 @@ class FloatingTile extends Component {
                 style = {{
                     margin: 20,
                     textAlign: 'center',
-                    display: 'inline-block'
+                    display: 'inline-block',
+                    borderRadius: "20px",
+                    padding: 0
                 }}
                 zDepth = { this.state.zDepth }
                 onMouseOver = { this.onMouseOver }
