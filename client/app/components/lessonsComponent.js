@@ -37,9 +37,7 @@ const Lessons = () => (
             floatZ = {5}
             children = {
               <Display 
-                midiValues={ [61,62,63,64,65] }
-                durations={ ["q","q","q","q","q"] }
-                accidentals={ ["","","","",""] }
+                noteString = {"C4/q,E4/8,Eb4/h,D4/16"}
                 />
             }
           />
@@ -53,22 +51,8 @@ const Lessons = () => (
             floatZ = {5}
             children = {
               <Display 
-                midiValues={ [61,62,63,64,65] }
-                durations={ ["q","q","q","q","q"] }
-                accidentals={ ["","","","",""] }
+                noteString = {"C4/q,E4/8,Eb4/h,D4/16"}
                 />
-            }
-          />
-        }
-      />
-      <GridTile 
-        cols={2}
-        children={
-          <FloatingTile
-            initZ = {1}
-            floatZ = {2}
-            children = {
-              <h1> Float Me! </h1>
             }
           />
         }

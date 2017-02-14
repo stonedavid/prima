@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from "react"
 import { Flow } from "vexflow";
 import { createVexFlowChord } from "../game/vexflow.js";
+import Rational from "rational-number";
 import v1 from "node-uuid";
 
 const {
@@ -35,23 +36,25 @@ class Display extends Component{
     this.drawCanvas();
   }
   
-  /*methods for: init draws blank...update clears and draws chord*/
   drawCanvas() {
     
-    
-    let width = this.props.midiValues.length * 50 + 50;
+    /*
+     * Set up div
+     */
     
     const svgContainer = document.createElement("div");
     const id = v1();
-    console.log("ID",id);
     svgContainer.id = id;
-    
-    
     
     if (this.refs.vfWrap.childNodes[0]) {
       this.refs.vfWrap.removeChild(this.refs.vfWrap.childNodes[0]);
     }
     this.refs.vfWrap.appendChild(svgContainer);
+    
+    
+    /*
+     * Bind vexflow methods
+     */
     
     const vf = new Factory({renderer: {
           selector: id
@@ -64,8 +67,14 @@ class Display extends Component{
     const notes = score.notes.bind(score);
     const beam = score.beam.bind(score);
 
+    /*
+     * Score constants and functions
+     */
+
     let x = 10;
     let y = 0;
+    
+    const rhythmicDivisions = ["w","h","q","8","16"];
     
     function makeSystem(width) {
       var system = vf.System({ x: x, y: y, width: width, spaceBetweenStaves: 10 });
@@ -73,26 +82,43 @@ class Display extends Component{
       return system;
     }
     
-    let system = makeSystem(300);
+    function drawLine(notes,startIndex,endIndex) {
+      let sl = new StaveLine({
+          first_note: notes.tickables[startIndex], 
+          last_note: notes.tickables[endIndex]
+      });
+      sl.setContext(ctx).draw();
+    }
+    
+    
+    
+    
+    /*
+     * Render to score
+     */
+     
+    let width = this.props.noteString.split(",").length * 50 + 50;
+    let system = makeSystem(width);
+    const time = this.props.noteString.split(",").reduce( (a,b) => {
+      let bVal = b[b.length - 1];
+      let bRat = new Rational( 1, Math.pow(2,rhythmicDivisions.indexOf(bVal)) );
+      
+      return a.add(bRat);
+    }, new Rational(0,1)
+    );
+    
     
     let vc1 = voice(
-          notes('C4/q, G4/q'),
-          { time: "2/4" }
+          notes(this.props.noteString),
+          { time: time.toString() }
         );
   
     system.addStave({
       voices: [vc1]
     }).addClef('treble');
     
-    let staveLine1 = new StaveLine({
-        first_note: vc1.tickables[0],
-        last_note: vc1.tickables[1],
-      });
-    
-   
 
     vf.draw();
-    staveLine1.setContext(ctx).draw();
     
     const svg = svgContainer.childNodes[0];
     svg.style.top = "0px";
@@ -172,6 +198,11 @@ class Display extends Component{
         }}>
       </div>;
     }
+}
+
+Display.propTypes = {
+  noteString: PropTypes.string.isRequired,
+  line: PropTypes.bool,
 }
 
 export default Display;
