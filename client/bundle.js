@@ -41635,6 +41635,7 @@
 	    StaveNote = _vexflow.Flow.StaveNote;
 
 
+	console.log(StaveLine);
 	console.log(Factory);
 
 	var Display = function (_Component) {
@@ -41682,6 +41683,8 @@
 	          selector: id
 	        } });
 
+	      var ctx = vf.getContext();
+
 	      var score = vf.EasyScore({ throwOnError: true });
 	      var voice = score.voice.bind(score);
 	      var notes = score.notes.bind(score);
@@ -41698,18 +41701,19 @@
 
 	      var system = makeSystem(300);
 
-	      var vc1 = voice(notes('C#5/q[id="m1a"], B4/8, A4/16[id="m2a"]'), { time: "7/16" });
+	      var vc1 = voice(notes('C4/q, G4/q'), { time: "2/4" });
 
 	      system.addStave({
 	        voices: [vc1]
 	      }).addClef('treble');
 
-	      vf.Curve({
-	        from: vc1.tickables[0],
-	        to: vc1.tickables[1]
+	      var staveLine1 = new StaveLine({
+	        first_note: vc1.tickables[0],
+	        last_note: vc1.tickables[1]
 	      });
 
 	      vf.draw();
+	      staveLine1.setContext(ctx).draw();
 
 	      var svg = svgContainer.childNodes[0];
 	      svg.style.top = "0px";

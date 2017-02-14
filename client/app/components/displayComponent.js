@@ -18,6 +18,7 @@ const {
   StaveNote,
 } = Flow;
 
+console.log(StaveLine);
 console.log(Factory);
 
 class Display extends Component{
@@ -55,6 +56,8 @@ class Display extends Component{
     const vf = new Factory({renderer: {
           selector: id
         }});
+        
+    const ctx = vf.getContext();
     
     const score = vf.EasyScore({ throwOnError: true });
     const voice = score.voice.bind(score);
@@ -73,22 +76,23 @@ class Display extends Component{
     let system = makeSystem(300);
     
     let vc1 = voice(
-          notes('C#5/q[id="m1a"], B4/8, A4/16[id="m2a"]'),
-          { time: "7/16" }
+          notes('C4/q, G4/q'),
+          { time: "2/4" }
         );
   
     system.addStave({
       voices: [vc1]
     }).addClef('treble');
     
-    vf.Curve({
-        from: vc1.tickables[0],
-        to: vc1.tickables[1],
+    let staveLine1 = new StaveLine({
+        first_note: vc1.tickables[0],
+        last_note: vc1.tickables[1],
       });
     
    
 
     vf.draw();
+    staveLine1.setContext(ctx).draw();
     
     const svg = svgContainer.childNodes[0];
     svg.style.top = "0px";
