@@ -38211,9 +38211,7 @@
 	      null,
 	      _react2.default.createElement(_Card.CardTitle, { title: "Welcome to Prima!", subtitle: "Improve your sight-reading" }),
 	      _react2.default.createElement(_displayComponent2.default, {
-	        midiValues: [60, 67, 64, 72],
-	        durations: ["8", "8", "8", "8"],
-	        accidentals: ["", "", "", ""]
+	        noteString: "C4/8"
 	      }),
 	      _react2.default.createElement(
 	        _Card.CardActions,
@@ -41632,6 +41630,7 @@
 	    StaveLine = _vexflow.Flow.StaveLine,
 	    Beam = _vexflow.Flow.Beam,
 	    Stave = _vexflow.Flow.Stave,
+	    GhostNote = _vexflow.Flow.GhostNote,
 	    Renderer = _vexflow.Flow.Renderer,
 	    RESOLUTION = _vexflow.Flow.RESOLUTION,
 	    StaveConnector = _vexflow.Flow.StaveConnector,
@@ -41641,6 +41640,7 @@
 
 	console.log(StaveLine);
 	console.log(Factory);
+	console.log(GhostNote);
 
 	var Display = function (_Component) {
 	  _inherits(Display, _Component);
@@ -41706,7 +41706,7 @@
 	      var rhythmicDivisions = ["w", "h", "q", "8", "16"];
 
 	      function makeSystem(width) {
-	        var system = vf.System({ x: x, y: y, width: width, spaceBetweenStaves: 10 });
+	        var system = vf.System({ x: x, y: y, width: width, spaceBetweenStaves: 6 });
 	        x += width;
 	        return system;
 	      }
@@ -41725,18 +41725,35 @@
 
 	      var width = this.props.noteString.split(",").length * 50 + 50;
 	      var system = makeSystem(width);
-	      var time = this.props.noteString.split(",").reduce(function (a, b) {
-	        var bVal = b[b.length - 1];
-	        var bRat = new _rationalNumber2.default(1, Math.pow(2, rhythmicDivisions.indexOf(bVal)));
 
-	        return a.add(bRat);
+	      var durations = this.props.noteString.split(",").map(function (str) {
+	        return rhythmicDivisions.indexOf(str.split("/").pop());
+	      });
+
+	      var timeMap = durations.map(function (dur) {
+	        return new _rationalNumber2.default(1, Math.pow(2, dur));
+	      });
+
+	      var time = timeMap.reduce(function (a, b) {
+	        return a.add(b);
 	      }, new _rationalNumber2.default(0, 1));
 
+	      var ghosts = voice(durations.map(function (dur) {
+	        console.log(dur);
+	        return new GhostNote(rhythmicDivisions[dur]);
+	      }), { time: time.toString() });
+
 	      var vc1 = voice(notes(this.props.noteString), { time: time.toString() });
+
+	      console.log(vc1, ghosts);
 
 	      system.addStave({
 	        voices: [vc1]
 	      }).addClef('treble');
+
+	      system.addStave({
+	        voices: [ghosts]
+	      }).addClef('bass');
 
 	      vf.draw();
 
@@ -41750,51 +41767,6 @@
 	      svgContainer.style.height = "180px";
 	      svgContainer.style.position = "relative";
 	      svgContainer.style.display = "inline-block";
-
-	      /*
-	      // Create an SVG renderer and attach it to the DIV element named "div".
-	      
-	      const renderer = new Renderer(svgContainer, Renderer.Backends.SVG);
-	       // Configure the rendering context.
-	      const context = renderer.getContext();
-	      context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
-	       // bottomstaff at 60 will put middle C in center
-	      const topStaff = new Stave(10, 0, width);
-	      const bottomStaff = new Stave(10, 60, width);
-	       // Add a clef
-	      topStaff.addClef("treble");
-	      bottomStaff.addClef("bass");
-	       var brace = new StaveConnector(topStaff, bottomStaff).setType(3);
-	      var lineLeft = new StaveConnector(topStaff, bottomStaff).setType(1);
-	      var lineRight = new StaveConnector(topStaff, bottomStaff).setType(7);
-	       topStaff.setContext(context).draw();
-	      bottomStaff.setContext(context).draw();
-	       brace.setContext(context).draw();
-	      lineLeft.setContext(context).draw();
-	      lineRight.setContext(context).draw();
-	       
-	      
-	      let midiValues = this.props.midiValues;
-	      let durations = this.props.durations;
-	      let accidentals = this.props.accidentals;
-	      
-	      let staff = ( midiValues[0] > 59 ? topStaff : bottomStaff );
-	      
-	      let notes = [];
-	      
-	      midiValues.forEach( (midiValue, i) => {
-	        console.log(midiValue,durations[i], accidentals[i]);
-	        notes.push(createVexFlowChord(midiValue,durations[i],accidentals[i]))
-	        }
-	      );
-	      
-	      var beams = Beam.generateBeams(notes);
-	       beams.forEach(function(beam) {
-	        beam.setContext(context).draw();
-	      });
-	      
-	      let bb = Formatter.FormatAndDraw(context,staff,notes);
-	      */
 	    }
 	  }, {
 	    key: "render",

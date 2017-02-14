@@ -11,15 +11,7 @@ const Home = () =>
       <Card>
         <CardTitle title="Welcome to Prima!" subtitle="Improve your sight-reading" />
         <Display
-          midiValues={
-            [60,67,64,72]
-          } 
-          durations={
-            ["8","8","8","8"]
-          }
-          accidentals={
-            ["","","",""]
-          }
+          noteString={"C4/8"}
         />
         <CardActions>
             <FlatButton label="Get Started" onClick={() => browserHistory.push("/signup")}/>
