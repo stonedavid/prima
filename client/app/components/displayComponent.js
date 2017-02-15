@@ -20,10 +20,6 @@ const {
   StaveNote,
 } = Flow;
 
-console.log(StaveLine);
-console.log(Factory);
-console.log(GhostNote);
-
 class Display extends Component{
   constructor(props) {
     super(props);
@@ -93,10 +89,8 @@ class Display extends Component{
     }
     
     
-    
-    
     /*
-     * Render to score
+     * Maps of note values for different vexflow objects
      */
      
     let width = this.props.noteString.split(",").length * 50 + 50;
@@ -113,36 +107,56 @@ class Display extends Component{
         );
     });
     
-    let time = timeMap.reduce( function(a, b) {
+    let time = timeMap.reduce( (a,b) => {
       return a.add(b);
     }, new Rational(0,1));
     
-    let ghosts = voice(durations.map(function(dur) {
-        console.log(dur);
-        return new GhostNote(rhythmicDivisions[dur]);
-      }),
-      { time: time.toString() }
-      );
+    
+    /*
+     * Iterate over notestring, creating orthogonal bass and treble voices
+     */
+    
+    let trebleNotes = [];
+    let bassNotes = [];
+    
+    this.props.noteString.split(",").forEach(str => {
+      
+      let octave = /(\d)\//.exec(str)[1];
+      let duration = str.split("/").pop();
+      
+      if (octave > 3) {
+        trebleNotes = trebleNotes.concat(notes(str));
+        bassNotes.push(new GhostNote(duration));
+      } else {
+        bassNotes = bassNotes.concat(notes(str, {clef: "bass"}));
+        trebleNotes.push(new GhostNote(duration));
+      }
+    });
     
     
-    let vc1 = voice(
-          notes(this.props.noteString),
-          { time: time.toString() }
-        );
+    let trebleVoice = voice(trebleNotes, { time: time.toString() });
+    let bassVoice = voice(bassNotes, { time: time.toString() });
         
-    console.log(vc1,ghosts);
   
     system.addStave({
-      voices: [vc1]
+      voices: [trebleVoice]
     }).addClef('treble');
     
     system.addStave({
-      voices: [ghosts]
+      voices: [bassVoice]
     }).addClef('bass');
     
+    system.addConnector("single");
+
+    system.addConnector("singleRight");
+
+
+    /*
+     * Draw and format SVG
+     */
 
     vf.draw();
-    
+
     const svg = svgContainer.childNodes[0];
     svg.style.top = "0px";
     svg.style.height = 180;

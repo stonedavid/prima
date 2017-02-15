@@ -37,7 +37,7 @@ const Lessons = () => (
             floatZ = {5}
             children = {
               <Display 
-                noteString = {"C4/q,E4/8,Eb4/h,D4/16"}
+                noteString = {"C4/q,E3/8,Eb4/h,D2/16"}
                 />
             }
           />

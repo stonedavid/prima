@@ -2,8 +2,6 @@ import  { generateCardSet } from "./lessons/noteIdentification.js";
 
 let cardSet = generateCardSet(55,67,["#","b"]);
 
-console.log(cardSet);
-
 const state = {
     
     navigation: {

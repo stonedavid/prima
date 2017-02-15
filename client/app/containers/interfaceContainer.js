@@ -11,9 +11,7 @@ import Display from "../components/displayComponent.js";
 const mapStateToProps = (state) => {
     return {
         keys: state.inputDisplay.keyboard.keys,
-        midiValues: [state.gameState.currentCard.midiValue],
-        accidentals: [state.gameState.currentCard.accidental],
-        durations: [state.gameState.currentCard.duration],
+        noteString: state.gameState.currentCard.noteString,
         currentScore: state.gameState.currentScore
     };
 };
@@ -44,12 +42,12 @@ const progressStyle = {
     width: "600px"
 }
 
-const Interface = ({ midiValues, durations, accidentals, keys, onPress, onRelease, currentScore }) => {
+const Interface = ({ noteString, keys, onPress, onRelease, currentScore }) => {
     return (
     <div>
       
         <Card>
-            <Display midiValues={ midiValues } accidentals={ accidentals } durations={ durations }  />
+            <Display noteString= {noteString} />
             <progress value={currentScore} max="20" style={progressStyle}></progress>
 
             <Keyboard keys={keys} onPress={onPress} onRelease={onRelease} />
