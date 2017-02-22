@@ -7,20 +7,55 @@ import { browserHistory } from "react-router";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Tabs, Tab } from "material-ui/Tabs";
 
+import Auth from "../src/modules/Auth.js";
+
+const loggedInTabs = [
+    {
+        label: "Play",
+        value: "/lessons"
+    },
+    
+    {
+        label: "Progress",
+        value: "/progress"
+    },
+    
+    { 
+        label: "Log Out",
+        value: "/logout"
+    }
+];
+
+const newVisitorTabs = [
+    {
+        label: "Play",
+        value: "/lessons"
+    },
+    
+    {
+        label: "Log In",
+        value: "/login"
+    }
+];
+
 const NavBar = ({ currentPage, onChange, isAuthenticated }) => (
     <MuiThemeProvider>
         <Tabs 
-            value={currentPage}
+            value={Auth.isUserAuthenticated() && currentPage==="/" ? "/lessons" : currentPage} //sorry kludge, but i'd rather do this than wrap the whole router with connect and browserHistory is async so it makes a mess
             onChange={onChange}
         >
-            <Tab label="Home" value="">
-            </Tab>
-            <Tab label="Lessons" value="/lessons">
-            </Tab>
-            <Tab label="Interface" value="/interface">
-            </Tab>
-            <Tab label={ isAuthenticated === true ? "Log out" : "Log in" } value="/login">
-            </Tab>
+            { Auth.isUserAuthenticated() ?
+                loggedInTabs.map( (tab,key) => {
+                    return (
+                    <Tab key={key} label={tab.label} value={tab.value}></Tab>
+                    )
+                })
+            : newVisitorTabs.map( (tab,key) => {
+                    return (
+                    <Tab key={key} label={tab.label} value={tab.value}></Tab>
+                    )
+                })
+            }
         </Tabs>
     </MuiThemeProvider>
 );

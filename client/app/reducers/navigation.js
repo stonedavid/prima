@@ -4,6 +4,7 @@ import { browserHistory } from "react-router";
 function navigation(state = {}, action) {
     switch (action.type) {
         case CHANGE_URL:
+            console.log(action);
             browserHistory.push(action.url);
             return Object.assign({}, state, {
                 currentPage: action.url

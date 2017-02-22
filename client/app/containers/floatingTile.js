@@ -24,7 +24,6 @@ class FloatingTile extends Component {
     onMouseOut = () => this.setState({ zDepth: this.props.initZ});
     
     render() {
-        console.log(this.state);
         return (
             <Paper 
                 style = {{

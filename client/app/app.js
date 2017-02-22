@@ -6,7 +6,7 @@
 import React from "react";
 
 import { Router, browserHistory } from 'react-router';
-import routes from "./routes.js";
+import routes from "./src/routes.js";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // css

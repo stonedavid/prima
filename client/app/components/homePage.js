@@ -13,8 +13,14 @@ const Home = () =>
         <Display
           noteString={"C4/8"}
         />
-        <CardActions>
-            <FlatButton label="Get Started" onClick={() => browserHistory.push("/signup")}/>
+        <CardActions style={{ margin: "0px" }}>
+            <FlatButton 
+              label="Get Started" 
+              onClick={() => browserHistory.push("/signup")}
+              style={{
+                marginRight: "0"
+              }}
+              />
         </CardActions>
       </Card>
     </MuiThemeProvider>
