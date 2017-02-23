@@ -152,6 +152,14 @@ class Display extends Component{
     
     let trebleVoice = voice(trebleNotes, { time: time.toString() });
     let bassVoice = voice(bassNotes, { time: time.toString() });
+    
+    system.setOptions({
+      x: -30,
+      y: y,
+      width: width,
+      spaceBetweenStaves: 6,
+      factory: vf
+    });
         
   
     system.addStave({
@@ -170,6 +178,8 @@ class Display extends Component{
      * Draw and format SVG
      */
      
+    console.log(system.startX);
+    
     console.log(system);
     
     
@@ -177,7 +187,7 @@ class Display extends Component{
     
     vf.draw();
     
-    console.log(system.parts[0].voices[0].tickables[0].note_heads[0].x);
+    console.log(system);
 
     const svg = svgContainer.childNodes[0];
     svg.style.top = "0px";
@@ -185,11 +195,19 @@ class Display extends Component{
     svg.style.left = "0px";
     svg.style.width = width + 20 + "px";
     svg.style.position = "relative";
-    svg.style.overflow = "visible";
+    svg.style.overflow = "hidden";
     svgContainer.style.height = "180px";
     svgContainer.style.position = "relative";
     svgContainer.style.display = "inline-block";
     
+    var pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathEl.setAttribute('d','M 50 0 V 180' );
+    pathEl.style.stroke = 'rgb(0,0,0)';
+    pathEl.style.strokeWidth = '5';
+    pathEl.style.fill = 'none';
+    //svg.appendChild(pathEl);
+    //svg.removeChild(pathEl);
+    //svg.parentNode.replaceChild(svg.cloneNode(false), svg);
 
   }
   render() {

@@ -530,7 +530,7 @@
 
 /***/ },
 /* 6 */
-[615, 7, 8],
+[617, 7, 8],
 /* 7 */
 /***/ function(module, exports) {
 
@@ -1015,7 +1015,7 @@
 
 /***/ },
 /* 11 */
-[616, 12],
+[618, 12],
 /* 12 */
 /***/ function(module, exports) {
 
@@ -5247,7 +5247,7 @@
 
 /***/ },
 /* 44 */
-[616, 45],
+[618, 45],
 /* 45 */
 12,
 /* 46 */
@@ -5489,7 +5489,7 @@
 /* 50 */
 4,
 /* 51 */
-[615, 32, 34],
+[617, 32, 34],
 /* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -20954,13 +20954,13 @@
 
 /***/ },
 /* 185 */
-[617, 186, 192, 194],
+[619, 186, 192, 194],
 /* 186 */
-[618, 187, 190, 191],
+[620, 187, 190, 191],
 /* 187 */
-[619, 188],
+[621, 188],
 /* 188 */
-[620, 189],
+[622, 189],
 /* 189 */
 /***/ function(module, exports) {
 
@@ -20973,7 +20973,7 @@
 
 /***/ },
 /* 190 */
-[621, 187],
+[623, 187],
 /* 191 */
 /***/ function(module, exports) {
 
@@ -21003,7 +21003,7 @@
 
 /***/ },
 /* 192 */
-[622, 193],
+[624, 193],
 /* 193 */
 /***/ function(module, exports) {
 
@@ -21592,21 +21592,21 @@
 
 /***/ },
 /* 206 */
-[617, 207, 213, 215],
+[619, 207, 213, 215],
 /* 207 */
-[618, 208, 211, 212],
+[620, 208, 211, 212],
 /* 208 */
-[619, 209],
+[621, 209],
 /* 209 */
-[620, 210],
+[622, 210],
 /* 210 */
 189,
 /* 211 */
-[621, 208],
+[623, 208],
 /* 212 */
 191,
 /* 213 */
-[622, 214],
+[624, 214],
 /* 214 */
 193,
 /* 215 */
@@ -27408,9 +27408,9 @@
 
 	var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
 
-	__webpack_require__(604);
+	__webpack_require__(606);
 
-	var _reactTapEventPlugin = __webpack_require__(608);
+	var _reactTapEventPlugin = __webpack_require__(610);
 
 	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
 
@@ -27468,7 +27468,7 @@
 
 	var _lessonsComponent2 = _interopRequireDefault(_lessonsComponent);
 
-	var _DashboardPage = __webpack_require__(623);
+	var _DashboardPage = __webpack_require__(604);
 
 	var _DashboardPage2 = _interopRequireDefault(_DashboardPage);
 
@@ -41850,6 +41850,14 @@
 	      var trebleVoice = voice(trebleNotes, { time: time.toString() });
 	      var bassVoice = voice(bassNotes, { time: time.toString() });
 
+	      system.setOptions({
+	        x: -30,
+	        y: y,
+	        width: width,
+	        spaceBetweenStaves: 6,
+	        factory: vf
+	      });
+
 	      system.addStave({
 	        voices: [trebleVoice]
 	      }).addClef('treble');
@@ -41866,11 +41874,13 @@
 	       * Draw and format SVG
 	       */
 
+	      console.log(system.startX);
+
 	      console.log(system);
 
 	      vf.draw();
 
-	      console.log(system.parts[0].voices[0].tickables[0].note_heads[0].x);
+	      console.log(system);
 
 	      var svg = svgContainer.childNodes[0];
 	      svg.style.top = "0px";
@@ -41878,10 +41888,19 @@
 	      svg.style.left = "0px";
 	      svg.style.width = width + 20 + "px";
 	      svg.style.position = "relative";
-	      svg.style.overflow = "visible";
+	      svg.style.overflow = "hidden";
 	      svgContainer.style.height = "180px";
 	      svgContainer.style.position = "relative";
 	      svgContainer.style.display = "inline-block";
+
+	      var pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+	      pathEl.setAttribute('d', 'M 50 0 V 180');
+	      pathEl.style.stroke = 'rgb(0,0,0)';
+	      pathEl.style.strokeWidth = '5';
+	      pathEl.style.fill = 'none';
+	      //svg.appendChild(pathEl);
+	      //svg.removeChild(pathEl);
+	      //svg.parentNode.replaceChild(svg.cloneNode(false), svg);
 	    }
 	  }, {
 	    key: "render",
@@ -79130,13 +79149,151 @@
 /* 604 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Auth = __webpack_require__(471);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	var _reactRedux = __webpack_require__(172);
+
+	var _Dashboard = __webpack_require__(605);
+
+	var _Dashboard2 = _interopRequireDefault(_Dashboard);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var DashboardPage = function (_React$Component) {
+	    _inherits(DashboardPage, _React$Component);
+
+	    /**
+	     * Class constructor
+	     **/
+	    function DashboardPage(props) {
+	        _classCallCheck(this, DashboardPage);
+
+	        var _this = _possibleConstructorReturn(this, (DashboardPage.__proto__ || Object.getPrototypeOf(DashboardPage)).call(this, props));
+
+	        console.log("props", _this.props);
+	        _this.state = {
+	            secretData: ""
+	        };
+	        return _this;
+	    }
+
+	    /**
+	     * This method will exec post init render
+	     **/
+
+
+	    _createClass(DashboardPage, [{
+	        key: "componentDidMount",
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var xhr = new XMLHttpRequest();
+	            console.log("email", this.props.email);
+	            xhr.open("get", "/api/users/" + this.props.email);
+	            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	            xhr.setRequestHeader("Authorization", "bearer " + _Auth2.default.getToken());
+	            xhr.responseType = "json";
+	            xhr.addEventListener("load", function () {
+	                if (xhr.status === 200) {
+	                    _this2.setState({
+	                        secretData: xhr.response.message
+	                    });
+	                }
+	            });
+	            xhr.send();
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(_Dashboard2.default, { secretData: this.state.secretData });
+	        }
+	    }]);
+
+	    return DashboardPage;
+	}(_react2.default.Component);
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        email: state.auth.email
+	    };
+	};
+
+	DashboardPage = (0, _reactRedux.connect)(mapStateToProps)(DashboardPage);
+
+	exports.default = DashboardPage;
+
+/***/ },
+/* 605 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Card = __webpack_require__(473);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Dashboard = function Dashboard(_ref) {
+	    var secretData = _ref.secretData;
+	    return _react2.default.createElement(
+	        _Card.Card,
+	        { className: "container" },
+	        _react2.default.createElement(_Card.CardTitle, {
+	            title: "Dashboard",
+	            subtitle: "You should get access to this page only after authorization."
+	        }),
+	        secretData && _react2.default.createElement(
+	            _Card.CardText,
+	            { style: { fontSize: "16px", color: "green" } },
+	            secretData
+	        )
+	    );
+	};
+
+	Dashboard.propTypes = {
+	    secretData: _react.PropTypes.string.isRequired
+	};
+
+		exports.default = Dashboard;
+
+/***/ },
+/* 606 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(605);
+	var content = __webpack_require__(607);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(607)(content, {});
+	var update = __webpack_require__(609)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -79153,10 +79310,10 @@
 	}
 
 /***/ },
-/* 605 */
+/* 607 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(606)();
+	exports = module.exports = __webpack_require__(608)();
 	// imports
 
 
@@ -79167,7 +79324,7 @@
 
 
 /***/ },
-/* 606 */
+/* 608 */
 /***/ function(module, exports) {
 
 	/*
@@ -79223,7 +79380,7 @@
 
 
 /***/ },
-/* 607 */
+/* 609 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -79475,11 +79632,11 @@
 
 
 /***/ },
-/* 608 */
+/* 610 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var invariant = __webpack_require__(609);
-	var defaultClickRejectionStrategy = __webpack_require__(610);
+	var invariant = __webpack_require__(611);
+	var defaultClickRejectionStrategy = __webpack_require__(612);
 
 	var alreadyInjected = false;
 
@@ -79501,15 +79658,15 @@
 	  alreadyInjected = true;
 
 	  __webpack_require__(40).injection.injectEventPluginsByName({
-	    'TapEventPlugin':       __webpack_require__(611)(shouldRejectClick)
+	    'TapEventPlugin':       __webpack_require__(613)(shouldRejectClick)
 	  });
 	};
 
 
 /***/ },
-/* 609 */
+/* 611 */
 8,
-/* 610 */
+/* 612 */
 /***/ function(module, exports) {
 
 	module.exports = function(lastTouchEvent, clickTimestamp) {
@@ -79520,7 +79677,7 @@
 
 
 /***/ },
-/* 611 */
+/* 613 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -79544,14 +79701,14 @@
 
 	"use strict";
 
-	var EventConstants = __webpack_require__(612);
+	var EventConstants = __webpack_require__(614);
 	var EventPluginUtils = __webpack_require__(42);
 	var EventPropagators = __webpack_require__(39);
 	var SyntheticUIEvent = __webpack_require__(71);
-	var TouchEventUtils = __webpack_require__(613);
+	var TouchEventUtils = __webpack_require__(615);
 	var ViewportMetrics = __webpack_require__(72);
 
-	var keyOf = __webpack_require__(614);
+	var keyOf = __webpack_require__(616);
 	var topLevelTypes = EventConstants.topLevelTypes;
 
 	var isStartish = EventPluginUtils.isStartish;
@@ -79697,7 +79854,7 @@
 
 
 /***/ },
-/* 612 */
+/* 614 */
 /***/ function(module, exports) {
 
 	/**
@@ -79793,7 +79950,7 @@
 	module.exports = EventConstants;
 
 /***/ },
-/* 613 */
+/* 615 */
 /***/ function(module, exports) {
 
 	/**
@@ -79841,7 +79998,7 @@
 
 
 /***/ },
-/* 614 */
+/* 616 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -79880,7 +80037,7 @@
 	module.exports = keyOf;
 
 /***/ },
-/* 615 */
+/* 617 */
 /***/ function(module, exports, __webpack_require__, __webpack_module_template_argument_0__, __webpack_module_template_argument_1__) {
 
 	/**
@@ -79996,7 +80153,7 @@
 	module.exports = PooledClass;
 
 /***/ },
-/* 616 */
+/* 618 */
 /***/ function(module, exports, __webpack_require__, __webpack_module_template_argument_0__) {
 
 	/**
@@ -80067,7 +80224,7 @@
 	module.exports = warning;
 
 /***/ },
-/* 617 */
+/* 619 */
 /***/ function(module, exports, __webpack_require__, __webpack_module_template_argument_0__, __webpack_module_template_argument_1__, __webpack_module_template_argument_2__) {
 
 	var baseGetTag = __webpack_require__(__webpack_module_template_argument_0__),
@@ -80135,7 +80292,7 @@
 
 
 /***/ },
-/* 618 */
+/* 620 */
 /***/ function(module, exports, __webpack_require__, __webpack_module_template_argument_0__, __webpack_module_template_argument_1__, __webpack_module_template_argument_2__) {
 
 	var Symbol = __webpack_require__(__webpack_module_template_argument_0__),
@@ -80169,7 +80326,7 @@
 
 
 /***/ },
-/* 619 */
+/* 621 */
 /***/ function(module, exports, __webpack_require__, __webpack_module_template_argument_0__) {
 
 	var root = __webpack_require__(__webpack_module_template_argument_0__);
@@ -80181,7 +80338,7 @@
 
 
 /***/ },
-/* 620 */
+/* 622 */
 /***/ function(module, exports, __webpack_require__, __webpack_module_template_argument_0__) {
 
 	var freeGlobal = __webpack_require__(__webpack_module_template_argument_0__);
@@ -80196,7 +80353,7 @@
 
 
 /***/ },
-/* 621 */
+/* 623 */
 /***/ function(module, exports, __webpack_require__, __webpack_module_template_argument_0__) {
 
 	var Symbol = __webpack_require__(__webpack_module_template_argument_0__);
@@ -80248,7 +80405,7 @@
 
 
 /***/ },
-/* 622 */
+/* 624 */
 /***/ function(module, exports, __webpack_require__, __webpack_module_template_argument_0__) {
 
 	var overArg = __webpack_require__(__webpack_module_template_argument_0__);
@@ -80258,144 +80415,6 @@
 
 	module.exports = getPrototype;
 
-
-/***/ },
-/* 623 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Auth = __webpack_require__(471);
-
-	var _Auth2 = _interopRequireDefault(_Auth);
-
-	var _reactRedux = __webpack_require__(172);
-
-	var _Dashboard = __webpack_require__(624);
-
-	var _Dashboard2 = _interopRequireDefault(_Dashboard);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var DashboardPage = function (_React$Component) {
-	    _inherits(DashboardPage, _React$Component);
-
-	    /**
-	     * Class constructor
-	     **/
-	    function DashboardPage(props) {
-	        _classCallCheck(this, DashboardPage);
-
-	        var _this = _possibleConstructorReturn(this, (DashboardPage.__proto__ || Object.getPrototypeOf(DashboardPage)).call(this, props));
-
-	        console.log("props", _this.props);
-	        _this.state = {
-	            secretData: ""
-	        };
-	        return _this;
-	    }
-
-	    /**
-	     * This method will exec post init render
-	     **/
-
-
-	    _createClass(DashboardPage, [{
-	        key: "componentDidMount",
-	        value: function componentDidMount() {
-	            var _this2 = this;
-
-	            var xhr = new XMLHttpRequest();
-	            console.log("email", this.props.email);
-	            xhr.open("get", "/api/users/" + this.props.email);
-	            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	            xhr.setRequestHeader("Authorization", "bearer " + _Auth2.default.getToken());
-	            xhr.responseType = "json";
-	            xhr.addEventListener("load", function () {
-	                if (xhr.status === 200) {
-	                    _this2.setState({
-	                        secretData: xhr.response.message
-	                    });
-	                }
-	            });
-	            xhr.send();
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(_Dashboard2.default, { secretData: this.state.secretData });
-	        }
-	    }]);
-
-	    return DashboardPage;
-	}(_react2.default.Component);
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        email: state.auth.email
-	    };
-	};
-
-	DashboardPage = (0, _reactRedux.connect)(mapStateToProps)(DashboardPage);
-
-	exports.default = DashboardPage;
-
-/***/ },
-/* 624 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Card = __webpack_require__(473);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Dashboard = function Dashboard(_ref) {
-	    var secretData = _ref.secretData;
-	    return _react2.default.createElement(
-	        _Card.Card,
-	        { className: "container" },
-	        _react2.default.createElement(_Card.CardTitle, {
-	            title: "Dashboard",
-	            subtitle: "You should get access to this page only after authorization."
-	        }),
-	        secretData && _react2.default.createElement(
-	            _Card.CardText,
-	            { style: { fontSize: "16px", color: "green" } },
-	            secretData
-	        )
-	    );
-	};
-
-	Dashboard.propTypes = {
-	    secretData: _react.PropTypes.string.isRequired
-	};
-
-		exports.default = Dashboard;
 
 /***/ }
 /******/ ])));
