@@ -5,34 +5,13 @@
 
 // there are a few ways to sort... i think duo does a module sort based on the last time any 
 // part of a module was reviewed, and then does an individual sort within the module
-
-/**
- * Card schema
- *
- * {
-     noteString: string, [A-G][#,b,n,""][0-8] / [w,h,q,8,16],
-     midiValue: int, [0-127],
-     difficulty: 0.3,
-     timestamp: Math.random(),
-     due: 1, this is the refractory period in seconds
- }
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- */
+// for each is slow, who cares, i dunno
 
 
+// THIS STILL NEEDS THE LOOPS TO BE SET FOR DURATIONS AND ACCIDENTALS...USE MAP??
+// CAREFUL -- THIS LOOP ALREADY QUIETLY HANDLES DIATONIC SETS WITH "ELSE IF"
 
-
-/*
- * Example module for just 5 notes
- */
-
-export const generateCardSet = (minimumMidi, maximumMidi, accidentals) => {
+export const generateCardSet = (minimumMidi, maximumMidi, accidentals, durations) => {
     const noteDict = ["c","x","d","x","e","f","x","g","x","a","x","b"];
     const accDict = {"#": -1, "b": 1};
     const size = maximumMidi - minimumMidi;
@@ -50,7 +29,7 @@ export const generateCardSet = (minimumMidi, maximumMidi, accidentals) => {
                     midiValue: midiNote,
                     difficulty: 0.3,
                     timestamp: Math.random(),
-                    due: 1
+                    period: 1
                 })
             })
         } else if (noteDict[normal] !== "x") {
@@ -60,13 +39,15 @@ export const generateCardSet = (minimumMidi, maximumMidi, accidentals) => {
                 midiValue: midiNote,
                 difficulty: 0.3,
                 timestamp: Math.random(),
-                due: 1
+                period: 1
             })
         }
     });
         
     return {
+        difficulty: 0.3,
         timestamp: 0,
+        period: 86400, // 24 hours is seconds, will result in roughly 2 day refractory period for successful completion
         cards: cardSet.sort( (a, b) => {
                 let x = ( (Date.now() / 1000) - a.timestamp ) / a.due; 
                 let y = ( (Date.now() / 1000) - b.timestamp ) / b.due;

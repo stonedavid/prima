@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch) => {
             xhr.responseType = "json";
             xhr.addEventListener("load", () => {
                 if (xhr.status === 200) {
-                    //dispatch(submitUser(state)); //changing this now, should just redirect to login
+                    dispatch(submissionError({}));
                     dispatch(changeUrl("/login"));
                 } else {
                     const errors = xhr.response.errors ? xhr.response.errors : {};

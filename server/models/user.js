@@ -3,6 +3,7 @@
 
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const curriculum = require("../data/defaultCurriculum.js");
 
 // define the User model schema
 const UserSchema = new mongoose.Schema({
@@ -11,7 +12,11 @@ const UserSchema = new mongoose.Schema({
         index: { unique: true }
     },
     password: String,
-    name: String
+    name: String,
+    curriculum: {
+        complete: Array,
+        incomplete: { type: Array, default: curriculum }
+    }
 });
 
 /**

@@ -27,10 +27,9 @@ const mapDispatchToProps = (dispatch) => {
             xhr.responseType = "json";
             xhr.addEventListener("load", () => {
                 if (xhr.status === 200) {
-                    dispatch(submitUser(state)); // checking this reducer...apparently right now it just adds user to the state
-                    
                     Auth.authenticateUser(xhr.response.token);
-                    
+                    dispatch(submitUser(state)); // checking this reducer...apparently right now it just adds user to the state
+                    dispatch(submissionError({}));
                     dispatch(changeUrl("/"));
                 } else {
                     const errors = xhr.response.errors ? xhr.response.errors : {};

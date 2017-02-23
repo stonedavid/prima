@@ -54,9 +54,25 @@ class Display extends Component{
      * Bind vexflow methods
      */
     
-    const vf = new Factory({renderer: {
+    const VF = function() {
+      return
+    };
+    
+    VF.prototype = new Factory({renderer: {
           selector: id
         }});
+        
+    VF.prototype.draw = function() {
+      this.systems.forEach(i => i.setContext(this.context).format());
+      this.staves.forEach(i => i.setContext(this.context).draw());
+      this.voices.forEach(i => i.setContext(this.context).draw());
+      this.renderQ.forEach(i => {
+      if (!i.isRendered()) i.setContext(this.context).draw();
+      });
+      this.systems.forEach(i => i.setContext(this.context).draw());
+    };
+    
+    const vf = new VF();
         
     const ctx = vf.getContext();
     
@@ -75,7 +91,7 @@ class Display extends Component{
     const rhythmicDivisions = ["w","h","q","8","16"];
     
     function makeSystem(width) {
-      var system = vf.System({ x: x, y: y, width: width, spaceBetweenStaves: 6 });
+      var system =  vf.System({ x: x, y: y, width: width, spaceBetweenStaves: 6 });
       x += width;
       return system;
     }
@@ -149,13 +165,19 @@ class Display extends Component{
     system.addConnector("single");
 
     system.addConnector("singleRight");
-
-
+    
     /*
      * Draw and format SVG
      */
-
+     
+    console.log(system);
+    
+    
+    
+    
     vf.draw();
+    
+    console.log(system.parts[0].voices[0].tickables[0].note_heads[0].x);
 
     const svg = svgContainer.childNodes[0];
     svg.style.top = "0px";

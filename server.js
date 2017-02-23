@@ -112,9 +112,21 @@ app.post("/auth/login", (req, res, next) => {
     })(req, res, next);
 });
 
-app.get("/api/dashboard", (req, res) => {
+/**
+ * API routes here
+ * 
+ * GET ALL cardsets for USER
+ * 
+ * GET one CARDSET for USER
+ * 
+ * POST one CARDSET for USER
+ * 
+ **/
+
+app.get("/api/users/:user", (req, res) => {
+    console.log(req.params)
     res.status(200).json({
-        message: "You're authorized to see this secret message!"
+        message: req.params.user
     });
 });
 

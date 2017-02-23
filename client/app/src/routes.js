@@ -5,6 +5,7 @@ import Interface from "../containers/interfaceContainer.js";
 import Signup from "../containers/signupContainer.js";
 import Login from "../containers/loginContainer.js";
 import Lessons from "../components/lessonsComponent.js";
+import Dashboard from "../containers/DashboardPage.js";
 
 
 import Auth from "./modules/Auth";
@@ -16,7 +17,7 @@ const routes = {
             path: "/",
             getComponent: (location, callback) => {
                 if (Auth.isUserAuthenticated()) {
-                    callback(null, Lessons);
+                    callback(null, Dashboard);
                 } else {
                     callback(null, Home);
                 }

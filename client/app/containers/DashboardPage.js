@@ -1,5 +1,6 @@
 import React from "react";
 import Auth from "../src/modules/Auth";
+import { connect } from "react-redux";
 import Dashboard from "../components/Dashboard.js";
 
 class DashboardPage extends React.Component {
@@ -9,7 +10,7 @@ class DashboardPage extends React.Component {
      **/
     constructor(props) {
         super(props);
-        
+        console.log("props",this.props);
         this.state = {
             secretData: ""
         };
@@ -20,7 +21,8 @@ class DashboardPage extends React.Component {
      **/ 
     componentDidMount() {
         const xhr = new XMLHttpRequest();
-        xhr.open("get", "/api/dashboard");
+        console.log("email",this.props.email);
+        xhr.open("get", "/api/users/" + this.props.email);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.setRequestHeader("Authorization", `bearer ${Auth.getToken()}`);
         xhr.responseType = "json";
@@ -39,4 +41,13 @@ class DashboardPage extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        email: state.auth.email
+    }
+};
+
+DashboardPage = connect(mapStateToProps)(DashboardPage);
+
 export default DashboardPage;
+
