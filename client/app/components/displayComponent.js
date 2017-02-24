@@ -154,7 +154,7 @@ class Display extends Component{
     let bassVoice = voice(bassNotes, { time: time.toString() });
     
     system.setOptions({
-      x: -30,
+      x: -100,
       y: y,
       width: width,
       spaceBetweenStaves: 6,
@@ -177,19 +177,14 @@ class Display extends Component{
     /*
      * Draw and format SVG
      */
-     
-    console.log(system.startX);
-    
-    console.log(system);
     
     
     
     
     vf.draw();
-    
-    console.log(system);
 
     const svg = svgContainer.childNodes[0];
+    console.log("SVG",svg.childNodes);
     svg.style.top = "0px";
     svg.style.height = 180;
     svg.style.left = "0px";
