@@ -128,6 +128,8 @@ class Display extends Component{
     }, new Rational(0,1));
     
     
+    console.log(time.toString());
+    
     /*
      * Iterate over notestring, creating orthogonal bass and treble voices
      */

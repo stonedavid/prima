@@ -35,20 +35,22 @@ class Animation extends Component {
         super(props);
         this.state = {
             x: 10,
-            distancePerSecond: 15
+            timestamp: 0,
+            svg: null,
+            trebleTickables: [],
+            bassTickables: []
         };
     }
 
     componentDidMount() {
-        this.drawCanvas();
-        this.updateOffset();
+        this.initDraw();
     }
     
     componentDidUpdate() {
         window.requestAnimationFrame(this.updateOffset);
     }
     
-    drawCanvas = () => {
+    initDraw = () => {
         /*
          * Set up div
          */
@@ -57,9 +59,9 @@ class Animation extends Component {
         const id = v1();
         svgContainer.id = id;
 
-        if (this.refs.vfWrap.childNodes[0]) {
+        /*if (this.refs.vfWrap.childNodes[0]) {
             this.refs.vfWrap.removeChild(this.refs.vfWrap.childNodes[0]);
-        }
+        }*/
         this.refs.vfWrap.appendChild(svgContainer);
 
 
@@ -196,40 +198,116 @@ class Animation extends Component {
 
         system.addConnector("singleRight");
         
+        
+        
         /*
          * Draw!
          */
 
         const svg = svgContainer.childNodes[0];
+        
         vf.draw();
+        const trebleTickables = system.parts[0].voices[0].tickables;
+        const bassTickables = system.parts[1].voices[0].tickables;
         svg.style.top = "0px";
         svg.style.height = 180;
-        svg.style.left = this.state.x + "px";
-        svg.style.width = this.state.width + 20 + "px";
+        //svg.style.left = this.state.x + "px";
+        svg.style.width = "250px";
         svg.style.position = "relative";
         svg.style.overflow = "hidden";
         svgContainer.style.height = "180px";
         svgContainer.style.position = "relative";
         svgContainer.style.display = "inline-block";
         svgContainer.style.overflow = "hidden";
-
-        var pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        pathEl.setAttribute('d', 'M 50 0 V 180');
-        pathEl.style.stroke = 'rgb(0,0,0)';
-        pathEl.style.strokeWidth = '5';
-        pathEl.style.fill = 'none';
-        //svg.appendChild(pathEl);
+        
+        this.setState({
+            svg: svg,
+            trebleTickables: trebleTickables,
+            bassTickables: bassTickables
+        });
         //svg.removeChild(pathEl);
         //svg.parentNode.replaceChild(svg.cloneNode(false), svg);
     }
 
-    updateOffset = () => {
+    updateOffset = (timestamp) => {
+        let newX;
+        let svg = this.state.svg;
+        if (!this.state.timestamp) {
+            newX = this.state.x;
+        } else {
+            newX = this.state.x - ((timestamp - this.state.timestamp) * (.1)); 
+        }
+        
+        if (newX < -100) {return;}
+        
+        let currentIntersection = this.state.trebleTickables.filter( tickable => {
+            let bb = tickable.getBoundingBox();
+            return !!bb &&(bb.x + this.state.x - 50 < 0) && (bb.w + bb.x + this.state.x - 50 > 0);
+        });
+        
+        currentIntersection = currentIntersection[0] ? currentIntersection[0].attrs.el.id : null;
+    
+        
+        svg.childNodes.forEach(node => {
+            if (node.id === "playhead") {
+                svg.removeChild(node);
+            } else if (node.id === currentIntersection) {
+                var filter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
+                                        filter.setAttribute("id","f1");
+                                        filter.setAttribute("x","0");
+                                        filter.setAttribute("y","0");
+
+                                        var gaussianFilter = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur");
+                                        gaussianFilter.setAttribute("in","SourceGraphic");
+                                        gaussianFilter.setAttribute("stdDeviation","15");
+
+                                        filter.appendChild(gaussianFilter);
+                                        node.appendChild(filter);
+                node.childNodes.forEach( g => {
+                    if (g.className.baseVal  === "vf-note") {
+                        g.childNodes.forEach( h => {
+                            
+                            switch (h.className.baseVal) {
+                                
+                                case "vf-notehead":
+                                    h.childNodes.forEach( i => {
+                                        
+                                        i.setAttribute("style","fill: green; stroke: green; -webkit-filter: blur(25px);")
+                                    });
+                                case "vf-stem":
+                                    h.childNodes.forEach( i => {
+                                        i.setAttribute("style","fill: green; stroke: green; -webkit-filter: blur(25px);")
+                                    });
+                                case "vf-flag":
+                                    h.childNodes.forEach( i => {
+                                        i.setAttribute("style","fill: green; stroke: green; -webkit-filter: blur(25px);")
+                                    });
+                                default:
+                                    return
+                            }
+                        })
+                    }
+                });
+                node.setAttribute("transform",`translate(${this.state.x},0)`);
+            } else {
+                node.setAttribute("transform",`translate(${this.state.x},0)`);
+            }
+        });
+        
+        var pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        
+        pathEl.setAttribute('d', `M 50 0 V 180`);
+        pathEl.setAttribute("id","playhead");
+        pathEl.style.stroke = 'rgb(0,0,0)';
+        svg.appendChild(pathEl);
+        
         this.setState((prevState,props) => {
             return {
-                x: prevState.x - 1
+                x: newX,
+                timestamp: timestamp,
+                svg: svg
             };
         });
-        this.drawCanvas();
     }
 
     render() {

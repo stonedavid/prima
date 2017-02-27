@@ -6,13 +6,29 @@ import FlatButton from "material-ui/FlatButton";
 import Animation from "./Animation.js";
 import Display from "./displayComponent";
 
+const genRandomNoteString = (length) => {
+  var string = "";
+  var notes = ["A","B","C","D","E","F","G"];
+  var rhythms = ["h","q","8"];
+  var octaves = ["3","4","5"]
+  for (var i = 0; i<length; i++) {
+    string+= notes[Math.floor(Math.random() * 7)] + octaves[Math.floor(Math.random() * 3)] + "/" + rhythms[Math.floor(Math.random() * 3)] + ",";
+  }
+  
+  return string.substring(0, string.length - 1);
+};
+
+let noteString = genRandomNoteString(101);
+
+console.log(noteString);
+
 const Home = () =>
   (
     <MuiThemeProvider>
       <Card>
         <CardTitle title="Welcome to Prima!" subtitle="Improve your sight-reading" />
         <Animation
-          noteString={"C4/8,D4/8,E4/8,F4/8,G4/8,A4/8,B4/8,C5/8"}
+          noteString={noteString}
         />
         <CardActions style={{ margin: "0px" }}>
             <FlatButton 
