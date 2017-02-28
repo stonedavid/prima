@@ -34,9 +34,12 @@ class Animation extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            nUpdates: 0,
+            BPM: 60,
             x: 10,
             timestamp: 0,
             svg: null,
+            currentIntersection: null,
             trebleTickables: [],
             bassTickables: []
         };
@@ -47,7 +50,7 @@ class Animation extends Component {
     }
     
     componentDidUpdate() {
-        window.requestAnimationFrame(this.updateOffset);
+        setTimeout(() => this.updateOffset(Date.now()),16);
     }
     
     initDraw = () => {
@@ -207,8 +210,24 @@ class Animation extends Component {
         const svg = svgContainer.childNodes[0];
         
         vf.draw();
+        
+        
         const trebleTickables = system.parts[0].voices[0].tickables;
         const bassTickables = system.parts[1].voices[0].tickables;
+        
+        
+        trebleTickables.map( (tickable,i) => {
+            let bb = tickable.getBoundingBox();
+            if (i < trebleTickables.length - 1) {
+                let nextbb = trebleTickables[i + 1].getBoundingBox();
+                tickable.distanceToNext = nextbb.x - bb.x;
+                return tickable
+            };
+            return tickable;
+        })
+        
+        console.log("Treble ticks: should have prop distanceToNext",trebleTickables);
+        
         svg.style.top = "0px";
         svg.style.height = 180;
         //svg.style.left = this.state.x + "px";
@@ -230,57 +249,54 @@ class Animation extends Component {
     }
 
     updateOffset = (timestamp) => {
+        if (this.state.nUpdates > 20000) {
+            return;
+        }
         let newX;
         let svg = this.state.svg;
-        if (!this.state.timestamp) {
-            newX = this.state.x;
-        } else {
-            newX = this.state.x - ((timestamp - this.state.timestamp) * (.1)); 
-        }
         
-        if (newX < -100) {return;}
+        //if (newX < -200) {return;}
         
-        let currentIntersection = this.state.trebleTickables.filter( tickable => {
+        let trebleIntersection = this.state.trebleTickables.filter( tickable => {
             let bb = tickable.getBoundingBox();
             return !!bb &&(bb.x + this.state.x - 50 < 0) && (bb.w + bb.x + this.state.x - 50 > 0);
         });
         
-        currentIntersection = currentIntersection[0] ? currentIntersection[0].attrs.el.id : null;
-    
+        let bassIntersection = this.state.bassTickables.filter( tickable => {
+            let bb = tickable.getBoundingBox();
+            return !!bb &&(bb.x + this.state.x - 50 < 0) && (bb.w + bb.x + this.state.x - 50 > 0);
+        });
+        
+        let bassIntersectionId = bassIntersection[0] ? bassIntersection[0].attrs.el.id : null;
+        let trebleIntersectionId = trebleIntersection[0] ? trebleIntersection[0].attrs.el.id : null;
+        if (trebleIntersection.length) {
+            this.setState({
+                currentIntersection: trebleIntersection[0]
+            });
+        }
         
         svg.childNodes.forEach(node => {
             if (node.id === "playhead") {
                 svg.removeChild(node);
-            } else if (node.id === currentIntersection) {
-                var filter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
-                                        filter.setAttribute("id","f1");
-                                        filter.setAttribute("x","0");
-                                        filter.setAttribute("y","0");
-
-                                        var gaussianFilter = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur");
-                                        gaussianFilter.setAttribute("in","SourceGraphic");
-                                        gaussianFilter.setAttribute("stdDeviation","15");
-
-                                        filter.appendChild(gaussianFilter);
-                                        node.appendChild(filter);
+            } else if (node.id === trebleIntersectionId || node.id === bassIntersectionId) {
+            
                 node.childNodes.forEach( g => {
                     if (g.className.baseVal  === "vf-note") {
                         g.childNodes.forEach( h => {
-                            
                             switch (h.className.baseVal) {
                                 
                                 case "vf-notehead":
                                     h.childNodes.forEach( i => {
                                         
-                                        i.setAttribute("style","fill: green; stroke: green; -webkit-filter: blur(25px);")
+                                        i.setAttribute("style","fill: green; stroke: green;")
                                     });
                                 case "vf-stem":
                                     h.childNodes.forEach( i => {
-                                        i.setAttribute("style","fill: green; stroke: green; -webkit-filter: blur(25px);")
+                                        i.setAttribute("style","fill: green; stroke: green;")
                                     });
                                 case "vf-flag":
                                     h.childNodes.forEach( i => {
-                                        i.setAttribute("style","fill: green; stroke: green; -webkit-filter: blur(25px);")
+                                        i.setAttribute("style","fill: green; stroke: green;")
                                     });
                                 default:
                                     return
@@ -294,6 +310,38 @@ class Animation extends Component {
             }
         });
         
+        const durationMap = {
+            "w": 4,
+            "h": 2,
+            "q": 1,
+            "8": 0.5,
+            "16": 0.25
+        };
+        
+        if (!this.state.timestamp) {
+            newX = this.state.x;
+        } else if (!this.state.currentIntersection) {
+            console.log("skipping frames");
+            newX = this.state.x - 3;
+        } else {
+            console.log("Intersecting note",this.state.currentIntersection);
+            let currentIntersection = this.state.currentIntersection;
+            console.log("TIMESTAMP", timestamp, "STATE TIMESTAMP", this.state.timestamp);
+            let timeDelta = (timestamp - this.state.timestamp) / 1000;
+            let BPM = this.state.BPM;
+            let duration = durationMap[currentIntersection.duration];
+            let distanceToNext = currentIntersection.distanceToNext;
+            console.log(distanceToNext);
+            console.log(duration);
+            console.log("tdelta",timeDelta);
+            console.log("BPM", this.state.BPM);
+            let distanceDelta = ( (timeDelta * BPM) / (duration * 60) );
+            console.log("distanceToNext",distanceToNext);
+            console.log("ddelta",distanceDelta);
+            newX = this.state.x - (distanceToNext * distanceDelta); 
+            console.log("new x", newX);
+        }
+        
         var pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
         
         pathEl.setAttribute('d', `M 50 0 V 180`);
@@ -305,7 +353,8 @@ class Animation extends Component {
             return {
                 x: newX,
                 timestamp: timestamp,
-                svg: svg
+                svg: svg,
+                nUpdates: prevState.nUpdates + 1
             };
         });
     }
