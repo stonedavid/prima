@@ -28,6 +28,7 @@ const {
     StaveConnector,
     Accidental,
     StaveNote,
+    TickContext
 } = Flow;
 
 class Animation extends Component {
@@ -35,7 +36,7 @@ class Animation extends Component {
         super(props);
         this.state = {
             nUpdates: 0,
-            BPM: 60,
+            BPM: 70,
             x: 10,
             timestamp: 0,
             svg: null,
@@ -48,11 +49,11 @@ class Animation extends Component {
     componentDidMount() {
         this.initDraw();
     }
-    
+
     componentDidUpdate() {
-        setTimeout(() => this.updateOffset(Date.now()),16);
+        setTimeout(() => this.updateOffset(Date.now()), 16);
     }
-    
+
     initDraw = () => {
         /*
          * Set up div
@@ -108,7 +109,7 @@ class Animation extends Component {
          *
          * def need to like not draw invisible bars
          */
-        
+
         let x = 10;
         let y = 0;
 
@@ -200,23 +201,33 @@ class Animation extends Component {
         system.addConnector("single");
 
         system.addConnector("singleRight");
-        
-        
-        
+
+
+
         /*
          * Draw!
          */
 
         const svg = svgContainer.childNodes[0];
+
+        let trebleTickables = system.parts[0].voices[0].tickables;
+        let bassTickables = system.parts[1].voices[0].tickables;
+        
+        let tickContext = new TickContext();
+        
+        trebleTickables.forEach( note => {
+            tickContext.addTickable(note);
+        });
+        
+        tickContext.preFormat().setX(400);
         
         vf.draw();
         
+        trebleTickables = system.parts[0].voices[0].tickables;
+        bassTickables = system.parts[1].voices[0].tickables;
         
-        const trebleTickables = system.parts[0].voices[0].tickables;
-        const bassTickables = system.parts[1].voices[0].tickables;
-        
-        
-        trebleTickables.map( (tickable,i) => {
+
+        trebleTickables.map((tickable, i) => {
             let bb = tickable.getBoundingBox();
             if (i < trebleTickables.length - 1) {
                 let nextbb = trebleTickables[i + 1].getBoundingBox();
@@ -224,49 +235,52 @@ class Animation extends Component {
                 return tickable
             };
             return tickable;
-        })
+        });
         
-        console.log("Treble ticks: should have prop distanceToNext",trebleTickables);
-        
+
+
+        console.log("Treble ticks: should have prop distanceToNext", trebleTickables);
+
+        let systemWidth = system.options.width;
+
         svg.style.top = "0px";
         svg.style.height = 180;
         //svg.style.left = this.state.x + "px";
-        svg.style.width = "250px";
+        svg.style.width = "500px";
         svg.style.position = "relative";
         svg.style.overflow = "hidden";
         svgContainer.style.height = "180px";
         svgContainer.style.position = "relative";
         svgContainer.style.display = "inline-block";
         svgContainer.style.overflow = "hidden";
-        
+
         this.setState({
             svg: svg,
             trebleTickables: trebleTickables,
-            bassTickables: bassTickables
+            bassTickables: bassTickables,
+            systemWidth: systemWidth
         });
         //svg.removeChild(pathEl);
         //svg.parentNode.replaceChild(svg.cloneNode(false), svg);
     }
 
     updateOffset = (timestamp) => {
-        if (this.state.nUpdates > 20000) {
+        if (this.state.nUpdates > 10000) {
             return;
         }
         let newX;
         let svg = this.state.svg;
-        
-        //if (newX < -200) {return;}
-        
-        let trebleIntersection = this.state.trebleTickables.filter( tickable => {
+
+        let trebleIntersection = this.state.trebleTickables.filter(tickable => {
             let bb = tickable.getBoundingBox();
-            return !!bb &&(bb.x + this.state.x - 50 < 0) && (bb.w + bb.x + this.state.x - 50 > 0);
+            return !!bb && (bb.x + this.state.x - 50 < 0) && (bb.w + bb.x + this.state.x - 50 > 0);
         });
-        
-        let bassIntersection = this.state.bassTickables.filter( tickable => {
+
+        let bassIntersection = this.state.bassTickables.filter(tickable => {
             let bb = tickable.getBoundingBox();
-            return !!bb &&(bb.x + this.state.x - 50 < 0) && (bb.w + bb.x + this.state.x - 50 > 0);
+            return !!bb && (bb.x + this.state.x - 50 < 0) && (bb.w + bb.x + this.state.x - 50 > 0);
         });
-        
+
         let bassIntersectionId = bassIntersection[0] ? bassIntersection[0].attrs.el.id : null;
         let trebleIntersectionId = trebleIntersection[0] ? trebleIntersection[0].attrs.el.id : null;
         if (trebleIntersection.length) {
@@ -274,42 +288,45 @@ class Animation extends Component {
                 currentIntersection: trebleIntersection[0]
             });
         }
-        
+
+
         svg.childNodes.forEach(node => {
             if (node.id === "playhead") {
                 svg.removeChild(node);
-            } else if (node.id === trebleIntersectionId || node.id === bassIntersectionId) {
-            
-                node.childNodes.forEach( g => {
-                    if (g.className.baseVal  === "vf-note") {
-                        g.childNodes.forEach( h => {
+            }
+            else if (node.id === trebleIntersectionId || node.id === bassIntersectionId) {
+
+                node.childNodes.forEach(g => {
+                    if (g.className.baseVal === "vf-note") {
+                        g.childNodes.forEach(h => {
                             switch (h.className.baseVal) {
-                                
+
                                 case "vf-notehead":
-                                    h.childNodes.forEach( i => {
-                                        
-                                        i.setAttribute("style","fill: green; stroke: green;")
+                                    h.childNodes.forEach(i => {
+
+                                        i.setAttribute("style", "fill: green; stroke: green;");
                                     });
                                 case "vf-stem":
-                                    h.childNodes.forEach( i => {
-                                        i.setAttribute("style","fill: green; stroke: green;")
+                                    h.childNodes.forEach(i => {
+                                        i.setAttribute("style", "fill: green; stroke: green;");
                                     });
                                 case "vf-flag":
-                                    h.childNodes.forEach( i => {
-                                        i.setAttribute("style","fill: green; stroke: green;")
+                                    h.childNodes.forEach(i => {
+                                        i.setAttribute("style", "fill: green; stroke: green;");
                                     });
                                 default:
-                                    return
+                                    return;
                             }
-                        })
+                        });
                     }
                 });
-                node.setAttribute("transform",`translate(${this.state.x},0)`);
-            } else {
-                node.setAttribute("transform",`translate(${this.state.x},0)`);
+                node.setAttribute("transform", `translate(${this.state.x},0)`);
+            }
+            else {
+                node.setAttribute("transform", `translate(${this.state.x},0)`);
             }
         });
-        
+
         const durationMap = {
             "w": 4,
             "h": 2,
@@ -317,39 +334,41 @@ class Animation extends Component {
             "8": 0.5,
             "16": 0.25
         };
-        
+
         if (!this.state.timestamp) {
             newX = this.state.x;
-        } else if (!this.state.currentIntersection) {
+        }
+        else if (!this.state.currentIntersection) {
             console.log("skipping frames");
             newX = this.state.x - 3;
-        } else {
-            console.log("Intersecting note",this.state.currentIntersection);
+        }
+        else {
+            //console.log("Intersecting note", this.state.currentIntersection);
             let currentIntersection = this.state.currentIntersection;
-            console.log("TIMESTAMP", timestamp, "STATE TIMESTAMP", this.state.timestamp);
+            //console.log("TIMESTAMP", timestamp, "STATE TIMESTAMP", this.state.timestamp);
             let timeDelta = (timestamp - this.state.timestamp) / 1000;
             let BPM = this.state.BPM;
             let duration = durationMap[currentIntersection.duration];
             let distanceToNext = currentIntersection.distanceToNext;
-            console.log(distanceToNext);
-            console.log(duration);
-            console.log("tdelta",timeDelta);
-            console.log("BPM", this.state.BPM);
-            let distanceDelta = ( (timeDelta * BPM) / (duration * 60) );
-            console.log("distanceToNext",distanceToNext);
-            console.log("ddelta",distanceDelta);
-            newX = this.state.x - (distanceToNext * distanceDelta); 
-            console.log("new x", newX);
+            //console.log(distanceToNext);
+            //console.log(duration);
+            //console.log("tdelta", timeDelta);
+            //console.log("BPM", this.state.BPM);
+            let distanceDelta = ((timeDelta * BPM) / (duration * 60));
+            //console.log("distanceToNext", distanceToNext);
+            //console.log("ddelta", distanceDelta);
+            newX = this.state.x - (distanceToNext * distanceDelta);
+            //console.log("new x", newX);
         }
-        
+
         var pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        
+
         pathEl.setAttribute('d', `M 50 0 V 180`);
-        pathEl.setAttribute("id","playhead");
+        pathEl.setAttribute("id", "playhead");
         pathEl.style.stroke = 'rgb(0,0,0)';
         svg.appendChild(pathEl);
-        
-        this.setState((prevState,props) => {
+
+        this.setState((prevState, props) => {
             return {
                 x: newX,
                 timestamp: timestamp,

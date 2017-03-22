@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Paper from "material-ui/Paper";
 
 /**
@@ -22,12 +22,14 @@ class FloatingTile extends Component {
     
     onMouseOver = () => this.setState({ zDepth: this.props.floatZ});
     onMouseOut = () => this.setState({ zDepth: this.props.initZ});
+    onClick = this.props.onClick;
     
     render() {
         return (
             <Paper 
                 style = {{
-                    margin: 20,
+                    marginBottom: 22,
+                    marginTop: 10,
                     textAlign: 'center',
                     display: 'inline-block',
                     borderRadius: "20px",
@@ -36,6 +38,7 @@ class FloatingTile extends Component {
                 zDepth = { this.state.zDepth }
                 onMouseOver = { this.onMouseOver }
                 onMouseOut = { this.onMouseOut }
+                onClick = { this.onClick }
                 >
                 { this.props.children }
             </Paper>
@@ -43,5 +46,11 @@ class FloatingTile extends Component {
             
     }
 }
+
+FloatingTile.propTypes = {
+    initZ: PropTypes.number.isRequired,
+    floatZ: PropTypes.number.isRequired,
+    lessonMeta: PropTypes.object.isRequired
+};
 
 export default FloatingTile;

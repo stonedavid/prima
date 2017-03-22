@@ -1,13 +1,21 @@
 
 import React from 'react'
 import { render } from 'react-dom'
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 
 import reducers from './reducers/reducers.js';
+import mySaga from './sagas/sagas.js';
 import initialState from "./state.js";
+
 import { generateKeys, setPlayer } from "./actions/actions.js";
 import App from './app.js';
+
+
+
+// create the saga middleware
+const sagaMiddleware = createSagaMiddleware()
 
 console.log(initialState);
 
@@ -22,7 +30,8 @@ Soundfont.instrument(ac, 'acoustic_grand_piano')
 
         .then(piano => {
             
-            store = createStore(reducers,initialState);
+            store = createStore(reducers,initialState,applyMiddleware(sagaMiddleware));
+            sagaMiddleware.run(mySaga)
             store.dispatch(generateKeys(initialState.gameState.size,initialState.gameState.offset));
             store.dispatch(setPlayer(piano,ac));
             console.log(store.getState());

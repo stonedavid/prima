@@ -1,4 +1,4 @@
-import { SUBMIT_USER, SUBMISSION_ERROR } from "../actions/actions.js";
+import { SUBMIT_USER, SUBMISSION_ERROR, CLEAR_ERRORS } from "../actions/actions.js";
 
 function auth(state = {}, action) {
     switch (action.type) {
@@ -18,7 +18,13 @@ function auth(state = {}, action) {
             return Object.assign({}, state, {
                 isAuthenticated: false,
                 errors: action.errors
-            })
+            });
+            
+        case CLEAR_ERRORS:
+            return Object.assign({}, state, {
+                isAuthenticated: true,
+                errors: {}
+            });
             
         default:
             return state;

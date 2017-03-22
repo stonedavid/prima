@@ -22,8 +22,21 @@ export const generateCardSet = (minimumMidi, maximumMidi, accidentals, durations
         let octave = Math.floor(midiNote/12)-1;
         
         if (noteDict[normal] === "x" && accidentals.length) {
-            accidentals.forEach(function(accidental) {
-                let noteString = noteDict[normal+accDict[accidental]] + accidental + octave + "/" + "q";
+            durations.forEach(function(duration) {
+                accidentals.forEach(function(accidental) {
+                    let noteString = noteDict[normal+accDict[accidental]] + accidental + octave + "/" + duration
+                    cardSet.push({
+                        noteString: noteString,
+                        midiValue: midiNote,
+                        difficulty: 0.3,
+                        timestamp: Math.random(),
+                        period: 1
+                    });
+                });
+            });
+        } else if (noteDict[normal] !== "x") {
+            durations.forEach(function(duration) {
+                let noteString = noteDict[normal] + octave + "/" + duration;
                 cardSet.push({
                     noteString: noteString,
                     midiValue: midiNote,
@@ -31,27 +44,14 @@ export const generateCardSet = (minimumMidi, maximumMidi, accidentals, durations
                     timestamp: Math.random(),
                     period: 1
                 })
-            })
-        } else if (noteDict[normal] !== "x") {
-            let noteString = noteDict[normal] + octave + "/" + "q";
-            cardSet.push({
-                noteString: noteString,
-                midiValue: midiNote,
-                difficulty: 0.3,
-                timestamp: Math.random(),
-                period: 1
-            })
+            });
         }
     });
         
-    return {
-        difficulty: 0.3,
-        timestamp: 0,
-        period: 86400, // 24 hours is seconds, will result in roughly 2 day refractory period for successful completion
-        cards: cardSet.sort( (a, b) => {
+    return cardSet.sort( (a, b) => {
                 let x = ( (Date.now() / 1000) - a.timestamp ) / a.due; 
                 let y = ( (Date.now() / 1000) - b.timestamp ) / b.due;
                 return ((x < y) ? 1 : ((x > y) ? -1 : 0));
             })
-    };
+
 }

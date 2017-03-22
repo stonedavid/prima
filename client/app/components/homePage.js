@@ -9,16 +9,16 @@ import Display from "./displayComponent";
 const genRandomNoteString = (length) => {
   var string = "";
   var notes = ["A","B","C","D","E","F","G"];
-  var rhythms = ["h","q","8"];
+  var rhythms = ["q","h"];
   var octaves = ["4","5"];
   for (var i = 0; i<length; i++) {
-    string+= notes[Math.floor(Math.random() * 7)] + octaves[Math.floor(Math.random() * octaves.length)] + "/" + rhythms[Math.floor(Math.random() * 3)] + ",";
+    string+= notes[Math.floor(Math.random() * 7)] + octaves[Math.floor(Math.random() * octaves.length)] + "/" + rhythms[Math.floor(Math.random() * rhythms.length)] + ",";
   }
   
   return string.substring(0, string.length - 1);
 };
 
-let noteString = genRandomNoteString(7);
+let noteString = genRandomNoteString(3);
 
 console.log(noteString);
 
@@ -27,7 +27,7 @@ const Home = () =>
     <MuiThemeProvider>
       <Card>
         <CardTitle title="Welcome to Prima!" subtitle="Improve your sight-reading" />
-        <Animation
+        <Display
           noteString={noteString}
         />
         <CardActions style={{ margin: "0px" }}>

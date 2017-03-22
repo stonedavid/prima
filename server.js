@@ -8,7 +8,11 @@ var validateSignupForm = require('./server/routes/auth');
 const passport = require("passport");
 const config = require("./config");
 
+const User = require("./server/models/user.js");
+
 require("./server/models").connect(config.dbUri);
+
+var generateCardNames = require("./server/data/generateCards.js").generateCardNames;
 
 // mongoose.connect(MONGODB ADDRESS)
 
@@ -16,6 +20,7 @@ var app = express();
 app.use(express.static(path.resolve(__dirname, 'client')));
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use(passport.initialize());
 
@@ -115,7 +120,7 @@ app.post("/auth/login", (req, res, next) => {
 /**
  * API routes here
  * 
- * GET ALL cardsets for USER
+ * GET ALL lessons for USER
  * 
  * GET one CARDSET for USER
  * 
@@ -123,12 +128,78 @@ app.post("/auth/login", (req, res, next) => {
  * 
  **/
 
-app.get("/api/users/:user", (req, res) => {
-    console.log(req.params)
-    res.status(200).json({
-        message: req.params.user
+app.get("/api/getLessons/:user", (req, res) => {
+    var name = req.params.user;
+    
+    // now in here we have to hit up mongo
+    User.findOne({name: name}, (err, user) => {
+        if (err) { 
+            console.log("mongo error");
+            return res.status(500).json({ error: err }); }
+        
+        if (!user) { 
+            const error = new Error("Incorrect email or password");
+            error.name = "IncorrectCredentialsError";
+            console.log("no such user", name);
+            return res.status(500).json({ error: error});
+        }
+        
+        return res.status(200).json({
+            lessons: user.curriculum.lessons
+        });
+    });
+    
+});
+
+app.get("/api/getCards/:user/:min/:max/:accidentals/:durations", (req, res) => {
+    
+    console.log("RETRIEVING CARDS");
+    
+    var name = req.params.user;
+    var min = parseInt(req.params.min);
+    var max = parseInt(req.params.max);
+    var durations = req.params.durations.split("_");
+    var accidentals = req.params.accidentals === "none" ? [] : req.params.accidentals.split("_");
+    
+    var cardNames = generateCardNames(min,max+1,accidentals,durations);
+    
+    // now in here we have to hit up mongo
+    User.findOne({name: name}, (err, user) => {
+        
+        if (err) { 
+            console.log("mongo error");
+            return res.status(500).json({ error: err }); }
+        
+        if (!user) { 
+            const error = new Error("Incorrect email or password");
+            error.name = "IncorrectCredentialsError";
+            console.log("no such user", name);
+            return res.status(500).json({ error: error});
+        }
+        
+    
+        return res.status(200).json({
+            cards: user.curriculum.cards.filter((card) => { return cardNames.indexOf(card.noteString) !== -1})
+        });
     });
 });
+
+app.post("/api/save/:email", (req, res) => {
+    var email = req.params.email;
+    var data = req.body;
+    
+    console.log(data);
+    
+    User.findOne({ email: email }, (err, user) => {
+        if (err) { return res.status(500).json({ error: err }); }
+        if (!user) { return res.status(500).json({ error: "User not found" }) }
+        
+        return res.status(200).json({
+            data: data
+        });
+    });
+});
+
 
 
 app.get('/*', function (request, response){

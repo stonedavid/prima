@@ -4,6 +4,9 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const curriculum = require("../data/defaultCurriculum.js");
+const generateCards = require("../data/generateCards.js").generateCardSet;
+
+var cards = generateCards(24,96,["#","b"],["w","h","q","8","16"]);
 
 // define the User model schema
 const UserSchema = new mongoose.Schema({
@@ -14,8 +17,8 @@ const UserSchema = new mongoose.Schema({
     password: String,
     name: String,
     curriculum: {
-        complete: Array,
-        incomplete: { type: Array, default: curriculum }
+        lessons: { type: Array, default: curriculum },
+        cards: { type: Array, default: cards } 
     }
 });
 

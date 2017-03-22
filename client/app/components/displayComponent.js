@@ -127,9 +127,6 @@ class Display extends Component{
       return a.add(b);
     }, new Rational(0,1));
     
-    
-    console.log(time.toString());
-    
     /*
      * Iterate over notestring, creating orthogonal bass and treble voices
      */
@@ -152,11 +149,14 @@ class Display extends Component{
     });
     
     
+    
     let trebleVoice = voice(trebleNotes, { time: time.toString() });
     let bassVoice = voice(bassNotes, { time: time.toString() });
     
+    
+    
     system.setOptions({
-      x: -100,
+      x: 10,
       y: y,
       width: width,
       spaceBetweenStaves: 6,
@@ -176,20 +176,21 @@ class Display extends Component{
 
     system.addConnector("singleRight");
     
+    
+    
+    
     /*
      * Draw and format SVG
      */
     
-    
-    
-    
     vf.draw();
+    
+    
 
     const svg = svgContainer.childNodes[0];
-    console.log("SVG",svg.childNodes);
+    //console.log("SVG",svg.childNodes);
     svg.style.top = "0px";
     svg.style.height = 180;
-    svg.style.left = "0px";
     svg.style.width = width + 20 + "px";
     svg.style.position = "relative";
     svg.style.overflow = "hidden";

@@ -7,7 +7,7 @@ module.exports = {
     devtool: "cheap-module-source-map",
     
     entry: [
-        //"webpack-hot-middleware/client?path=https://gradus-dxstone.c9users.io/__webpack_hmr&timeout=20000",
+        "babel-polyfill",
         "./client/app/main.js"
         ],
     

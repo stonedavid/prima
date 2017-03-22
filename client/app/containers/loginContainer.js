@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import { submitUser, submissionError, changeUrl } from '../actions/actions.js';
+import { login, submitUser, submissionError, changeUrl, clearErrors } from '../actions/actions.js';
 import LoginForm from "../components/loginForm.js";
-import Auth from "../src/modules/Auth";
+
 
 const mapStateToProps = (state) => {
     return {
@@ -11,36 +11,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSubmit: (form,state) => {
+        onSubmit: (form,user) => {
             form.preventDefault();
-            
-            //AJAX request here:
-            
-            const email = encodeURIComponent(state.email);
-            const password = encodeURIComponent(state.password);
-            
-            const formData = `email=${email}&password=${password}`;
-            
-            const xhr = new XMLHttpRequest();
-            xhr.open("post","/auth/login");
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.responseType = "json";
-            xhr.addEventListener("load", () => {
-                if (xhr.status === 200) {
-                    Auth.authenticateUser(xhr.response.token);
-                    dispatch(submitUser(state)); // checking this reducer...apparently right now it just adds user to the state
-                    dispatch(submissionError({}));
-                    dispatch(changeUrl("/"));
-                } else {
-                    const errors = xhr.response.errors ? xhr.response.errors : {};
-                    errors.summary = xhr.response.message;
-                    dispatch(submissionError(errors));
-                    console.log(errors);
-                }
-                
-            });
-            
-            xhr.send(formData);
+            dispatch(login(user)); // login is an action that refers to a SAGA
         },
         
         changeUrl: (url) => {

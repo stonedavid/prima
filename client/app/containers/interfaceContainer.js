@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import Slider from "material-ui/Slider";
 import Card from "material-ui/Card";
 
-import { pressKey, releaseKey, evalNote } from '../actions/actions.js';
+import { pressKey, releaseKey, evalSaga } from '../actions/actions.js';
 import Keyboard from '../components/keyboardComponent.js';
 import Display from "../components/displayComponent.js";
 
@@ -21,18 +21,20 @@ const mapDispatchToProps = (dispatch) => {
         onPress: (e,midiValue) => {
             e.preventDefault();
             if (e.buttons || e.type === "touchstart") {
-                dispatch(evalNote(midiValue));
-                dispatch(pressKey(midiValue))
+                
+                // this saga will check the score against the threshold, and then async call a gamestate update followed by API call if necessary
+                dispatch(evalSaga(midiValue)); 
+                dispatch(pressKey(midiValue));
             }
             
         },
+        
         onRelease: (e,midiValue) => {
             e.preventDefault();
             if (e.buttons || (e.type == "mouseup") || (e.type === "touchend")) {
                 dispatch(releaseKey(midiValue))
             }
         }
-        
     }
 }
 
@@ -42,14 +44,13 @@ const progressStyle = {
     width: "600px"
 }
 
-const Interface = ({ noteString, keys, onPress, onRelease, currentScore }) => {
+const Interface = ({ noteString, keys, onPress, onRelease, currentScore, currentMIDI }) => {
     return (
     <div>
       
         <Card>
-            <Display noteString= {noteString} />
+            <Display noteString = {noteString} />
             <progress value={currentScore} max="20" style={progressStyle}></progress>
-
             <Keyboard keys={keys} onPress={onPress} onRelease={onRelease} />
         </Card>
     </div>
