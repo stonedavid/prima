@@ -1,5 +1,6 @@
 import React, {
-  Component
+  Component,
+  PropTypes
 }
 from 'react';
 import {
@@ -12,8 +13,6 @@ import Paper from "material-ui/Paper";
 import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
-
-const API = require("../src/API.js");
 
 const styles = {
   root: {
@@ -37,10 +36,7 @@ import Display from "./displayComponent.js";
 class Lessons extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loading: true,
-      lessons: null
-    };
+    console.log("LESSONS PROPS",this.props);
   }
 
   cardsetToNoteString = (lessonMeta) => {
@@ -64,7 +60,7 @@ class Lessons extends Component {
 
   render() {
     return (
-      this.state.loading ? (
+      !this.props.lessons.length ? (
         <h1>Loading...</h1>
       ) : (
         <div style={styles.root}>
@@ -74,7 +70,7 @@ class Lessons extends Component {
             cols={1}
             style={styles.gridList}
           >
-            {this.state.lessons.map( lessonMeta => {
+            {this.props.lessons.map( lessonMeta => {
             
               return (
                 <GridTile 
@@ -103,44 +99,9 @@ class Lessons extends Component {
   }
 }
 
+Lessons.propTypes = {
+  lessons: PropTypes.array.isRequired,
+  getUserLessons: PropTypes.func.isRequired
+};
 
-/*
-const Lessons = () => (
-  <div style={styles.root}>
-    <GridList
-      cellHeight={350}
-      style={styles.gridList}
-    >
-      <GridTile 
-        cols={1}
-        children={
-          <FloatingTile
-            initZ = {1}
-            floatZ = {5}
-            children = {
-              <Display 
-                noteString = {"C4/q,E3/8,Eb4/h,D2/16"}
-                />
-            }
-          />
-        }
-      />
-      <GridTile 
-        cols={1}
-        children={
-          <FloatingTile
-            initZ = {1}
-            floatZ = {5}
-            children = {
-              <Display 
-                noteString = {"C4/q,E4/8,Eb4/h,D4/16"}
-                />
-            }
-          />
-        }
-      />
-    </GridList>
-  </div>
-);
-*/
 export default Lessons;

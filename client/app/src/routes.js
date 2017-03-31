@@ -4,7 +4,7 @@ import Home from "../components/homePage.js";
 import Interface from "../containers/interfaceContainer.js";
 import Signup from "../containers/signupContainer.js";
 import Login from "../containers/loginContainer.js";
-import Lessons from "../components/lessonsComponent.js";
+import Lessons from "../containers/lessonsContainer.js";
 import Dashboard from "../containers/DashboardPage.js";
 
 

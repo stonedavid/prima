@@ -19,7 +19,10 @@ import {
     clearErrors,
     setGameUser,
     saveError,
-    evalNote
+    evalNote,
+    mountUserLessons,
+    getUserLessonsError,
+    GET_USER_LESSONS
 }
 from "../actions/actions.js";
 
@@ -86,19 +89,21 @@ export function* saveCards() {
 
 /**
  * getUserLessons
- * @param action = { user }
+ * @param action 
  * @yields gets user lessons from API
  **/
  
 export function* getUserLessons() {
+    console.log("GET LESSONS SAGA");
     try {
+        console.log("FETCHING LESSONS");
         const email = yield select(state => state.auth.email);
         const response = yield call(API.getUserLessons, email);
-        yield put(mountUserLessons, response);
+        yield put(mountUserLessons(response));
     } catch (e) {
         const errors = e.errors ? e.errors : {};
         errors.summary = e.message;
-        yield put(getUserLessonsError(errors));
+        console.log(errors);
     }
 }
 

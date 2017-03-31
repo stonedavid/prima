@@ -24,6 +24,8 @@ export const IS_LOGGED_IN = "IS_LOGGED_IN";
  * API actions
  */
 
+export const GET_USER_LESSONS = "GET_USER_LESSONS";
+export const MOUNT_USER_LESSONS = "MOUNT_USER_LESSONS";
 export const MOUNT_CARDS = "MOUNT_CARDS";
 export const SAVE_CARDS = "SAVE_CARDS";
 export const SAVE_ERROR = "SAVE_ERROR";
@@ -72,6 +74,14 @@ export function setPlayer(audioPlayer, audioContext) {
 
 export function displayNote(noteObject) {
     return { type: DISPLAY_NOTE, noteObject };
+}
+
+export function getUserLessons() {
+    return { type: GET_USER_LESSONS };
+}
+
+export function mountUserLessons(userLessons) {
+    return { type: MOUNT_USER_LESSONS, userLessons };
 }
 
 export function mountCards(cardset, lessonMeta) {

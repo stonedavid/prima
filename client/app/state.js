@@ -27,7 +27,7 @@ const state = {
                 name: "",
                 email: ""
             },
-            userLessons: null, // array of data to create links on the curriculum page
+            userLessons: [], // array of data to create links on the curriculum page
             lessonMeta: null, // timestamp, difficulty, period data for cardset
             cardset: null, // array of cards
             currentCard: null,

@@ -1,4 +1,4 @@
-import { EVAL_NOTE, MOUNT_CARDS, SET_GAME_USER, SET_USER_LESSONS, SAVE_CARDS, SAVE_ERROR } from "../actions/actions.js";
+import { EVAL_NOTE, MOUNT_CARDS, SET_GAME_USER, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR } from "../actions/actions.js";
 import { calculateNextDueDate } from "../game/sm.js";
 
 function gameState(state = {}, action) {
@@ -11,7 +11,8 @@ function gameState(state = {}, action) {
                 }
             });
             
-        case SET_USER_LESSONS:
+        case MOUNT_USER_LESSONS:
+            console.log("MOUNTING LESSONS", action.userLessons);
             return Object.assign({}, state, {
                 userLessons: action.userLessons
             });

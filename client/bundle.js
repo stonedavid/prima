@@ -7116,7 +7116,7 @@
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _sagas = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./sagas/sagas.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _sagas = __webpack_require__(591);
 
 	var _sagas2 = _interopRequireDefault(_sagas);
 
@@ -31057,6 +31057,8 @@
 	exports.playMidi = playMidi;
 	exports.setPlayer = setPlayer;
 	exports.displayNote = displayNote;
+	exports.getUserLessons = getUserLessons;
+	exports.mountUserLessons = mountUserLessons;
 	exports.mountCards = mountCards;
 	exports.saveCards = saveCards;
 	exports.saveError = saveError;
@@ -31094,6 +31096,8 @@
 	 * API actions
 	 */
 
+	var GET_USER_LESSONS = exports.GET_USER_LESSONS = "GET_USER_LESSONS";
+	var MOUNT_USER_LESSONS = exports.MOUNT_USER_LESSONS = "MOUNT_USER_LESSONS";
 	var MOUNT_CARDS = exports.MOUNT_CARDS = "MOUNT_CARDS";
 	var SAVE_CARDS = exports.SAVE_CARDS = "SAVE_CARDS";
 	var SAVE_ERROR = exports.SAVE_ERROR = "SAVE_ERROR";
@@ -31144,6 +31148,14 @@
 
 	function displayNote(noteObject) {
 	    return { type: DISPLAY_NOTE, noteObject: noteObject };
+	}
+
+	function getUserLessons() {
+	    return { type: GET_USER_LESSONS };
+	}
+
+	function mountUserLessons(userLessons) {
+	    return { type: MOUNT_USER_LESSONS, userLessons: userLessons };
 	}
 
 	function mountCards(cardset, lessonMeta) {
@@ -36326,7 +36338,8 @@
 	                }
 	            });
 
-	        case _actions.SET_USER_LESSONS:
+	        case _actions.MOUNT_USER_LESSONS:
+	            console.log("MOUNTING LESSONS", action.userLessons);
 	            return Object.assign({}, state, {
 	                userLessons: action.userLessons
 	            });
@@ -36442,8 +36455,283 @@
 		};
 
 /***/ },
-/* 591 */,
-/* 592 */,
+/* 591 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.loginSaga = loginSaga;
+	exports.evalSaga = evalSaga;
+	exports.saveCards = saveCards;
+	exports.getUserLessons = getUserLessons;
+	exports.default = rootSaga;
+
+	var _effects = __webpack_require__(592);
+
+	var _reduxSaga = __webpack_require__(516);
+
+	var _actions = __webpack_require__(530);
+
+	var _Auth = __webpack_require__(593);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _marked = [loginSaga, evalSaga, saveCards, getUserLessons, rootSaga].map(regeneratorRuntime.mark);
+
+	var API = __webpack_require__(594);
+
+	function loginSaga(action) {
+	    var response, errors;
+	    return regeneratorRuntime.wrap(function loginSaga$(_context) {
+	        while (1) {
+	            switch (_context.prev = _context.next) {
+	                case 0:
+	                    _context.prev = 0;
+	                    _context.next = 3;
+	                    return (0, _effects.call)(API.login, action.user);
+
+	                case 3:
+	                    response = _context.sent;
+
+	                    _Auth2.default.authenticateUser(response.token);
+	                    _context.next = 7;
+	                    return (0, _effects.put)((0, _actions.submitUser)(action.user));
+
+	                case 7:
+	                    _context.next = 9;
+	                    return (0, _effects.put)((0, _actions.setGameUser)(action.user));
+
+	                case 9:
+	                    _context.next = 11;
+	                    return (0, _effects.put)((0, _actions.clearErrors)());
+
+	                case 11:
+	                    _context.next = 13;
+	                    return (0, _effects.put)((0, _actions.changeUrl)("/lessons"));
+
+	                case 13:
+	                    _context.next = 21;
+	                    break;
+
+	                case 15:
+	                    _context.prev = 15;
+	                    _context.t0 = _context['catch'](0);
+	                    errors = _context.t0.errors ? _context.t0.errors : {};
+
+	                    errors.summary = _context.t0.message;
+	                    _context.next = 21;
+	                    return (0, _effects.put)((0, _actions.submissionError)(errors));
+
+	                case 21:
+	                case 'end':
+	                    return _context.stop();
+	            }
+	        }
+	    }, _marked[0], this, [[0, 15]]);
+	}
+
+	/**
+	 * evalSaga
+	 * @param action = { score, threshold }
+	 * 
+	 * Triggers saveCards if score lesson completed
+	 **/
+
+	function evalSaga(action) {
+	    var score;
+	    return regeneratorRuntime.wrap(function evalSaga$(_context2) {
+	        while (1) {
+	            switch (_context2.prev = _context2.next) {
+	                case 0:
+	                    _context2.next = 2;
+	                    return (0, _effects.put)((0, _actions.evalNote)(action.midiValue));
+
+	                case 2:
+	                    _context2.next = 4;
+	                    return (0, _effects.select)(function (state) {
+	                        return state.gameState.currentScore;
+	                    });
+
+	                case 4:
+	                    score = _context2.sent;
+
+	                    if (!(score === 3)) {
+	                        _context2.next = 8;
+	                        break;
+	                    }
+
+	                    _context2.next = 8;
+	                    return (0, _effects.put)({ type: "SAVE_CARDS" });
+
+	                case 8:
+	                case 'end':
+	                    return _context2.stop();
+	            }
+	        }
+	    }, _marked[1], this);
+	}
+
+	/**
+	 * saveCards
+	 * @param action, with USER and CARDSET fields
+	 * */
+
+	function saveCards() {
+	    var user, cardset, lessonMeta, form, score, response, errors;
+	    return regeneratorRuntime.wrap(function saveCards$(_context3) {
+	        while (1) {
+	            switch (_context3.prev = _context3.next) {
+	                case 0:
+	                    _context3.prev = 0;
+	                    _context3.next = 3;
+	                    return (0, _effects.select)(function (state) {
+	                        return state.gameState.player.email;
+	                    });
+
+	                case 3:
+	                    user = _context3.sent;
+	                    _context3.next = 6;
+	                    return (0, _effects.select)(function (state) {
+	                        return state.gameState.cardset;
+	                    });
+
+	                case 6:
+	                    cardset = _context3.sent;
+	                    _context3.next = 9;
+	                    return (0, _effects.select)(function (state) {
+	                        return state.gameState.lessonMeta;
+	                    });
+
+	                case 9:
+	                    lessonMeta = _context3.sent;
+	                    form = { user: user, cardset: cardset, lessonMeta: lessonMeta };
+	                    _context3.next = 13;
+	                    return (0, _effects.select)(function (state) {
+	                        return state.gameState.currentScore;
+	                    });
+
+	                case 13:
+	                    score = _context3.sent;
+
+	                    console.log(user, cardset, lessonMeta, score);
+	                    _context3.next = 17;
+	                    return (0, _effects.call)(API.saveCards, form);
+
+	                case 17:
+	                    response = _context3.sent;
+
+	                    console.log("SAVE RESPONSE", response);
+	                    _context3.next = 27;
+	                    break;
+
+	                case 21:
+	                    _context3.prev = 21;
+	                    _context3.t0 = _context3['catch'](0);
+	                    errors = _context3.t0.errors ? _context3.t0.errors : {};
+
+	                    errors.summary = _context3.t0.message;
+	                    _context3.next = 27;
+	                    return (0, _effects.put)((0, _actions.saveError)(errors));
+
+	                case 27:
+	                case 'end':
+	                    return _context3.stop();
+	            }
+	        }
+	    }, _marked[2], this, [[0, 21]]);
+	}
+
+	/**
+	 * getUserLessons
+	 * @param action 
+	 * @yields gets user lessons from API
+	 **/
+
+	function getUserLessons() {
+	    var email, response, errors;
+	    return regeneratorRuntime.wrap(function getUserLessons$(_context4) {
+	        while (1) {
+	            switch (_context4.prev = _context4.next) {
+	                case 0:
+	                    console.log("GET LESSONS SAGA");
+	                    _context4.prev = 1;
+
+	                    console.log("FETCHING LESSONS");
+	                    _context4.next = 5;
+	                    return (0, _effects.select)(function (state) {
+	                        return state.auth.email;
+	                    });
+
+	                case 5:
+	                    email = _context4.sent;
+	                    _context4.next = 8;
+	                    return (0, _effects.call)(API.getUserLessons, email);
+
+	                case 8:
+	                    response = _context4.sent;
+	                    _context4.next = 11;
+	                    return (0, _effects.put)((0, _actions.mountUserLessons)(response));
+
+	                case 11:
+	                    _context4.next = 18;
+	                    break;
+
+	                case 13:
+	                    _context4.prev = 13;
+	                    _context4.t0 = _context4['catch'](1);
+	                    errors = _context4.t0.errors ? _context4.t0.errors : {};
+
+	                    errors.summary = _context4.t0.message;
+	                    console.log(errors);
+
+	                case 18:
+	                case 'end':
+	                    return _context4.stop();
+	            }
+	        }
+	    }, _marked[3], this, [[1, 13]]);
+	}
+
+	function rootSaga() {
+	    return regeneratorRuntime.wrap(function rootSaga$(_context5) {
+	        while (1) {
+	            switch (_context5.prev = _context5.next) {
+	                case 0:
+	                    _context5.next = 2;
+	                    return (0, _effects.takeEvery)("LOGIN", loginSaga);
+
+	                case 2:
+	                    _context5.next = 4;
+	                    return (0, _effects.takeEvery)("SAVE_CARDS", saveCards);
+
+	                case 4:
+	                    _context5.next = 6;
+	                    return (0, _effects.takeEvery)("EVAL_SAGA", evalSaga);
+
+	                case 6:
+	                    _context5.next = 8;
+	                    return (0, _effects.takeEvery)("GET_USER_LESSONS", getUserLessons);
+
+	                case 8:
+	                case 'end':
+	                    return _context5.stop();
+	            }
+	        }
+	    }, _marked[4], this);
+		}
+
+/***/ },
+/* 592 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(526)
+
+/***/ },
 /* 593 */
 /***/ function(module, exports) {
 
@@ -36519,7 +36807,116 @@
 		exports.default = Auth;
 
 /***/ },
-/* 594 */,
+/* 594 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.getUserLessons = exports.saveCards = exports.login = undefined;
+
+	var _Auth = __webpack_require__(593);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * function login
+	 * @param form = { email, password }
+	 * @returns Promise
+	 **/
+
+	var login = exports.login = function login(form) {
+
+	    return new Promise(function (resolve, reject) {
+
+	        var email = encodeURIComponent(form.email);
+	        var password = encodeURIComponent(form.password);
+	        var formData = "email=" + email + "&password=" + password;
+
+	        var xhr = new XMLHttpRequest();
+	        xhr.open("post", "/auth/login");
+	        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	        xhr.responseType = "json";
+
+	        xhr.addEventListener("load", function () {
+	            if (xhr.status === 200) {
+	                _Auth2.default.authenticateUser(xhr.response.token);
+	                resolve(xhr.response);
+	            } else {
+	                var errors = xhr.response.errors ? xhr.response.errors : {};
+	                errors.summary = xhr.response.message;
+	                reject(xhr.response);
+	            }
+	        });
+
+	        xhr.send(formData);
+	    });
+	};
+
+	/**
+	 * function saveCards
+	 * @param form = { user, cardset }
+	 * @returns Promise
+	 **/
+
+	// there's a challenge for this since i'm calling dispatch from the response. 
+	// solution at https://redux-saga.github.io/redux-saga/docs/basics/DispatchingActions.html
+
+	var saveCards = exports.saveCards = function saveCards(form) {
+
+	    return new Promise(function (resolve, reject) {
+
+	        console.log("Saving these cards", form.cardset);
+
+	        var email = encodeURIComponent(form.user);
+	        var xhr = new XMLHttpRequest();
+	        xhr.open("POST", "/api/save/" + email);
+	        xhr.setRequestHeader("Content-type", "application/json");
+	        xhr.setRequestHeader("Authorization", "bearer " + _Auth2.default.getToken());
+	        xhr.responseType = "json";
+
+	        xhr.addEventListener("load", function () {
+	            if (xhr.status === 200) {
+	                resolve(xhr.response);
+	            } else {
+	                var errors = xhr.response.errors ? xhr.response.errors : {};
+	                errors.summary = xhr.response.message;
+	                reject(xhr.response);
+	            }
+	        });
+
+	        xhr.send(JSON.stringify(form));
+	    });
+	};
+
+	var getUserLessons = exports.getUserLessons = function getUserLessons(email) {
+
+	    return new Promise(function (resolve, reject) {
+
+	        var xhr = new XMLHttpRequest();
+	        email = encodeURIComponent(email);
+	        xhr.open("get", "/api/getLessons/" + email);
+	        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	        xhr.setRequestHeader("Authorization", "bearer " + _Auth2.default.getToken());
+	        xhr.responseType = "json";
+	        xhr.addEventListener("load", function () {
+	            if (xhr.status === 200) {
+	                resolve(Object.values(xhr.response.lessons));
+	            } else {
+	                var errors = xhr.response.errors ? xhr.response.errors : {};
+	                errors.summary = xhr.response.message;
+	                reject(xhr.response);
+	            }
+	        });
+	        xhr.send();
+	    });
+	};
+
+/***/ },
 /* 595 */
 /***/ function(module, exports) {
 
@@ -36557,7 +36954,7 @@
 	            name: "",
 	            email: ""
 	        },
-	        userLessons: null, // array of data to create links on the curriculum page
+	        userLessons: [], // array of data to create links on the curriculum page
 	        lessonMeta: null, // timestamp, difficulty, period data for cardset
 	        cardset: null, // array of cards
 	        currentCard: null,
@@ -36654,9 +37051,9 @@
 
 	var _loginContainer2 = _interopRequireDefault(_loginContainer);
 
-	var _lessonsComponent = __webpack_require__(907);
+	var _lessonsContainer = __webpack_require__(994);
 
-	var _lessonsComponent2 = _interopRequireDefault(_lessonsComponent);
+	var _lessonsContainer2 = _interopRequireDefault(_lessonsContainer);
 
 	var _DashboardPage = __webpack_require__(916);
 
@@ -36690,7 +37087,7 @@
 	        component: _loginContainer2.default
 	    }, {
 	        path: "/lessons",
-	        component: _lessonsComponent2.default
+	        component: _lessonsContainer2.default
 	    }, {
 	        path: "/logout",
 	        onEnter: function onEnter(nextState, replace) {
@@ -86594,10 +86991,6 @@
 
 	var _starBorder2 = _interopRequireDefault(_starBorder);
 
-	var _Auth = __webpack_require__(593);
-
-	var _Auth2 = _interopRequireDefault(_Auth);
-
 	var _displayComponent = __webpack_require__(883);
 
 	var _displayComponent2 = _interopRequireDefault(_displayComponent);
@@ -86635,26 +87028,6 @@
 
 	    var _this = _possibleConstructorReturn(this, (Lessons.__proto__ || Object.getPrototypeOf(Lessons)).call(this, props));
 
-	    _this.getUserLessons = function () {
-	      //TODO for lessons this should only retrieve the lessons component of the user
-
-	      var xhr = new XMLHttpRequest();
-	      xhr.open("get", "/api/getLessons/" + "Test Account");
-	      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	      xhr.setRequestHeader("Authorization", 'bearer ' + _Auth2.default.getToken());
-	      xhr.responseType = "json";
-	      xhr.addEventListener("load", function () {
-	        if (xhr.status === 200) {
-	          console.log("response", xhr.response);
-	          _this.setState({
-	            loading: false,
-	            lessons: Object.values(xhr.response.lessons)
-	          });
-	        }
-	      });
-	      xhr.send();
-	    };
-
 	    _this.cardsetToNoteString = function (lessonMeta) {
 
 	      var name = lessonMeta.name.split("_");
@@ -86669,26 +87042,21 @@
 	      return noteString;
 	    };
 
-	    _this.state = {
-	      loading: true,
-	      lessons: null
-	    };
+	    console.log("LESSONS PROPS", _this.props);
 	    return _this;
 	  }
-
-	  //TODO: connect this with mapStateToProps so that the user name is part of the props
 
 	  _createClass(Lessons, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.getUserLessons();
+	      this.props.getUserLessons();
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
 
-	      return this.state.loading ? _react2.default.createElement(
+	      return !this.props.lessons.length ? _react2.default.createElement(
 	        'h1',
 	        null,
 	        'Loading...'
@@ -86703,7 +87071,7 @@
 	            cols: 1,
 	            style: styles.gridList
 	          },
-	          this.state.lessons.map(function (lessonMeta) {
+	          this.props.lessons.map(function (lessonMeta) {
 
 	            return _react2.default.createElement(_GridList.GridTile, {
 	              cols: 1,
@@ -86726,46 +87094,10 @@
 	  return Lessons;
 	}(_react.Component);
 
-	/*
-	const Lessons = () => (
-	  <div style={styles.root}>
-	    <GridList
-	      cellHeight={350}
-	      style={styles.gridList}
-	    >
-	      <GridTile 
-	        cols={1}
-	        children={
-	          <FloatingTile
-	            initZ = {1}
-	            floatZ = {5}
-	            children = {
-	              <Display 
-	                noteString = {"C4/q,E3/8,Eb4/h,D2/16"}
-	                />
-	            }
-	          />
-	        }
-	      />
-	      <GridTile 
-	        cols={1}
-	        children={
-	          <FloatingTile
-	            initZ = {1}
-	            floatZ = {5}
-	            children = {
-	              <Display 
-	                noteString = {"C4/q,E4/8,Eb4/h,D4/16"}
-	                />
-	            }
-	          />
-	        }
-	      />
-	    </GridList>
-	  </div>
-	);
-	*/
-
+	Lessons.propTypes = {
+	  lessons: _react.PropTypes.array.isRequired,
+	  getUserLessons: _react.PropTypes.func.isRequired
+	};
 
 		exports.default = Lessons;
 
@@ -90081,6 +90413,45 @@
 
 	module.exports = getPrototype;
 
+
+/***/ },
+/* 994 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _reactRedux = __webpack_require__(468);
+
+	var _lessonsComponent = __webpack_require__(907);
+
+	var _lessonsComponent2 = _interopRequireDefault(_lessonsComponent);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        lessons: state.gameState.userLessons
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        getUserLessons: function getUserLessons() {
+	            console.log("DISPATCHING GET LESSONS");
+	            setTimeout(function () {
+	                dispatch({ type: 'GET_USER_LESSONS' });
+	            }, 1);
+	        }
+	    };
+	};
+
+	var LessonsContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_lessonsComponent2.default);
+
+	exports.default = LessonsContainer;
 
 /***/ }
 /******/ ])));
