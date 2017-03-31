@@ -21,7 +21,7 @@ export const login = (form) => {
         xhr.open("post", "/auth/login");
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.responseType = "json";
-        
+
         xhr.addEventListener("load", () => {
             if (xhr.status === 200) {
                 Auth.authenticateUser(xhr.response.token);
@@ -45,10 +45,12 @@ export const login = (form) => {
  * @param form = { user, cardset }
  * @returns Promise
  **/
- 
+
 export const saveCards = (form) => {
-    
+
     return new Promise((resolve, reject) => {
+
+        console.log("Saving these cards", form.cardset);
 
         const email = encodeURIComponent(form.user);
         const xhr = new XMLHttpRequest();
@@ -56,7 +58,7 @@ export const saveCards = (form) => {
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.setRequestHeader("Authorization", `bearer ${Auth.getToken()}`);
         xhr.responseType = "json";
-        
+
         xhr.addEventListener("load", () => {
             if (xhr.status === 200) {
                 resolve(xhr.response);
@@ -71,5 +73,29 @@ export const saveCards = (form) => {
         xhr.send(JSON.stringify(form));
 
     });
-}
+};
 
+export const getUserLessons = (email) => {
+
+    return new Promise((resolve, reject) => {
+
+        const xhr = new XMLHttpRequest();
+        email = encodeURIComponent(email);
+        xhr.open("get", "/api/getLessons/" + email);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("Authorization", `bearer ${Auth.getToken()}`);
+        xhr.responseType = "json";
+        xhr.addEventListener("load", () => {
+            if (xhr.status === 200) {
+                resolve(Object.values(xhr.response.lessons));
+            }
+            else {
+                const errors = xhr.response.errors ? xhr.response.errors : {};
+                errors.summary = xhr.response.message;
+                reject(xhr.response);
+            }
+        });
+        xhr.send();
+        
+    });
+};

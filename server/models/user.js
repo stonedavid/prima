@@ -17,8 +17,8 @@ const UserSchema = new mongoose.Schema({
     password: String,
     name: String,
     curriculum: {
-        lessons: { type: Array, default: curriculum },
-        cards: { type: Array, default: cards } 
+        lessons: { type: Object, default: curriculum },
+        cards: { type: Object, default: cards } 
     }
 });
 

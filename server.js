@@ -128,11 +128,11 @@ app.post("/auth/login", (req, res, next) => {
  * 
  **/
 
-app.get("/api/getLessons/:user", (req, res) => {
-    var name = req.params.user;
+app.get("/api/getLessons/:email", (req, res) => {
+    var email = decodeURIComponent(req.params.email);
     
     // now in here we have to hit up mongo
-    User.findOne({name: name}, (err, user) => {
+    User.findOne({email: email}, (err, user) => {
         if (err) { 
             console.log("mongo error");
             return res.status(500).json({ error: err }); }
@@ -140,7 +140,7 @@ app.get("/api/getLessons/:user", (req, res) => {
         if (!user) { 
             const error = new Error("Incorrect email or password");
             error.name = "IncorrectCredentialsError";
-            console.log("no such user", name);
+            console.log("no such user", email);
             return res.status(500).json({ error: error});
         }
         
@@ -188,16 +188,7 @@ app.post("/api/save/:email", (req, res) => {
     var email = req.params.email;
     var data = req.body;
     
-    console.log(data);
-    
-    User.findOne({ email: email }, (err, user) => {
-        if (err) { return res.status(500).json({ error: err }); }
-        if (!user) { return res.status(500).json({ error: "User not found" }) }
-        
-        return res.status(200).json({
-            data: data
-        });
-    });
+    var user = User.findOne({ email: email });
 });
 
 

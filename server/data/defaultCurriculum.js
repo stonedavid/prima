@@ -1,9 +1,9 @@
 // this is just metadata that is used to query the db and assemble cardsets
 
-module.exports = [
+module.exports = {
     
-    {
-        name: "A3-E4.d.q",
+    "A3-E4_d_q" : {
+        name: "A3-E4_d_q",
         minimumMidi: 57,
         maximumMidi: 64,
         accidentals: null,
@@ -15,8 +15,8 @@ module.exports = [
         period: 86400
     },
     
-    {
-        name: "F3-C4.d.q",
+    "F3-C4_d_q" : {
+        name: "F3-C4_d_q",
         minimumMidi: 53,
         maximumMidi: 60,
         accidentals: null,
@@ -28,8 +28,8 @@ module.exports = [
         period: 86400
     },
     
-    {
-        name: "C4-G4.d.q",
+    "C4-G4_d_q" : {
+        name: "C4-G4_d_q",
         minimumMidi: 60,
         maximumMidi: 67,
         accidentals: null,
@@ -41,8 +41,8 @@ module.exports = [
         period: 86400
     },
     
-    {
-        name: "F3-G4.d.q",
+    "F3-G4_d_q" : {
+        name: "F3-G4_d_q",
         minimumMidi: 53,
         maximumMidi: 67,
         accidentals: null,
@@ -54,8 +54,8 @@ module.exports = [
         period: 86400
     },
     
-    {
-        name: "D3-A3.d.q",
+    "D3-A3_d_q" : {
+        name: "D3-A3_d_q",
         minimumMidi: 50,
         maximumMidi: 57,
         accidentals: null,
@@ -67,8 +67,8 @@ module.exports = [
         period: 86400
     },
     
-    {
-        name: "E4-B4.d.q",
+    "E4-B4_d_q" : {
+        name: "E4-B4_d_q",
         minimumMidi: 64,
         maximumMidi: 71,
         accidentals: null,
@@ -80,8 +80,8 @@ module.exports = [
         period: 86400
     },
     
-    {
-        name: "D3-B4.d.q",
+    "D3-B4_d_q" : {
+        name: "D3-B4_d_q",
         minimumMidi: 50,
         maximumMidi: 71,
         accidentals: null,
@@ -93,8 +93,8 @@ module.exports = [
         period: 86400
     },
     
-    {
-        name: "B2-F3.d.q",
+    "B2-F3_d_q" : {
+        name: "B2-F3_d_q",
         minimumMidi: 47,
         maximumMidi: 53,
         accidentals: null,
@@ -106,8 +106,8 @@ module.exports = [
         period: 86400
     },
     
-    {
-        name: "G4-D5.d.q",
+    "G4-D5_d_q" : {
+        name: "G4-D5_d_q",
         minimumMidi: 67,
         maximumMidi: 74,
         accidentals: null,
@@ -119,8 +119,8 @@ module.exports = [
         period: 86400
     },
     
-    {
-        name: "G2-D3.d.q",
+    "G2-D3_d_q" : {
+        name: "G2-D3_d_q",
         minimumMidi: 43,
         maximumMidi: 50,
         accidentals: null,
@@ -132,8 +132,8 @@ module.exports = [
         period: 86400
     },
     
-    {
-        name: "B4-F5.d.q",
+    "B4-F5_d_q" : {
+        name: "B4-F5_d_q",
         minimumMidi: 71,
         maximumMidi: 77,
         accidentals: null,
@@ -145,8 +145,8 @@ module.exports = [
         period: 86400
     },
     
-    {
-        name: "G2-F5.d.q",
+    "G2-F5_d_q" : {
+        name: "G2-F5_d_q",
         minimumMidi: 43,
         maximumMidi: 77,
         accidentals: null,
@@ -156,6 +156,6 @@ module.exports = [
         difficulty: 0.3,
         timestamp: 0,
         period: 86400
-    },
+    }
     
-];
+};

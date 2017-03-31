@@ -16,7 +16,7 @@ exports.generateCardSet = function(minimumMidi, maximumMidi, accidentals, durati
     const accDict = {"#": -1, "b": 1};
     const size = maximumMidi - minimumMidi;
     const midiArray = Array.apply(null, Array(size)).map(function (_, i) {return i + minimumMidi;});
-    const cardSet = [];
+    const cardSet = {};
     midiArray.forEach(function(midiNote) {
         var normal = midiNote%12;
         var octave = Math.floor(midiNote/12)-1;
@@ -24,37 +24,33 @@ exports.generateCardSet = function(minimumMidi, maximumMidi, accidentals, durati
         if (noteDict[normal] === "x" && accidentals.length) {
             durations.forEach(function(duration) {
                 accidentals.forEach(function(accidental) {
-                    var noteString = noteDict[normal+accDict[accidental]] + accidental + octave + "/" + duration
-                    cardSet.push({
+                    var noteString = noteDict[normal+accDict[accidental]] + accidental + octave + "/" + duration;
+                    cardSet[noteString] = {
                         noteString: noteString,
                         midiValue: midiNote,
                         accidental: accidental,
                         difficulty: 0.3,
                         timestamp: Math.random(),
                         period: 1
-                    });
+                    };
                 });
             });
         } else if (noteDict[normal] !== "x") {
             durations.forEach(function(duration) {
                 var noteString = noteDict[normal] + octave + "/" + duration;
-                cardSet.push({
+                cardSet[noteString] = {
                     noteString: noteString,
                     midiValue: midiNote,
                     accidental: null,
                     difficulty: 0.3,
                     timestamp: Math.random(),
                     period: 1
-                })
+                };
             });
         }
     });
         
-    return cardSet.sort( (a, b) => {
-                var x = ( (Date.now() / 1000) - a.timestamp ) / a.period; 
-                var y = ( (Date.now() / 1000) - b.timestamp ) / b.period;
-                return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-            });
+    return cardSet;
 };
 
 exports.generateCardNames = function(minimumMidi, maximumMidi, accidentals, durations) {

@@ -11,6 +11,7 @@ import {
 from 'redux-saga'
 
 const API = require("../src/API.js");
+
 import {
     submitUser,
     changeUrl,
@@ -83,8 +84,27 @@ export function* saveCards() {
     }
 }
 
+/**
+ * getUserLessons
+ * @param action = { user }
+ * @yields gets user lessons from API
+ **/
+ 
+export function* getUserLessons() {
+    try {
+        const email = yield select(state => state.auth.email);
+        const response = yield call(API.getUserLessons, email);
+        yield put(mountUserLessons, response);
+    } catch (e) {
+        const errors = e.errors ? e.errors : {};
+        errors.summary = e.message;
+        yield put(getUserLessonsError(errors));
+    }
+}
+
 export default function* rootSaga() {
     yield takeEvery("LOGIN", loginSaga);
     yield takeEvery("SAVE_CARDS", saveCards);
     yield takeEvery("EVAL_SAGA", evalSaga);
+    yield takeEvery("GET_USER_LESSONS", getUserLessons);
 }

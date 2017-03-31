@@ -13,7 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 
-import Auth from "../src/modules/Auth.js";
+const API = require("../src/API.js");
 
 const styles = {
   root: {
@@ -43,42 +43,23 @@ class Lessons extends Component {
     };
   }
 
-  //TODO: connect this with mapStateToProps so that the user name is part of the props
-
-  getUserLessons = () => {
-    //TODO for lessons this should only retrieve the lessons component of the user
-    
-    const xhr = new XMLHttpRequest();
-    xhr.open("get", "/api/getLessons/" + "David Stone");
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.setRequestHeader("Authorization", `bearer ${Auth.getToken()}`);
-    xhr.responseType = "json";
-    xhr.addEventListener("load", () => {
-      if (xhr.status === 200) {
-        console.log("response", xhr.response);
-        this.setState({
-          loading: false,
-          lessons: xhr.response.lessons
-        });
-      }
-    });
-    xhr.send();
-  }
-  
   cardsetToNoteString = (lessonMeta) => {
     
-    let name = lessonMeta.name;
-    let range = new RegExp('(\\w+)\-(\\w+)','g');
-    let accidentals = name.split(".")[1];
-    let durations = name.split(".")[2];
-    let match = range.exec(name);
-    let noteString = `${match[1]}/${durations},${match[2]}/${durations}`
-    return noteString
+    let name = lessonMeta.name.split("_");
+    let range = name[0].split("-");
+    let low = range[0];
+    let high = range[1];
+    let accidentals = name[1];
+    let durations = name[2];
+    console.log("ACC,DURATIONS", accidentals, durations);
+    let noteString = `${low}/${durations},${high}/${durations}`;
+    console.log("NOTESTRING", noteString);
+    return noteString;
     
   }
   
   componentDidMount() {
-    this.getUserLessons();
+    this.props.getUserLessons();
   }
 
   render() {

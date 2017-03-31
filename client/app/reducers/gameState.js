@@ -18,6 +18,8 @@ function gameState(state = {}, action) {
         
         case EVAL_NOTE:
             
+            // TODO: set up to handle an object of notestring keys, not an array
+            
             let timestamp, 
             clock, 
             currentCard, 
@@ -43,8 +45,7 @@ function gameState(state = {}, action) {
             
             console.log("SCORE:", score);
             
-            // Create updated card, insert in set, and insert in lesson
-            
+            // Create updated card, insert in set
             
             updatedCard = calculateNextDueDate(currentCard,score,threshold);
                 
@@ -52,6 +53,8 @@ function gameState(state = {}, action) {
                 card.midiValue === currentCard.midiValue ? updatedCard : card
                 );
                 
+            
+            // Sorting should be changed here to retrieve card that maximizes this ratio    
             sortedCardSet = updatedCardSet.sort( (a, b) => {
                 let x = ( (Date.now() / 1000) - a.timestamp ) / a.period; 
                 let y = ( (Date.now() / 1000) - b.timestamp ) / b.period;

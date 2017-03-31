@@ -7116,7 +7116,7 @@
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _sagas = __webpack_require__(591);
+	var _sagas = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./sagas/sagas.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _sagas2 = _interopRequireDefault(_sagas);
 
@@ -36333,6 +36333,8 @@
 
 	        case _actions.EVAL_NOTE:
 
+	            // TODO: set up to handle an object of notestring keys, not an array
+
 	            var timestamp = void 0,
 	                clock = void 0,
 	                currentCard = void 0,
@@ -36357,8 +36359,7 @@
 
 	            console.log("SCORE:", score);
 
-	            // Create updated card, insert in set, and insert in lesson
-
+	            // Create updated card, insert in set
 
 	            updatedCard = (0, _sm.calculateNextDueDate)(currentCard, score, threshold);
 
@@ -36366,6 +36367,7 @@
 	                return card.midiValue === currentCard.midiValue ? updatedCard : card;
 	            });
 
+	            // Sorting should be changed here to retrieve card that maximizes this ratio    
 	            sortedCardSet = updatedCardSet.sort(function (a, b) {
 	                var x = (Date.now() / 1000 - a.timestamp) / a.period;
 	                var y = (Date.now() / 1000 - b.timestamp) / b.period;
@@ -36440,226 +36442,8 @@
 		};
 
 /***/ },
-/* 591 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.loginSaga = loginSaga;
-	exports.evalSaga = evalSaga;
-	exports.saveCards = saveCards;
-	exports.default = rootSaga;
-
-	var _effects = __webpack_require__(592);
-
-	var _reduxSaga = __webpack_require__(516);
-
-	var _actions = __webpack_require__(530);
-
-	var _Auth = __webpack_require__(593);
-
-	var _Auth2 = _interopRequireDefault(_Auth);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var _marked = [loginSaga, evalSaga, saveCards, rootSaga].map(regeneratorRuntime.mark);
-
-	var API = __webpack_require__(594);
-	function loginSaga(action) {
-	    var response, errors;
-	    return regeneratorRuntime.wrap(function loginSaga$(_context) {
-	        while (1) {
-	            switch (_context.prev = _context.next) {
-	                case 0:
-	                    _context.prev = 0;
-	                    _context.next = 3;
-	                    return (0, _effects.call)(API.login, action.user);
-
-	                case 3:
-	                    response = _context.sent;
-
-	                    _Auth2.default.authenticateUser(response.token);
-	                    _context.next = 7;
-	                    return (0, _effects.put)((0, _actions.submitUser)(action.user));
-
-	                case 7:
-	                    _context.next = 9;
-	                    return (0, _effects.put)((0, _actions.setGameUser)(action.user));
-
-	                case 9:
-	                    _context.next = 11;
-	                    return (0, _effects.put)((0, _actions.clearErrors)());
-
-	                case 11:
-	                    _context.next = 13;
-	                    return (0, _effects.put)((0, _actions.changeUrl)("/lessons"));
-
-	                case 13:
-	                    _context.next = 21;
-	                    break;
-
-	                case 15:
-	                    _context.prev = 15;
-	                    _context.t0 = _context['catch'](0);
-	                    errors = _context.t0.errors ? _context.t0.errors : {};
-
-	                    errors.summary = _context.t0.message;
-	                    _context.next = 21;
-	                    return (0, _effects.put)((0, _actions.submissionError)(errors));
-
-	                case 21:
-	                case 'end':
-	                    return _context.stop();
-	            }
-	        }
-	    }, _marked[0], this, [[0, 15]]);
-	}
-
-	/**
-	 * evalSaga
-	 * @param action = { score, threshold }
-	 * 
-	 * Triggers saveCards if score lesson completed
-	 **/
-
-	function evalSaga(action) {
-	    var score;
-	    return regeneratorRuntime.wrap(function evalSaga$(_context2) {
-	        while (1) {
-	            switch (_context2.prev = _context2.next) {
-	                case 0:
-	                    _context2.next = 2;
-	                    return (0, _effects.put)((0, _actions.evalNote)(action.midiValue));
-
-	                case 2:
-	                    _context2.next = 4;
-	                    return (0, _effects.select)(function (state) {
-	                        return state.gameState.currentScore;
-	                    });
-
-	                case 4:
-	                    score = _context2.sent;
-
-	                    if (!(score === 3)) {
-	                        _context2.next = 8;
-	                        break;
-	                    }
-
-	                    _context2.next = 8;
-	                    return (0, _effects.put)({ type: "SAVE_CARDS" });
-
-	                case 8:
-	                case 'end':
-	                    return _context2.stop();
-	            }
-	        }
-	    }, _marked[1], this);
-	}
-
-	/**
-	 * saveCards
-	 * @param action, with USER and CARDSET fields
-	 * */
-
-	function saveCards() {
-	    var user, cardset, lessonMeta, form, score, response, errors;
-	    return regeneratorRuntime.wrap(function saveCards$(_context3) {
-	        while (1) {
-	            switch (_context3.prev = _context3.next) {
-	                case 0:
-	                    _context3.prev = 0;
-	                    _context3.next = 3;
-	                    return (0, _effects.select)(function (state) {
-	                        return state.gameState.player.email;
-	                    });
-
-	                case 3:
-	                    user = _context3.sent;
-	                    _context3.next = 6;
-	                    return (0, _effects.select)(function (state) {
-	                        return state.gameState.cardset;
-	                    });
-
-	                case 6:
-	                    cardset = _context3.sent;
-	                    _context3.next = 9;
-	                    return (0, _effects.select)(function (state) {
-	                        return state.gameState.lessonMeta;
-	                    });
-
-	                case 9:
-	                    lessonMeta = _context3.sent;
-	                    form = { user: user, cardset: cardset, lessonMeta: lessonMeta };
-	                    _context3.next = 13;
-	                    return (0, _effects.select)(function (state) {
-	                        return state.gameState.currentScore;
-	                    });
-
-	                case 13:
-	                    score = _context3.sent;
-
-	                    console.log(user, cardset, lessonMeta, score);
-	                    _context3.next = 17;
-	                    return (0, _effects.call)(API.saveCards, form);
-
-	                case 17:
-	                    response = _context3.sent;
-
-	                    console.log("SAVE RESPONSE", response);
-	                    _context3.next = 27;
-	                    break;
-
-	                case 21:
-	                    _context3.prev = 21;
-	                    _context3.t0 = _context3['catch'](0);
-	                    errors = _context3.t0.errors ? _context3.t0.errors : {};
-
-	                    errors.summary = _context3.t0.message;
-	                    _context3.next = 27;
-	                    return (0, _effects.put)((0, _actions.saveError)(errors));
-
-	                case 27:
-	                case 'end':
-	                    return _context3.stop();
-	            }
-	        }
-	    }, _marked[2], this, [[0, 21]]);
-	}
-
-	function rootSaga() {
-	    return regeneratorRuntime.wrap(function rootSaga$(_context4) {
-	        while (1) {
-	            switch (_context4.prev = _context4.next) {
-	                case 0:
-	                    _context4.next = 2;
-	                    return (0, _effects.takeEvery)("LOGIN", loginSaga);
-
-	                case 2:
-	                    _context4.next = 4;
-	                    return (0, _effects.takeEvery)("SAVE_CARDS", saveCards);
-
-	                case 4:
-	                    _context4.next = 6;
-	                    return (0, _effects.takeEvery)("EVAL_SAGA", evalSaga);
-
-	                case 6:
-	                case 'end':
-	                    return _context4.stop();
-	            }
-	        }
-	    }, _marked[3], this);
-		}
-
-/***/ },
-/* 592 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(526)
-
-/***/ },
+/* 591 */,
+/* 592 */,
 /* 593 */
 /***/ function(module, exports) {
 
@@ -36735,91 +36519,7 @@
 		exports.default = Auth;
 
 /***/ },
-/* 594 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.saveCards = exports.login = undefined;
-
-	var _Auth = __webpack_require__(593);
-
-	var _Auth2 = _interopRequireDefault(_Auth);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * function login
-	 * @param form = { email, password }
-	 * @returns Promise
-	 **/
-
-	var login = exports.login = function login(form) {
-
-	    return new Promise(function (resolve, reject) {
-
-	        var email = encodeURIComponent(form.email);
-	        var password = encodeURIComponent(form.password);
-	        var formData = "email=" + email + "&password=" + password;
-
-	        var xhr = new XMLHttpRequest();
-	        xhr.open("post", "/auth/login");
-	        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	        xhr.responseType = "json";
-
-	        xhr.addEventListener("load", function () {
-	            if (xhr.status === 200) {
-	                _Auth2.default.authenticateUser(xhr.response.token);
-	                resolve(xhr.response);
-	            } else {
-	                var errors = xhr.response.errors ? xhr.response.errors : {};
-	                errors.summary = xhr.response.message;
-	                reject(xhr.response);
-	            }
-	        });
-
-	        xhr.send(formData);
-	    });
-	};
-
-	/**
-	 * function saveCards
-	 * @param form = { user, cardset }
-	 * @returns Promise
-	 **/
-
-	// there's a challenge for this since i'm calling dispatch from the response. 
-	// solution at https://redux-saga.github.io/redux-saga/docs/basics/DispatchingActions.html
-
-	var saveCards = exports.saveCards = function saveCards(form) {
-
-	    return new Promise(function (resolve, reject) {
-
-	        var email = encodeURIComponent(form.user);
-	        var xhr = new XMLHttpRequest();
-	        xhr.open("POST", "/api/save/" + email);
-	        xhr.setRequestHeader("Content-type", "application/json");
-	        xhr.setRequestHeader("Authorization", "bearer " + _Auth2.default.getToken());
-	        xhr.responseType = "json";
-
-	        xhr.addEventListener("load", function () {
-	            if (xhr.status === 200) {
-	                resolve(xhr.response);
-	            } else {
-	                var errors = xhr.response.errors ? xhr.response.errors : {};
-	                errors.summary = xhr.response.message;
-	                reject(xhr.response);
-	            }
-	        });
-
-	        xhr.send(JSON.stringify(form));
-	    });
-	};
-
-/***/ },
+/* 594 */,
 /* 595 */
 /***/ function(module, exports) {
 
@@ -86939,7 +86639,7 @@
 	      //TODO for lessons this should only retrieve the lessons component of the user
 
 	      var xhr = new XMLHttpRequest();
-	      xhr.open("get", "/api/getLessons/" + "David Stone");
+	      xhr.open("get", "/api/getLessons/" + "Test Account");
 	      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	      xhr.setRequestHeader("Authorization", 'bearer ' + _Auth2.default.getToken());
 	      xhr.responseType = "json";
@@ -86948,7 +86648,7 @@
 	          console.log("response", xhr.response);
 	          _this.setState({
 	            loading: false,
-	            lessons: xhr.response.lessons
+	            lessons: Object.values(xhr.response.lessons)
 	          });
 	        }
 	      });
@@ -86957,12 +86657,15 @@
 
 	    _this.cardsetToNoteString = function (lessonMeta) {
 
-	      var name = lessonMeta.name;
-	      var range = new RegExp('(\\w+)\-(\\w+)', 'g');
-	      var accidentals = name.split(".")[1];
-	      var durations = name.split(".")[2];
-	      var match = range.exec(name);
-	      var noteString = match[1] + '/' + durations + ',' + match[2] + '/' + durations;
+	      var name = lessonMeta.name.split("_");
+	      var range = name[0].split("-");
+	      var low = range[0];
+	      var high = range[1];
+	      var accidentals = name[1];
+	      var durations = name[2];
+	      console.log("ACC,DURATIONS", accidentals, durations);
+	      var noteString = low + '/' + durations + ',' + high + '/' + durations;
+	      console.log("NOTESTRING", noteString);
 	      return noteString;
 	    };
 
