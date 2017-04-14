@@ -87,7 +87,9 @@ export const getUserLessons = (email) => {
         xhr.responseType = "json";
         xhr.addEventListener("load", () => {
             if (xhr.status === 200) {
-                resolve(Object.values(xhr.response.lessons));
+                resolve(Object.values(xhr.response.lessons).sort( (a,b) => {
+                    return a.index < b.index ? -1 : 1;
+                }));
             }
             else {
                 const errors = xhr.response.errors ? xhr.response.errors : {};

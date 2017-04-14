@@ -7,7 +7,6 @@
 // part of a module was reviewed, and then does an individual sort within the module
 // for each is slow, who cares, i dunno
 
-
 // THIS STILL NEEDS THE LOOPS TO BE SET FOR DURATIONS AND ACCIDENTALS...USE MAP??
 // CAREFUL -- THIS LOOP ALREADY QUIETLY HANDLES DIATONIC SETS WITH "ELSE IF"
 
@@ -31,7 +30,11 @@ exports.generateCardSet = function(minimumMidi, maximumMidi, accidentals, durati
                         accidental: accidental,
                         difficulty: 0.3,
                         timestamp: Math.random(),
-                        period: 1
+                        period: 1,
+                        timesSeen: 0,
+                        timesCorrect: 0,
+                        timesIncorrect: 0,
+                        timestampReadable: 0
                     };
                 });
             });
@@ -44,7 +47,11 @@ exports.generateCardSet = function(minimumMidi, maximumMidi, accidentals, durati
                     accidental: null,
                     difficulty: 0.3,
                     timestamp: Math.random(),
-                    period: 1
+                    period: 1,
+                    timesSeen: 0,
+                    timesCorrect: 0,
+                    timesIncorrect: 0,
+                    timestampReadable: 0
                 };
             });
         }

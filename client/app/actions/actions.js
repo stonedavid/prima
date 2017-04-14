@@ -27,6 +27,7 @@ export const IS_LOGGED_IN = "IS_LOGGED_IN";
 export const GET_USER_LESSONS = "GET_USER_LESSONS";
 export const MOUNT_USER_LESSONS = "MOUNT_USER_LESSONS";
 export const MOUNT_CARDS = "MOUNT_CARDS";
+export const UPDATE_META = "UPDATE_META";
 export const SAVE_CARDS = "SAVE_CARDS";
 export const SAVE_ERROR = "SAVE_ERROR";
 
@@ -43,6 +44,7 @@ export const CHANGE_URL = "CHANGE_URL";
 export const EVAL_NOTE = "EVAL_NOTE";
 export const EVAL_SAGA = "EVAL_SAGA";
 export const SET_GAME_USER = "SET_GAME_USER";
+export const SET_CLOCK = "SET_CLOCK";
 
 /*
  * action creators
@@ -88,6 +90,10 @@ export function mountCards(cardset, lessonMeta) {
     return { type: MOUNT_CARDS, cardset, lessonMeta };
 }
 
+export function updateMeta() {
+    return { type: UPDATE_META };
+}
+
 export function saveCards() {
     return { type: SAVE_CARDS };
 }
@@ -126,4 +132,8 @@ export function evalSaga(midiValue) {
 
 export function setGameUser(form) {
     return { type: SET_GAME_USER, form };
+}
+
+export function setClock() {
+    return { type: SET_CLOCK };
 }

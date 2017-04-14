@@ -21,7 +21,8 @@ import {
     saveError,
     evalNote,
     mountUserLessons,
-    getUserLessonsError,
+    updateMeta,
+    setClock,
     GET_USER_LESSONS
 }
 from "../actions/actions.js";
@@ -71,11 +72,12 @@ export function* evalSaga(action) {
  
 export function* saveCards() {
     try {
+        yield(put(updateMeta()));
         const user = yield select(state => state.gameState.player.email);
         const cardset = yield select(state => state.gameState.cardset);
         const lessonMeta = yield select(state => state.gameState.lessonMeta);
         const form = { user: user, cardset: cardset, lessonMeta: lessonMeta };
-        const score = yield select(state => state.gameState.currentScore)
+        const score = yield select(state => state.gameState.currentScore);
         console.log(user,cardset,lessonMeta,score);
         const response = yield call(API.saveCards,form);
         console.log("SAVE RESPONSE", response);

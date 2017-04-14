@@ -3,6 +3,7 @@
 module.exports = {
     
     "A3-E4_d_q" : {
+        index: 0,
         name: "A3-E4_d_q",
         minimumMidi: 57,
         maximumMidi: 64,
@@ -12,10 +13,15 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     },
     
     "F3-C4_d_q" : {
+        index: 1,
         name: "F3-C4_d_q",
         minimumMidi: 53,
         maximumMidi: 60,
@@ -25,10 +31,15 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     },
     
     "C4-G4_d_q" : {
+        index: 2,
         name: "C4-G4_d_q",
         minimumMidi: 60,
         maximumMidi: 67,
@@ -38,10 +49,15 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     },
     
     "F3-G4_d_q" : {
+        index: 3,
         name: "F3-G4_d_q",
         minimumMidi: 53,
         maximumMidi: 67,
@@ -51,10 +67,15 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     },
     
     "D3-A3_d_q" : {
+        index: 4,
         name: "D3-A3_d_q",
         minimumMidi: 50,
         maximumMidi: 57,
@@ -64,10 +85,15 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     },
     
     "E4-B4_d_q" : {
+        index: 5,
         name: "E4-B4_d_q",
         minimumMidi: 64,
         maximumMidi: 71,
@@ -77,10 +103,15 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     },
     
     "D3-B4_d_q" : {
+        index: 6,
         name: "D3-B4_d_q",
         minimumMidi: 50,
         maximumMidi: 71,
@@ -90,10 +121,15 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     },
     
     "B2-F3_d_q" : {
+        index: 7,
         name: "B2-F3_d_q",
         minimumMidi: 47,
         maximumMidi: 53,
@@ -103,10 +139,15 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     },
     
     "G4-D5_d_q" : {
+        index: 8,
         name: "G4-D5_d_q",
         minimumMidi: 67,
         maximumMidi: 74,
@@ -116,10 +157,15 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     },
     
     "G2-D3_d_q" : {
+        index: 9,
         name: "G2-D3_d_q",
         minimumMidi: 43,
         maximumMidi: 50,
@@ -129,10 +175,15 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     },
     
     "B4-F5_d_q" : {
+        index: 10,
         name: "B4-F5_d_q",
         minimumMidi: 71,
         maximumMidi: 77,
@@ -142,10 +193,15 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     },
     
     "G2-F5_d_q" : {
+        index: 11,
         name: "G2-F5_d_q",
         minimumMidi: 43,
         maximumMidi: 77,
@@ -155,7 +211,11 @@ module.exports = {
         unlocked: true,
         difficulty: 0.3,
         timestamp: 0,
-        period: 86400
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
     }
     
 };

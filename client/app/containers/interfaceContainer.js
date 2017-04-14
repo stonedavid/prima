@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from "react";
+import CSSTransitionGroup from "react-transition-group/CSSTransitionGroup";
 import { connect } from "react-redux"
 
 import Slider from "material-ui/Slider";
@@ -7,6 +8,7 @@ import Card from "material-ui/Card";
 import { pressKey, releaseKey, evalSaga } from '../actions/actions.js';
 import Keyboard from '../components/keyboardComponent.js';
 import Display from "../components/displayComponent.js";
+import ProgressBar from "../components/progressBarComponent.js";
 
 const mapStateToProps = (state) => {
     return {
@@ -38,19 +40,21 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-const progressStyle = {
-    display: "block",
-    margin: "auto",
-    width: "600px"
-}
-
 const Interface = ({ noteString, keys, onPress, onRelease, currentScore, currentMIDI }) => {
+    const child = <div key={Math.random()}><Display noteString = {noteString} active = {1}/></div>;
     return (
     <div>
       
         <Card>
-            <Display noteString = {noteString} />
-            <progress value={currentScore} max="20" style={progressStyle}></progress>
+            <div style={{height: 208, position: "relative", overflow: "hidden", margin: "auto"}}>
+            <CSSTransitionGroup
+                transitionName="slide"
+                transitionEnterTimeout={600}
+                transitionLeave={false}>
+                {child}
+            </CSSTransitionGroup>
+            </div>
+            <ProgressBar progress={currentScore} />
             <Keyboard keys={keys} onPress={onPress} onRelease={onRelease} />
         </Card>
     </div>

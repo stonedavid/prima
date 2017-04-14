@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from "react"
+import CSSTransitionGroup from "react-transition-group/CSSTransitionGroup";
 import { Flow } from "vexflow";
 import { createVexFlowChord } from "../game/vexflow.js";
 import Rational from "rational-number";
@@ -194,6 +195,8 @@ class Display extends Component{
     svg.style.width = width + 20 + "px";
     svg.style.position = "relative";
     svg.style.overflow = "hidden";
+    svgContainer.style.opacity = this.props.active ? 0.9 : 0.2;
+    svg.style.zIndex = -1;
     svgContainer.style.height = "180px";
     svgContainer.style.position = "relative";
     svgContainer.style.display = "inline-block";
@@ -209,22 +212,29 @@ class Display extends Component{
 
   }
   render() {
-    return <div ref="vfWrap" style={{
-          border: "2px gray solid",
-          padding: 10,
-          borderRadius: 20,
-          margin: 0,
-          backgroundColor: "rgba(255,255,255,0.8)",
-          display: "inline-block",
-          animation: "taufik 2s"
-        }}>
-      </div>;
-    }
+    
+    return (
+      <div>
+        <div key="1" ref="vfWrap" style={{
+                        border: "2px gray solid",
+                        padding: 10,
+                        borderRadius: 0,
+                        margin: 0,
+                        backgroundColor: "rgba(255,255,255,0.8)",
+                        display: "inline-block"
+                      }}>
+        </div>
+      </div>
+    );
+  }
 }
 
 Display.propTypes = {
   noteString: PropTypes.string.isRequired,
   line: PropTypes.bool,
-}
+  active: PropTypes.bool.isRequired
+};
 
 export default Display;
+
+/**/

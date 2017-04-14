@@ -5,6 +5,7 @@ import { Card, CardTitle, CardActions } from "material-ui/Card";
 import FlatButton from "material-ui/FlatButton";
 import Animation from "./Animation.js";
 import Display from "./displayComponent";
+import TodoList from "./todoList.js";
 
 const genRandomNoteString = (length) => {
   var string = "";
@@ -29,6 +30,7 @@ const Home = () =>
         <CardTitle title="Welcome to Prima!" subtitle="Improve your sight-reading" />
         <Display
           noteString={noteString}
+          active={true}
         />
         <CardActions style={{ margin: "0px" }}>
             <FlatButton 
@@ -39,6 +41,7 @@ const Home = () =>
               }}
               />
         </CardActions>
+        <TodoList/>
       </Card>
     </MuiThemeProvider>
     )

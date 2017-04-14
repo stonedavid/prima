@@ -22,6 +22,7 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
+
 /**
  * Compare password with database
  * 
@@ -40,7 +41,11 @@ UserSchema.pre("save", function saveHook(next) {
     const user = this;
     
     // proceed further only if the password is modified or the user is new
-    if (!user.isModified("password")) { return next(); }
+    if (!user.isModified("password")) { 
+        console.log("saving user data...");
+        console.log("CURRICULUM MODIFIED?",user.isModified("curriculum"));
+        return next(); 
+    }
     
     return bcrypt.genSalt( (saltError, salt) => {
         if (saltError) { return next(saltError); }

@@ -28,8 +28,6 @@ class FloatingTile extends Component {
         return (
             <Paper 
                 style = {{
-                    marginBottom: 22,
-                    marginTop: 10,
                     textAlign: 'center',
                     display: 'inline-block',
                     borderRadius: "20px",

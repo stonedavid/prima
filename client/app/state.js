@@ -38,6 +38,7 @@ const state = {
             settings: {
                 clock: 20
             },
+            timestamp: 0,
             errors: null
     }
 };

@@ -1,4 +1,4 @@
-import { EVAL_NOTE, MOUNT_CARDS, SET_GAME_USER, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR } from "../actions/actions.js";
+import { EVAL_NOTE, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META } from "../actions/actions.js";
 import { calculateNextDueDate } from "../game/sm.js";
 
 function gameState(state = {}, action) {
@@ -15,6 +15,13 @@ function gameState(state = {}, action) {
             console.log("MOUNTING LESSONS", action.userLessons);
             return Object.assign({}, state, {
                 userLessons: action.userLessons
+            });
+        
+        case SET_CLOCK:
+            console.log("SETTING CLOCK");
+            return Object.assign({}, state, {
+                timestamp: Date.now() / 1000
+
             });
         
         case EVAL_NOTE:
@@ -38,13 +45,16 @@ function gameState(state = {}, action) {
             clock = state.settings.clock;
             
             currentCard = state.currentCard;
+            console.log("CURRENT CARD",currentCard);
             currentCardSet = state.cardset;
             
             threshold = 0.6;
             score = (currentCard.midiValue === action.midiValue ? 
                 1 - Math.min( 1, ((Date.now() / 1000 - timestamp) / clock)): 0);
-            
+                
+            console.log("TIME DELTA", ((Date.now()/1000 - timestamp)));
             console.log("SCORE:", score);
+            console.log("CURRENT MIDI", currentCard.midiValue, "INPUT MIDI", action.midiValue);
             
             // Create updated card, insert in set
             
@@ -71,6 +81,14 @@ function gameState(state = {}, action) {
                 cardset: sortedCardSet,
                 timestamp: Date.now() / 1000
                 });
+                
+        case UPDATE_META:
+            let updatedMeta = calculateNextDueDate(state.lessonMeta, 1.0, 0.5);
+            
+            return Object.assign({}, state, {
+                lessonMeta: updatedMeta
+            });
+            
             
         case MOUNT_CARDS:
             return Object.assign({}, state, {

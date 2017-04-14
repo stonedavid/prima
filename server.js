@@ -151,11 +151,11 @@ app.get("/api/getLessons/:email", (req, res) => {
     
 });
 
-app.get("/api/getCards/:user/:min/:max/:accidentals/:durations", (req, res) => {
+app.get("/api/getCards/:email/:min/:max/:accidentals/:durations", (req, res) => {
     
     console.log("RETRIEVING CARDS");
     
-    var name = req.params.user;
+    var email = req.params.email;
     var min = parseInt(req.params.min);
     var max = parseInt(req.params.max);
     var durations = req.params.durations.split("_");
@@ -164,7 +164,7 @@ app.get("/api/getCards/:user/:min/:max/:accidentals/:durations", (req, res) => {
     var cardNames = generateCardNames(min,max+1,accidentals,durations);
     
     // now in here we have to hit up mongo
-    User.findOne({name: name}, (err, user) => {
+    User.findOne({email: email}, (err, user) => {
         
         if (err) { 
             console.log("mongo error");
@@ -173,13 +173,19 @@ app.get("/api/getCards/:user/:min/:max/:accidentals/:durations", (req, res) => {
         if (!user) { 
             const error = new Error("Incorrect email or password");
             error.name = "IncorrectCredentialsError";
-            console.log("no such user", name);
+            console.log("no such user", email);
             return res.status(500).json({ error: error});
         }
         
+        var selectedCards = [];
+        
+        cardNames.forEach( cardName => {
+            selectedCards.push(user.curriculum.cards[cardName]);
+        });
+        
     
         return res.status(200).json({
-            cards: user.curriculum.cards.filter((card) => { return cardNames.indexOf(card.noteString) !== -1})
+            cards: selectedCards
         });
     });
 });
@@ -188,8 +194,88 @@ app.post("/api/save/:email", (req, res) => {
     var email = req.params.email;
     var data = req.body;
     
-    var user = User.findOne({ email: email });
+    User.findOne({ "email": email }, (err, user) => {
+        if (err) {
+            console.log("mongo error");
+            return res.status(500).json({ error: err });
+        }
+        
+        if (!user) { 
+            const error = new Error("Incorrect email or password");
+            error.name = "IncorrectCredentialsError";
+            console.log("no such user", user);
+            return res.status(500).json({ error: error});
+        }
+        
+        var cardset = data.cardset;
+        var lessonMeta = data.lessonMeta;
+    
+        
+        cardset.forEach( card => {
+            user.curriculum.cards[card.noteString] = card;
+        });
+        
+        user.curriculum.lessons[lessonMeta.name] = lessonMeta;
+        
+        user.markModified("curriculum");
+        
+        user.save(function (err) {
+            if(err) {
+                console.error('ERROR!');
+            }
+        });
+        
+        res.status(200).json({data: user.curriculum});
+    });
 });
+
+/**
+ * Tests
+ **/
+ 
+app.get("/tests/checkCards/:email", (req, res) => {
+        var email = req.params.email;
+        
+        User.findOne({ "email": email }, (err, user) => {
+            if (err) {
+                console.log("mongo error");
+                return res.status(500).json({ error: err });
+            }
+        
+            if (!user) { 
+                const error = new Error("Incorrect email or password");
+                error.name = "IncorrectCredentialsError";
+                console.log("no such user", user);
+                return res.status(500).json({ error: error});
+            }
+            
+            res.json(user.curriculum.cards);
+        });
+        
+    }
+);
+
+app.get("/tests/checkLessons/:email", (req, res) => {
+        var email = req.params.email;
+        
+        User.findOne({ "email": email }, (err, user) => {
+            if (err) {
+                console.log("mongo error");
+                return res.status(500).json({ error: err });
+            }
+        
+            if (!user) { 
+                const error = new Error("Incorrect email or password");
+                error.name = "IncorrectCredentialsError";
+                console.log("no such user", user);
+                return res.status(500).json({ error: error});
+            }
+            
+            res.json(user.curriculum.lessons);
+        });
+        
+    }
+);
 
 
 

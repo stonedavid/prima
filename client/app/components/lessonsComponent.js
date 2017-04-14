@@ -21,10 +21,8 @@ const styles = {
     justifyContent: 'space-around',
   },
   gridList: {
+    width: 600,
     marginTop: 30,
-    display: 'flex',
-    flexWrap: 'nowrap',
-    overflowX: 'auto',
   },
 };
 
@@ -36,7 +34,6 @@ import Display from "./displayComponent.js";
 class Lessons extends Component {
   constructor(props) {
     super(props);
-    console.log("LESSONS PROPS",this.props);
   }
 
   cardsetToNoteString = (lessonMeta) => {
@@ -47,9 +44,7 @@ class Lessons extends Component {
     let high = range[1];
     let accidentals = name[1];
     let durations = name[2];
-    console.log("ACC,DURATIONS", accidentals, durations);
     let noteString = `${low}/${durations},${high}/${durations}`;
-    console.log("NOTESTRING", noteString);
     return noteString;
     
   }
@@ -66,24 +61,32 @@ class Lessons extends Component {
         <div style={styles.root}>
           <GridList
             cellHeight={"auto"}
-            padding={10}
-            cols={1}
+            padding={5}
+            cols={3}
             style={styles.gridList}
           >
             {this.props.lessons.map( lessonMeta => {
-            
+              
+              let active = lessonMeta.unlocked;
+              
+              active = false;
+              
               return (
                 <GridTile 
-                  cols={1}
+                  style={
+                    { overflow: "visible" }
+                  }
                   children={
                     <FloatingTile
-                      initZ = {1}
+                      initZ = {0}
                       floatZ = {3}
                       lessonMeta = { lessonMeta }
+                      email = { this.props.email }
                       children = {
                         <Display
                           noteString = {this.cardsetToNoteString(lessonMeta)}
                           line = {true}
+                          active = {active}
                         />
                       }
                     />
