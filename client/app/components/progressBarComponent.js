@@ -1,30 +1,31 @@
 import React, { PropTypes } from "react";
+import CSSTransitionGroup from "react-transition-group/CSSTransitionGroup";
 
 
 
 const ProgressBar = ({progress}) => {
     const styles = {
         outer: {
-            background: "#f80",
+            background: "#eee",
             margin: "auto",
             position: "relative",
             display: "block",
-            width: "80%"
+            width: "100%",
+            height: 10
+            
         },
         
         inner: {
-            background: "#ddd",
-            left: progress * 25,
             position: "absolute",
             top: 0,
-            transition: '0.5s transform ease',
-            borderRadius: 50
+            width: `${progress}%`,
+            height: 10
         }
     }
     
     return (
         <div style = {styles.outer}>
-            <div style = {styles.inner}></div>
+            <div className={"progress"} style = {styles.inner}></div>
         </div>
     );
 }

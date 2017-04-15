@@ -214,17 +214,15 @@ class Display extends Component{
   render() {
     
     return (
-      <div>
-        <div key="1" ref="vfWrap" style={{
+        <div ref="vfWrap" style={{
                         border: "2px gray solid",
                         padding: 10,
-                        borderRadius: 0,
+                        borderRadius: 20,
                         margin: 0,
                         backgroundColor: "rgba(255,255,255,0.8)",
                         display: "inline-block"
                       }}>
         </div>
-      </div>
     );
   }
 }

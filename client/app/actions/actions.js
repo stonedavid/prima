@@ -58,8 +58,8 @@ export function createKey(midiValue) {
     return { type: CREATE_KEY, midiValue: midiValue };
 }
  
-export function pressKey(midiValue,node = {}) {
-    return { type: PRESS_KEY, midiValue: midiValue };
+export function pressKey(midiValue,evaluation) {
+    return { type: PRESS_KEY, midiValue: midiValue, evaluation: evaluation };
 }
 
 export function releaseKey(midiValue) {

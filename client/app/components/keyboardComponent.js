@@ -27,6 +27,10 @@ const populateKeyComponents = (keyObjects, onPress, onRelease) => {
                         pressed = {
                             keyObjects[i].pressed
                         }
+                        
+                        evaluation = {
+                            keyObjects[i].evaluation
+                        }
                         // Key
                         key = {keyObjects[i].midiValue}
                         />);
@@ -53,6 +57,12 @@ const populateKeyComponents = (keyObjects, onPress, onRelease) => {
                         }
                         whitePressed = {
                             keyObjects[i + 1].pressed // THIS IS THE SOURCE OF THE ERROR! NO HANGING BLACK KEYS!
+                        }
+                        blackEvaluation = {
+                            keyObjects[i].evaluation
+                        }
+                        whiteEvaluation = {
+                            keyObjects[i+1].evaluation
                         }
                         
                         // Key

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { evalNote, pressKey, releaseKey } from '../actions/actions.js';
-import { Keyboard } from '../components/keyboardComponent.js';
+import { evalNote, evalSaga, pressKey, releaseKey } from '../actions/actions.js';
+import Keyboard from '../components/keyboardComponent.js';
 
 const mapStateToProps = (state) => {
     return {
@@ -13,9 +13,7 @@ const mapDispatchToProps = (dispatch) => {
         onPress: (e,midiValue) => {
             e.preventDefault();
             if (e.buttons) {
-                console.log("PRESSED", midiValue)
-                dispatch(pressKey(midiValue))
-                dispatch(evalNote(midiValue))
+                dispatch(evalSaga(midiValue))
             }
             
         },

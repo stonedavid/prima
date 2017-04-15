@@ -31132,10 +31132,8 @@
 	    return { type: CREATE_KEY, midiValue: midiValue };
 	}
 
-	function pressKey(midiValue) {
-	    var node = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-	    return { type: PRESS_KEY, midiValue: midiValue };
+	function pressKey(midiValue, evaluation) {
+	    return { type: PRESS_KEY, midiValue: midiValue, evaluation: evaluation };
 	}
 
 	function releaseKey(midiValue) {
@@ -36147,9 +36145,14 @@
 	            if (state.midiValue != action.midiValue) {
 	                return state;
 	            }
+
+	            var color = action.evaluation ? "green" : "red";
+
 	            return Object.assign({}, state, {
 	                pressed: true,
-	                node: action.node
+	                node: action.node,
+	                evaluation: action.evaluation
+
 	            });
 
 	        case "RELEASE_KEY":
@@ -36160,7 +36163,8 @@
 	            if (state.node) state.node.stop();
 	            return Object.assign({}, state, {
 	                pressed: false,
-	                node: undefined
+	                node: undefined,
+	                evaluation: false
 	            });
 
 	        case "CREATE_KEY":
@@ -36586,32 +36590,48 @@
 	 **/
 
 	function evalSaga(action) {
-	    var score;
+	    var correctMIDI, evaluation, score;
 	    return regeneratorRuntime.wrap(function evalSaga$(_context2) {
 	        while (1) {
 	            switch (_context2.prev = _context2.next) {
 	                case 0:
 	                    _context2.next = 2;
-	                    return (0, _effects.put)((0, _actions.evalNote)(action.midiValue));
+	                    return (0, _effects.select)(function (state) {
+	                        return state.gameState.currentCard.midiValue;
+	                    });
 
 	                case 2:
-	                    _context2.next = 4;
+	                    correctMIDI = _context2.sent;
+	                    evaluation = correctMIDI == action.midiValue;
+
+	                    console.log("CORRECT MIDI", correctMIDI);
+	                    console.log("INPUT MIDI", action.midiValue);
+	                    console.log("SAGA EVALUATION", evaluation);
+	                    _context2.next = 9;
+	                    return (0, _effects.put)((0, _actions.pressKey)(action.midiValue, evaluation));
+
+	                case 9:
+	                    _context2.next = 11;
+	                    return (0, _effects.put)((0, _actions.evalNote)(action.midiValue));
+
+	                case 11:
+	                    _context2.next = 13;
 	                    return (0, _effects.select)(function (state) {
 	                        return state.gameState.currentScore;
 	                    });
 
-	                case 4:
+	                case 13:
 	                    score = _context2.sent;
 
 	                    if (!(score === 3)) {
-	                        _context2.next = 8;
+	                        _context2.next = 17;
 	                        break;
 	                    }
 
-	                    _context2.next = 8;
+	                    _context2.next = 17;
 	                    return (0, _effects.put)({ type: "SAVE_CARDS" });
 
-	                case 8:
+	                case 17:
 	                case 'end':
 	                    return _context2.stop();
 	            }
@@ -46557,7 +46577,7 @@
 
 	var _displayComponent2 = _interopRequireDefault(_displayComponent);
 
-	var _todoList = __webpack_require__(897);
+	var _todoList = __webpack_require__(884);
 
 	var _todoList2 = _interopRequireDefault(_todoList);
 
@@ -83553,7 +83573,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _CSSTransitionGroup = __webpack_require__(884);
+	var _CSSTransitionGroup = __webpack_require__(885);
 
 	var _CSSTransitionGroup2 = _interopRequireDefault(_CSSTransitionGroup);
 
@@ -83789,18 +83809,14 @@
 	    key: "render",
 	    value: function render() {
 
-	      return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement("div", { key: "1", ref: "vfWrap", style: {
-	            border: "2px gray solid",
-	            padding: 10,
-	            borderRadius: 0,
-	            margin: 0,
-	            backgroundColor: "rgba(255,255,255,0.8)",
-	            display: "inline-block"
-	          } })
-	      );
+	      return _react2.default.createElement("div", { ref: "vfWrap", style: {
+	          border: "2px gray solid",
+	          padding: 10,
+	          borderRadius: 20,
+	          margin: 0,
+	          backgroundColor: "rgba(255,255,255,0.8)",
+	          display: "inline-block"
+	        } });
 	    }
 	  }]);
 
@@ -83823,21 +83839,114 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _CSSTransitionGroup = __webpack_require__(885);
+
+	var _CSSTransitionGroup2 = _interopRequireDefault(_CSSTransitionGroup);
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _FlatButton = __webpack_require__(812);
+
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ImageCarousel = function (_Component) {
+	    _inherits(ImageCarousel, _Component);
+
+	    function ImageCarousel(props) {
+	        _classCallCheck(this, ImageCarousel);
+
+	        var _this = _possibleConstructorReturn(this, (ImageCarousel.__proto__ || Object.getPrototypeOf(ImageCarousel)).call(this, props));
+
+	        _this.changeItem = function () {
+	            console.log(_this.state);
+	            _this.setState({
+	                item: _react2.default.createElement(
+	                    'div',
+	                    { key: Math.random() },
+	                    Math.floor(Math.random() * 10)
+	                )
+	            });
+	        };
+
+	        _this.state = {
+	            item: _react2.default.createElement(
+	                'div',
+	                { key: Math.random() },
+	                Math.floor(Math.random() * 10)
+	            )
+	        };
+	        return _this;
+	    }
+
+	    _createClass(ImageCarousel, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                'div',
+	                { style: { height: 100 } },
+	                _react2.default.createElement(
+	                    'div',
+	                    { style: { height: 50 } },
+	                    _react2.default.createElement(
+	                        _CSSTransitionGroup2.default,
+	                        {
+	                            transitionName: 'slide',
+	                            transitionEnterTimeout: 300,
+	                            transitionLeave: false },
+	                        this.state.item
+	                    )
+	                ),
+	                _react2.default.createElement(_FlatButton2.default, { label: 'Change', secondary: true, onClick: function onClick() {
+	                        return _this2.changeItem();
+	                    } })
+	            );
+	        }
+	    }]);
+
+	    return ImageCarousel;
+	}(_react.Component);
+
+		exports.default = ImageCarousel;
+
+/***/ },
+/* 885 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 	exports.__esModule = true;
 
 	var _react = __webpack_require__(299);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _TransitionGroup = __webpack_require__(885);
+	var _TransitionGroup = __webpack_require__(886);
 
 	var _TransitionGroup2 = _interopRequireDefault(_TransitionGroup);
 
-	var _CSSTransitionGroupChild = __webpack_require__(889);
+	var _CSSTransitionGroupChild = __webpack_require__(890);
 
 	var _CSSTransitionGroupChild2 = _interopRequireDefault(_CSSTransitionGroupChild);
 
-	var _PropTypes = __webpack_require__(896);
+	var _PropTypes = __webpack_require__(897);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -83911,14 +84020,14 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 885 */
+/* 886 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _chainFunction = __webpack_require__(886);
+	var _chainFunction = __webpack_require__(887);
 
 	var _chainFunction2 = _interopRequireDefault(_chainFunction);
 
@@ -83926,11 +84035,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _warning = __webpack_require__(887);
+	var _warning = __webpack_require__(888);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _ChildMapping = __webpack_require__(888);
+	var _ChildMapping = __webpack_require__(889);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -84171,7 +84280,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 886 */
+/* 887 */
 /***/ function(module, exports) {
 
 	
@@ -84197,9 +84306,9 @@
 
 
 /***/ },
-/* 887 */
-539,
 /* 888 */
+539,
+/* 889 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -84295,7 +84404,7 @@
 	}
 
 /***/ },
-/* 889 */
+/* 890 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -84304,19 +84413,19 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _addClass = __webpack_require__(890);
+	var _addClass = __webpack_require__(891);
 
 	var _addClass2 = _interopRequireDefault(_addClass);
 
-	var _removeClass = __webpack_require__(892);
+	var _removeClass = __webpack_require__(893);
 
 	var _removeClass2 = _interopRequireDefault(_removeClass);
 
-	var _requestAnimationFrame = __webpack_require__(893);
+	var _requestAnimationFrame = __webpack_require__(894);
 
 	var _requestAnimationFrame2 = _interopRequireDefault(_requestAnimationFrame);
 
-	var _properties = __webpack_require__(895);
+	var _properties = __webpack_require__(896);
 
 	var _react = __webpack_require__(299);
 
@@ -84324,7 +84433,7 @@
 
 	var _reactDom = __webpack_require__(326);
 
-	var _PropTypes = __webpack_require__(896);
+	var _PropTypes = __webpack_require__(897);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -84525,7 +84634,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 890 */
+/* 891 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -84535,7 +84644,7 @@
 	});
 	exports.default = addClass;
 
-	var _hasClass = __webpack_require__(891);
+	var _hasClass = __webpack_require__(892);
 
 	var _hasClass2 = _interopRequireDefault(_hasClass);
 
@@ -84547,7 +84656,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 891 */
+/* 892 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -84562,7 +84671,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 892 */
+/* 893 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -84572,7 +84681,7 @@
 	};
 
 /***/ },
-/* 893 */
+/* 894 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -84581,7 +84690,7 @@
 	  value: true
 	});
 
-	var _inDOM = __webpack_require__(894);
+	var _inDOM = __webpack_require__(895);
 
 	var _inDOM2 = _interopRequireDefault(_inDOM);
 
@@ -84630,7 +84739,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 894 */
+/* 895 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -84642,7 +84751,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 895 */
+/* 896 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -84652,7 +84761,7 @@
 	});
 	exports.animationEnd = exports.animationDelay = exports.animationTiming = exports.animationDuration = exports.animationName = exports.transitionEnd = exports.transitionDuration = exports.transitionDelay = exports.transitionTiming = exports.transitionProperty = exports.transform = undefined;
 
-	var _inDOM = __webpack_require__(894);
+	var _inDOM = __webpack_require__(895);
 
 	var _inDOM2 = _interopRequireDefault(_inDOM);
 
@@ -84757,7 +84866,7 @@
 	}
 
 /***/ },
-/* 896 */
+/* 897 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -84807,99 +84916,6 @@
 	})]);
 
 /***/ },
-/* 897 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _CSSTransitionGroup = __webpack_require__(884);
-
-	var _CSSTransitionGroup2 = _interopRequireDefault(_CSSTransitionGroup);
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _FlatButton = __webpack_require__(812);
-
-	var _FlatButton2 = _interopRequireDefault(_FlatButton);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ImageCarousel = function (_Component) {
-	    _inherits(ImageCarousel, _Component);
-
-	    function ImageCarousel(props) {
-	        _classCallCheck(this, ImageCarousel);
-
-	        var _this = _possibleConstructorReturn(this, (ImageCarousel.__proto__ || Object.getPrototypeOf(ImageCarousel)).call(this, props));
-
-	        _this.changeItem = function () {
-	            console.log(_this.state);
-	            _this.setState({
-	                item: _react2.default.createElement(
-	                    'div',
-	                    { key: Math.random() },
-	                    Math.floor(Math.random() * 10)
-	                )
-	            });
-	        };
-
-	        _this.state = {
-	            item: _react2.default.createElement(
-	                'div',
-	                { key: Math.random() },
-	                Math.floor(Math.random() * 10)
-	            )
-	        };
-	        return _this;
-	    }
-
-	    _createClass(ImageCarousel, [{
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-
-	            return _react2.default.createElement(
-	                'div',
-	                { style: { height: 100 } },
-	                _react2.default.createElement(
-	                    'div',
-	                    { style: { height: 50 } },
-	                    _react2.default.createElement(
-	                        _CSSTransitionGroup2.default,
-	                        {
-	                            transitionName: 'slide',
-	                            transitionEnterTimeout: 300,
-	                            transitionLeave: false },
-	                        this.state.item
-	                    )
-	                ),
-	                _react2.default.createElement(_FlatButton2.default, { label: 'Change', secondary: true, onClick: function onClick() {
-	                        return _this2.changeItem();
-	                    } })
-	            );
-	        }
-	    }]);
-
-	    return ImageCarousel;
-	}(_react.Component);
-
-		exports.default = ImageCarousel;
-
-/***/ },
 /* 898 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -84913,7 +84929,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _CSSTransitionGroup = __webpack_require__(884);
+	var _CSSTransitionGroup = __webpack_require__(885);
 
 	var _CSSTransitionGroup2 = _interopRequireDefault(_CSSTransitionGroup);
 
@@ -84929,9 +84945,9 @@
 
 	var _actions = __webpack_require__(530);
 
-	var _keyboardComponent = __webpack_require__(903);
+	var _keyboardContainer = __webpack_require__(1010);
 
-	var _keyboardComponent2 = _interopRequireDefault(_keyboardComponent);
+	var _keyboardContainer2 = _interopRequireDefault(_keyboardContainer);
 
 	var _displayComponent = __webpack_require__(883);
 
@@ -84945,46 +84961,42 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        keys: state.inputDisplay.keyboard.keys,
 	        noteString: state.gameState.currentCard.noteString,
 	        currentScore: state.gameState.currentScore
 	    };
 	};
 
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        onPress: function onPress(e, midiValue) {
-	            e.preventDefault();
-	            if (e.buttons || e.type === "touchstart") {
+	var containerStyle = {
+	    position: "relative",
+	    display: "block",
+	    height: 210,
+	    paddingTop: 20,
+	    paddingBottom: 20
+	};
 
-	                // this saga will check the score against the threshold, and then async call a gamestate update followed by API call if necessary
-	                dispatch((0, _actions.evalSaga)(midiValue));
-	                dispatch((0, _actions.pressKey)(midiValue));
-	            }
-	        },
+	var progressContainerStyle = {
+	    position: "relative",
+	    display: "block",
+	    height: 30,
+	    paddingTop: 20,
+	    margin: "auto",
+	    width: 604
+	};
 
-	        onRelease: function onRelease(e, midiValue) {
-	            e.preventDefault();
-	            if (e.buttons || e.type == "mouseup" || e.type === "touchend") {
-	                dispatch((0, _actions.releaseKey)(midiValue));
-	            }
-	        }
-	    };
+	var childStyle = {
+	    position: "absolute",
+	    display: "inline",
+	    right: 0,
+	    left: 0
 	};
 
 	var Interface = function Interface(_ref) {
 	    var noteString = _ref.noteString,
-	        keys = _ref.keys,
-	        onPress = _ref.onPress,
-	        onRelease = _ref.onRelease,
 	        currentScore = _ref.currentScore,
 	        currentMIDI = _ref.currentMIDI;
 
-	    var child = _react2.default.createElement(
-	        "div",
-	        { key: Math.random() },
-	        _react2.default.createElement(_displayComponent2.default, { noteString: noteString, active: 1 })
-	    );
+	    var displayChild = _react2.default.createElement(_displayComponent2.default, { noteString: noteString, active: true, key: Math.random() });
+
 	    return _react2.default.createElement(
 	        "div",
 	        null,
@@ -84993,23 +85005,32 @@
 	            null,
 	            _react2.default.createElement(
 	                "div",
-	                { style: { height: 208, position: "relative", overflow: "hidden", margin: "auto" } },
+	                { style: containerStyle },
 	                _react2.default.createElement(
 	                    _CSSTransitionGroup2.default,
 	                    {
 	                        transitionName: "slide",
-	                        transitionEnterTimeout: 600,
-	                        transitionLeave: false },
-	                    child
+	                        transitionEnterTimeout: 500,
+	                        transitionLeaveTimeout: 500
+	                    },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { key: Math.random(), style: childStyle },
+	                        displayChild
+	                    )
 	                )
 	            ),
-	            _react2.default.createElement(_progressBarComponent2.default, { progress: currentScore }),
-	            _react2.default.createElement(_keyboardComponent2.default, { keys: keys, onPress: onPress, onRelease: onRelease })
+	            _react2.default.createElement(
+	                "div",
+	                { style: progressContainerStyle },
+	                _react2.default.createElement(_progressBarComponent2.default, { progress: currentScore / 20 * 100 })
+	            ),
+	            _react2.default.createElement(_keyboardContainer2.default, null)
 	        )
 	    );
 	};
 
-	var InterfaceContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Interface);
+	var InterfaceContainer = (0, _reactRedux.connect)(mapStateToProps)(Interface);
 
 	exports.default = InterfaceContainer;
 
@@ -85991,7 +86012,9 @@
 
 	                    // State from keyObjects array
 	                    , midiValue: keyObjects[i].midiValue,
-	                    pressed: keyObjects[i].pressed
+	                    pressed: keyObjects[i].pressed,
+
+	                    evaluation: keyObjects[i].evaluation
 	                    // Key
 	                    , key: keyObjects[i].midiValue
 	                }));
@@ -86008,7 +86031,9 @@
 	                    , midiValue: keyObjects[i].midiValue,
 	                    blackPressed: keyObjects[i].pressed,
 	                    whitePressed: keyObjects[i + 1].pressed // THIS IS THE SOURCE OF THE ERROR! NO HANGING BLACK KEYS!
-
+	                    ,
+	                    blackEvaluation: keyObjects[i].evaluation,
+	                    whiteEvaluation: keyObjects[i + 1].evaluation
 
 	                    // Key
 	                    , key: keyObjects[i].midiValue
@@ -86084,8 +86109,9 @@
 	    var onPress = _ref.onPress,
 	        onRelease = _ref.onRelease,
 	        midiValue = _ref.midiValue,
-	        pressed = _ref.pressed;
-	    return _react2.default.createElement("div", { className: "white " + (pressed ? "pressed" : ""),
+	        pressed = _ref.pressed,
+	        evaluation = _ref.evaluation;
+	    return _react2.default.createElement("div", { className: "white " + (pressed ? "pressed" : "") + (evaluation ? "-correct" : "-incorrect"),
 	        onMouseDown: function onMouseDown(e) {
 	            return onPress(e, midiValue);
 	        },
@@ -86114,8 +86140,9 @@
 	    var onPress = _ref2.onPress,
 	        onRelease = _ref2.onRelease,
 	        midiValue = _ref2.midiValue,
-	        pressed = _ref2.pressed;
-	    return _react2.default.createElement("span", { className: pressed ? "pressed" : "",
+	        pressed = _ref2.pressed,
+	        evaluation = _ref2.evaluation;
+	    return _react2.default.createElement("span", { className: (pressed ? "pressed" : "") + (evaluation ? "-correct" : "-incorrect"),
 	        onMouseDown: function onMouseDown(e) {
 	            return onPress(e, midiValue);
 	        },
@@ -86141,7 +86168,8 @@
 	    var onPress = _ref3.onPress,
 	        onRelease = _ref3.onRelease,
 	        midiValue = _ref3.midiValue,
-	        pressed = _ref3.pressed;
+	        pressed = _ref3.pressed,
+	        evaluation = _ref3.evaluation;
 	    return _react2.default.createElement(
 	        "li",
 	        null,
@@ -86149,7 +86177,8 @@
 	            onPress: onPress,
 	            onRelease: onRelease,
 	            midiValue: midiValue,
-	            pressed: pressed
+	            pressed: pressed,
+	            evaluation: evaluation
 	        })
 	    );
 	};
@@ -86159,7 +86188,9 @@
 	        onRelease = _ref4.onRelease,
 	        midiValue = _ref4.midiValue,
 	        whitePressed = _ref4.whitePressed,
-	        blackPressed = _ref4.blackPressed;
+	        blackPressed = _ref4.blackPressed,
+	        whiteEvaluation = _ref4.whiteEvaluation,
+	        blackEvaluation = _ref4.blackEvaluation;
 	    return _react2.default.createElement(
 	        "li",
 	        null,
@@ -86167,13 +86198,15 @@
 	            onPress: onPress,
 	            onRelease: onRelease,
 	            midiValue: midiValue + 1,
-	            pressed: whitePressed
+	            pressed: whitePressed,
+	            evaluation: whiteEvaluation
 	        }),
 	        _react2.default.createElement(BlackKeyElement, {
 	            onPress: onPress,
 	            onRelease: onRelease,
 	            midiValue: midiValue,
-	            pressed: blackPressed
+	            pressed: blackPressed,
+	            evaluation: blackEvaluation
 	        })
 	    );
 	};
@@ -86209,6 +86242,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _CSSTransitionGroup = __webpack_require__(885);
+
+	var _CSSTransitionGroup2 = _interopRequireDefault(_CSSTransitionGroup);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ProgressBar = function ProgressBar(_ref) {
@@ -86216,27 +86253,27 @@
 
 	    var styles = {
 	        outer: {
-	            background: "#f80",
+	            background: "#eee",
 	            margin: "auto",
 	            position: "relative",
 	            display: "block",
-	            width: "80%"
+	            width: "100%",
+	            height: 10
+
 	        },
 
 	        inner: {
-	            background: "#ddd",
-	            left: progress * 25,
 	            position: "absolute",
 	            top: 0,
-	            transition: '0.5s transform ease',
-	            borderRadius: 50
+	            width: progress + "%",
+	            height: 10
 	        }
 	    };
 
 	    return _react2.default.createElement(
 	        "div",
 	        { style: styles.outer },
-	        _react2.default.createElement("div", { style: styles.inner })
+	        _react2.default.createElement("div", { className: "progress", style: styles.inner })
 	    );
 	};
 
@@ -89300,7 +89337,7 @@
 
 
 	// module
-	exports.push([module.id, "/**\n * Pure CSS3 Piano by Taufik Nurrohman\n * On: 1 December 2011\n * URL: http://hompimpaalaihumgambreng.blogspot.com/\n * Note: This experiment is under the God Almighty License.\n * Please do not replace or remove the attribution above if you want to save/modify this project legally.\n * Good luck!\n */\n\n* {\n  margin:0px;\n  padding:0px;\n  list-style:none;\n}\n\ninput:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {\n    background-color: rgb(255,255,255);\n    background-image: none;\n    color: rgb(0, 0, 0);\n}\n\n:focus {\n  outline:none !important;\n}\n\n/*body {\n  background:#666;\n  background:-webkit-radial-gradient(bottom left,cover,#999,#666);\n  background:-moz-radial-gradient(bottom left,cover,#999,#666);\n  background:-ms-radial-gradient(bottom left,cover,#999,#666);\n  background:-o-radial-gradient(bottom left,cover,#999,#666);\n  background:radial-gradient(bottom left,cover,#999,#666);\n  height:500px;\n}*/\n\na {\n  color:indigo;\n  text-decoration:none;\n}\n\na:hover {\n  text-decoration:underline;\n}\n\n/* Piano Wrapper */\n#p-wrapper {\n  white-space: nowrap;\n  overflow-x:scroll;\n  overflow-y:hidden;\n  background:#000;\n  background:-webkit-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:-moz-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:-ms-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:-o-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  position:relative;\n  -webkit-box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;\n  -moz-box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;\n  box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;\n  border:2px solid #333;\n  -webkit-border-radius:0 0 5px 5px;\n  -moz-border-radius:0 0 5px 5px;\n  border-radius:0 0 5px 5px;\n  -webkit-animation:taufik 2s;\n  -moz-animation:taufik 2s;\n  animation:taufik 2s;\n}\n\n/* Tuts */\nul#piano {\n  display: inline-block;\n  height:220px;\n  margin: 0px;\n  border-top:2px solid #222;\n}\n\nul#piano li {\n  list-style:none;\n  float:left;\n  background:#aaa;\n  width:40px;\n  position:relative;\n}\n\nul#piano li a,ul#piano li div.white {\n  -webkit-user-select: none;\n  display:block;\n  height:220px;\n  background:#fff;\n  background:-webkit-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-moz-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-ms-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-o-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:linear-gradient(-30deg,#f5f5f5,#fff);\n  border:1px solid #ccc;\n  -webkit-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -moz-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -webkit-border-radius:0 0 3px 3px;\n  -moz-border-radius:0 0 3px 3px;\n  border-radius:0 0 3px 3px;\n}\n\n#piano li a.pressed,  ul#piano li div.white.pressed {\n  -webkit-tap-highlight-color: #ccc;\n  -webkit-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  -moz-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  position:relative;\n  top:2px;\n  height:216px;\n}\n\nul#piano li a.pressed:before,ul#piano li div.white.pressed:before {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent transparent transparent rgba(0,0,0,0.1);\n  position:absolute;\n  left:0px;\n  top:0px;\n}\n\nul#piano li a.pressed:after,ul#piano li div.white.pressed:after {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent rgba(0,0,0,0.1) transparent transparent;\n  position:absolute;\n  right:0px;\n  top:0px;\n}\n\n/* Black Tuts */\nul#piano li span {\n  position:absolute;\n  top:0px;\n  left:-12px;\n  width:20px;\n  height:120px;\n  background:#333;\n  background:-webkit-linear-gradient(-20deg,#333,#000,#333);\n  background:-moz-linear-gradient(-20deg,#333,#000,#333);\n  background:-ms-linear-gradient(-20deg,#333,#000,#333);\n  background:-o-linear-gradient(-20deg,#333,#000,#333);\n  background:linear-gradient(-20deg,#333,#000,#333);\n  z-index:10;\n  border-width:1px 2px 7px;\n  border-style:solid;\n  border-color:#666 #222 #111 #555;\n  -webkit-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -moz-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -webkit-border-radius:0 0 2px 2px;\n  -moz-border-radius:0 0 2px 2px;\n  border-radius:0 0 2px 2px;\n}\n\nul#piano li span.pressed {\n  border-bottom-width:2px;\n  height:123px;\n  -webkit-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  -moz-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n}\n\n/* React Transition Class */\n\n.slide-enter {\n  opacity: 0.01;\n  transform: translate(10%);\n}\n\n.slide-enter.slide-enter-active {\n  opacity: 1;\n  transform: translate(0%);\n  transition: all 600ms ease-in-out;\n}\n\n\n/* Animation */\n@-webkit-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@-moz-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}", ""]);
+	exports.push([module.id, "/**\n * Pure CSS3 Piano by Taufik Nurrohman\n * On: 1 December 2011\n * URL: http://hompimpaalaihumgambreng.blogspot.com/\n * Note: This experiment is under the God Almighty License.\n * Please do not replace or remove the attribution above if you want to save/modify this project legally.\n * Good luck!\n */\n\n* {\n  margin:0px;\n  padding:0px;\n  list-style:none;\n}\n\ninput:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {\n    background-color: rgb(255,255,255);\n    background-image: none;\n    color: rgb(0, 0, 0);\n}\n\n:focus {\n  outline:none !important;\n}\n\n/*body {\n  background:#666;\n  background:-webkit-radial-gradient(bottom left,cover,#999,#666);\n  background:-moz-radial-gradient(bottom left,cover,#999,#666);\n  background:-ms-radial-gradient(bottom left,cover,#999,#666);\n  background:-o-radial-gradient(bottom left,cover,#999,#666);\n  background:radial-gradient(bottom left,cover,#999,#666);\n  height:500px;\n}*/\n\na {\n  color:indigo;\n  text-decoration:none;\n}\n\na:hover {\n  text-decoration:underline;\n}\n\n/* Piano Wrapper */\n#p-wrapper {\n  white-space: nowrap;\n  overflow-x:scroll;\n  overflow-y:hidden;\n  background:#000;\n  background:-webkit-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:-moz-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:-ms-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:-o-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  position:relative;\n  -webkit-box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;\n  -moz-box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;\n  box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;\n  border:2px solid #333;\n  -webkit-border-radius:0 0 5px 5px;\n  -moz-border-radius:0 0 5px 5px;\n  border-radius:0 0 5px 5px;\n  -webkit-animation:taufik 2s;\n  -moz-animation:taufik 2s;\n  animation:taufik 2s;\n}\n\n/* Tuts */\nul#piano {\n  display: inline-block;\n  height:220px;\n  margin: 0px;\n  border-top:2px solid #222;\n}\n\nul#piano li {\n  list-style:none;\n  float:left;\n  background:#aaa;\n  width:40px;\n  position:relative;\n}\n\nul#piano li a,ul#piano li div.white {\n  -webkit-user-select: none;\n  display:block;\n  height:220px;\n  background:#fff;\n  background:-webkit-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-moz-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-ms-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-o-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:linear-gradient(-30deg,#f5f5f5,#fff);\n  border:1px solid #ccc;\n  -webkit-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -moz-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -webkit-border-radius:0 0 3px 3px;\n  -moz-border-radius:0 0 3px 3px;\n  border-radius:0 0 3px 3px;\n}\n\n#piano li a.pressed,  ul#piano li div.white.pressed-correct {\n  -webkit-tap-highlight-color: #ccc;\n  -webkit-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  -moz-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  position:relative;\n  top:2px;\n  height:216px;\n  background:-webkit-linear-gradient(-30deg,#00b200,#fff);\n  background:-moz-linear-gradient(-30deg,#00b200,#fff);\n  background:-ms-linear-gradient(-30deg,#00b200,#fff);\n  background:-o-linear-gradient(-30deg,#00b200,#fff);\n  background:linear-gradient(-30deg,#00b200,#fff);\n}\n\n#piano li a.pressed,  ul#piano li div.white.pressed-incorrect {\n  -webkit-tap-highlight-color: #ccc;\n  -webkit-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  -moz-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  position:relative;\n  top:2px;\n  height:216px;\n  background:-webkit-linear-gradient(-30deg,#ff4c4c,#fff);\n  background:-moz-linear-gradient(-30deg,#ff4c4c,#fff);\n  background:-ms-linear-gradient(-30deg,#ff4c4c,#fff);\n  background:-o-linear-gradient(-30deg,#ff4c4c,#fff);\n  background:linear-gradient(-30deg,#ff4c4c,#fff);\n}\n\nul#piano li a.pressed:before,ul#piano li div.white.pressed:before {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent transparent transparent rgba(0,0,0,0.1);\n  position:absolute;\n  left:0px;\n  top:0px;\n}\n\nul#piano li a.pressed:after,ul#piano li div.white.pressed:after {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent rgba(0,0,0,0.1) transparent transparent;\n  position:absolute;\n  right:0px;\n  top:0px;\n}\n\n/* Black Tuts */\nul#piano li span {\n  position:absolute;\n  top:0px;\n  left:-12px;\n  width:20px;\n  height:120px;\n  background:#333;\n  background:-webkit-linear-gradient(-20deg,#333,#000,#333);\n  background:-moz-linear-gradient(-20deg,#333,#000,#333);\n  background:-ms-linear-gradient(-20deg,#333,#000,#333);\n  background:-o-linear-gradient(-20deg,#333,#000,#333);\n  background:linear-gradient(-20deg,#333,#000,#333);\n  z-index:10;\n  border-width:1px 2px 7px;\n  border-style:solid;\n  border-color:#666 #222 #111 #555;\n  -webkit-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -moz-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -webkit-border-radius:0 0 2px 2px;\n  -moz-border-radius:0 0 2px 2px;\n  border-radius:0 0 2px 2px;\n}\n\nul#piano li span.pressed {\n  border-bottom-width:2px;\n  height:123px;\n  -webkit-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  -moz-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n}\n\n.progress {\n  background:-webkit-linear-gradient(-90deg,#32ff32,#adffad);\n  background:-moz-linear-gradient(-90deg,#32ff32,#adffad);\n  background:-ms-linear-gradient(-90deg,#32ff32,#adffad);\n  background:-o-linear-gradient(-90deg,#32ff32,#adffad);\n  background:linear-gradient(-90deg,#32ff32,#adffad);\n  transition: width 500ms ease-in-out;\n}\n\n/* React Transition Class */\n\n.slide-enter {\n  opacity: 0.01;\n  transform: translate(30%,0);\n}\n\n.slide-enter.slide-enter-active {\n  opacity: 1;\n  transform: translate(0,0);\n  transition: all 450ms ease-in-out 50ms;\n}\n\n.slide-leave {\n  opacity: 1;\n  transform: translate(0,0);\n}\n\n.slide-leave.slide-leave-active {\n  opacity: 0.01;\n  transform: translate(-30%,0);\n  transition: all 450ms ease-in-out 50ms;\n}\n\n\n\n/* Animation */\n@-webkit-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@-moz-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n", ""]);
 
 	// exports
 
@@ -91670,6 +91707,54 @@
 
 	module.exports = getPrototype;
 
+
+/***/ },
+/* 1010 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _reactRedux = __webpack_require__(468);
+
+	var _actions = __webpack_require__(530);
+
+	var _keyboardComponent = __webpack_require__(903);
+
+	var _keyboardComponent2 = _interopRequireDefault(_keyboardComponent);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        keys: state.inputDisplay.keyboard.keys
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        onPress: function onPress(e, midiValue) {
+	            e.preventDefault();
+	            if (e.buttons) {
+	                dispatch((0, _actions.evalSaga)(midiValue));
+	            }
+	        },
+	        onRelease: function onRelease(e, midiValue) {
+	            e.preventDefault();
+	            if (e.buttons || e.type == "mouseup") {
+	                dispatch((0, _actions.releaseKey)(midiValue));
+	            }
+	        }
+
+	    };
+	};
+
+	var KeyboardContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_keyboardComponent2.default);
+
+	exports.default = KeyboardContainer;
 
 /***/ }
 /******/ ])));

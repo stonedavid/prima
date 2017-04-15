@@ -6,8 +6,8 @@ FINISH UP KEY COMPONENTS SO THEY CONTROL THEIR OWN PRESSED STATE PROPERLY
 
 import React, { PropTypes } from "react";
 
-const WhiteKeyElement = ({onPress,onRelease,midiValue,pressed}) => (
-    <div className={"white " + (pressed ? "pressed" : "")} 
+const WhiteKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation}) => (
+    <div className={"white " + (pressed ? "pressed" : "") + (evaluation ? "-correct" : "-incorrect") } 
         onMouseDown={(e) => onPress(e,midiValue)} 
         onTouchStart={(e) => onPress(e,midiValue)}
         onMouseEnter={(e) => onPress(e,midiValue)}
@@ -19,8 +19,8 @@ const WhiteKeyElement = ({onPress,onRelease,midiValue,pressed}) => (
 
 );
 
-const BlackKeyElement = ({onPress,onRelease,midiValue,pressed}) => (
-    <span className={(pressed ? "pressed" : "")} 
+const BlackKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation}) => (
+    <span className={(pressed ? "pressed" : "") + (evaluation ? "-correct" : "-incorrect")} 
         onMouseDown={(e) => onPress(e,midiValue)} 
         onTouchStart={(e) => onPress(e,midiValue)}
         onMouseEnter={(e) => onPress(e,midiValue)}
@@ -30,24 +30,26 @@ const BlackKeyElement = ({onPress,onRelease,midiValue,pressed}) => (
         onMouseLeave={(e) => onRelease(e,midiValue)}/>
 );
 
-const WhiteKey = ({onPress,onRelease,midiValue,pressed}) => (
+const WhiteKey = ({onPress,onRelease,midiValue,pressed,evaluation}) => (
     <li>
         <WhiteKeyElement
         onPress={onPress}
         onRelease={onRelease}
         midiValue={midiValue}
         pressed={pressed}
+        evaluation={evaluation}
         />
     </li>
 );
 
-const BlackWhiteKey = ({onPress,onRelease,midiValue,whitePressed,blackPressed}) => (
+const BlackWhiteKey = ({onPress,onRelease,midiValue,whitePressed,blackPressed,whiteEvaluation,blackEvaluation}) => (
     <li>
         <WhiteKeyElement
         onPress={onPress}
         onRelease={onRelease}
         midiValue={midiValue + 1}
         pressed={whitePressed}
+        evaluation={whiteEvaluation}
         />
         
         <BlackKeyElement
@@ -55,6 +57,7 @@ const BlackWhiteKey = ({onPress,onRelease,midiValue,whitePressed,blackPressed}) 
         onRelease={onRelease}
         midiValue={midiValue}
         pressed={blackPressed}
+        evaluation={blackEvaluation}
         />
     </li>
 );

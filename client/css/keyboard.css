@@ -101,7 +101,7 @@ ul#piano li a,ul#piano li div.white {
   border-radius:0 0 3px 3px;
 }
 
-#piano li a.pressed,  ul#piano li div.white.pressed {
+#piano li a.pressed,  ul#piano li div.white.pressed-correct {
   -webkit-tap-highlight-color: #ccc;
   -webkit-box-shadow:0 2px 2px rgba(0,0,0,0.4);
   -moz-box-shadow:0 2px 2px rgba(0,0,0,0.4);
@@ -109,6 +109,26 @@ ul#piano li a,ul#piano li div.white {
   position:relative;
   top:2px;
   height:216px;
+  background:-webkit-linear-gradient(-30deg,#00b200,#fff);
+  background:-moz-linear-gradient(-30deg,#00b200,#fff);
+  background:-ms-linear-gradient(-30deg,#00b200,#fff);
+  background:-o-linear-gradient(-30deg,#00b200,#fff);
+  background:linear-gradient(-30deg,#00b200,#fff);
+}
+
+#piano li a.pressed,  ul#piano li div.white.pressed-incorrect {
+  -webkit-tap-highlight-color: #ccc;
+  -webkit-box-shadow:0 2px 2px rgba(0,0,0,0.4);
+  -moz-box-shadow:0 2px 2px rgba(0,0,0,0.4);
+  box-shadow:0 2px 2px rgba(0,0,0,0.4);
+  position:relative;
+  top:2px;
+  height:216px;
+  background:-webkit-linear-gradient(-30deg,#ff4c4c,#fff);
+  background:-moz-linear-gradient(-30deg,#ff4c4c,#fff);
+  background:-ms-linear-gradient(-30deg,#ff4c4c,#fff);
+  background:-o-linear-gradient(-30deg,#ff4c4c,#fff);
+  background:linear-gradient(-30deg,#ff4c4c,#fff);
 }
 
 ul#piano li a.pressed:before,ul#piano li div.white.pressed:before {
@@ -168,18 +188,39 @@ ul#piano li span.pressed {
   box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;
 }
 
+.progress {
+  background:-webkit-linear-gradient(-90deg,#32ff32,#adffad);
+  background:-moz-linear-gradient(-90deg,#32ff32,#adffad);
+  background:-ms-linear-gradient(-90deg,#32ff32,#adffad);
+  background:-o-linear-gradient(-90deg,#32ff32,#adffad);
+  background:linear-gradient(-90deg,#32ff32,#adffad);
+  transition: width 500ms ease-in-out;
+}
+
 /* React Transition Class */
 
 .slide-enter {
   opacity: 0.01;
-  transform: translate(10%);
+  transform: translate(30%,0);
 }
 
 .slide-enter.slide-enter-active {
   opacity: 1;
-  transform: translate(0%);
-  transition: all 600ms ease-in-out;
+  transform: translate(0,0);
+  transition: all 450ms ease-in-out 50ms;
 }
+
+.slide-leave {
+  opacity: 1;
+  transform: translate(0,0);
+}
+
+.slide-leave.slide-leave-active {
+  opacity: 0.01;
+  transform: translate(-30%,0);
+  transition: all 450ms ease-in-out 50ms;
+}
+
 
 
 /* Animation */

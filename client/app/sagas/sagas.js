@@ -22,7 +22,7 @@ import {
     evalNote,
     mountUserLessons,
     updateMeta,
-    setClock,
+    pressKey,
     GET_USER_LESSONS
 }
 from "../actions/actions.js";
@@ -58,6 +58,13 @@ export function* loginSaga(action) {
 
 export function* evalSaga(action) {
     
+    
+    const correctMIDI = yield select(state => state.gameState.currentCard.midiValue);
+    const evaluation = correctMIDI == action.midiValue;
+    console.log("CORRECT MIDI", correctMIDI);
+    console.log("INPUT MIDI", action.midiValue);
+    console.log("SAGA EVALUATION",evaluation);
+    yield put(pressKey(action.midiValue, evaluation));
     yield put(evalNote(action.midiValue));
     const score = yield select(state => state.gameState.currentScore);
     if (score === 3) {

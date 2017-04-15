@@ -27,9 +27,14 @@ const key = (state = {}, action) => {
             if (state.midiValue != action.midiValue) {
                 return state
             }
+            
+            let color = action.evaluation ? "green" : "red";
+            
             return Object.assign({},state, {
                 pressed: true,
-                node: action.node
+                node: action.node,
+                evaluation: action.evaluation
+                
             });
             
         case "RELEASE_KEY":
@@ -40,7 +45,8 @@ const key = (state = {}, action) => {
             if (state.node) state.node.stop();
             return Object.assign({},state, {
                 pressed: false,
-                node: undefined
+                node: undefined,
+                evaluation: false
             });
             
         case "CREATE_KEY":
