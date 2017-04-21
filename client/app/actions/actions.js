@@ -43,6 +43,7 @@ export const CHANGE_URL = "CHANGE_URL";
 
 export const EVAL_NOTE = "EVAL_NOTE";
 export const EVAL_SAGA = "EVAL_SAGA";
+export const ADVANCE_CARD = "ADVANCE_CARD";
 export const SET_GAME_USER = "SET_GAME_USER";
 export const SET_CLOCK = "SET_CLOCK";
 
@@ -128,6 +129,10 @@ export function evalNote(midiValue) {
 
 export function evalSaga(midiValue) {
     return { type: EVAL_SAGA, midiValue };
+}
+
+export function advanceCard(midiValue) {
+    return { type: ADVANCE_CARD, midiValue };
 }
 
 export function setGameUser(form) {

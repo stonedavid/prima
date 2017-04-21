@@ -3,9 +3,7 @@ import { browserHistory } from "react-router";
 import   MuiThemeProvider  from "material-ui/styles/MuiThemeProvider";
 import { Card, CardTitle, CardActions } from "material-ui/Card";
 import FlatButton from "material-ui/FlatButton";
-import Animation from "./Animation.js";
 import Display from "./displayComponent";
-import TodoList from "./todoList.js";
 
 const genRandomNoteString = (length) => {
   var string = "";
@@ -41,7 +39,6 @@ const Home = () =>
               }}
               />
         </CardActions>
-        <TodoList/>
       </Card>
     </MuiThemeProvider>
     )

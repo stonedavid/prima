@@ -1,4 +1,4 @@
-import { EVAL_NOTE, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META } from "../actions/actions.js";
+import { ADVANCE_CARD, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META } from "../actions/actions.js";
 import { calculateNextDueDate } from "../game/sm.js";
 
 function gameState(state = {}, action) {
@@ -24,7 +24,7 @@ function gameState(state = {}, action) {
 
             });
         
-        case EVAL_NOTE:
+        case ADVANCE_CARD:
             
             // TODO: set up to handle an object of notestring keys, not an array
             
@@ -46,6 +46,7 @@ function gameState(state = {}, action) {
             
             currentCard = state.currentCard;
             console.log("CURRENT CARD",currentCard);
+            console.log("INPUT MIDIVALUE", action.midiValue);
             currentCardSet = state.cardset;
             
             threshold = 0.6;

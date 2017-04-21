@@ -19,7 +19,7 @@ import {
     clearErrors,
     setGameUser,
     saveError,
-    evalNote,
+    advanceCard,
     mountUserLessons,
     updateMeta,
     pressKey,
@@ -65,7 +65,6 @@ export function* evalSaga(action) {
     console.log("INPUT MIDI", action.midiValue);
     console.log("SAGA EVALUATION",evaluation);
     yield put(pressKey(action.midiValue, evaluation));
-    yield put(evalNote(action.midiValue));
     const score = yield select(state => state.gameState.currentScore);
     if (score === 3) {
         yield put({ type: "SAVE_CARDS" });

@@ -201,13 +201,16 @@ ul#piano li span.pressed {
 
 .slide-enter {
   opacity: 0.01;
-  transform: translate(30%,0);
+  transform: translate(20%,0);
 }
 
 .slide-enter.slide-enter-active {
   opacity: 1;
   transform: translate(0,0);
-  transition: all 450ms ease-in-out 50ms;
+  -webkit-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -moz-webkit-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -o-webkit-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .slide-leave {
@@ -217,8 +220,8 @@ ul#piano li span.pressed {
 
 .slide-leave.slide-leave-active {
   opacity: 0.01;
-  transform: translate(-30%,0);
-  transition: all 450ms ease-in-out 50ms;
+  transform: translate(-20%,0);
+  transition: all 200ms linear;
 }
 
 

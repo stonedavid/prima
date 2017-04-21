@@ -17,8 +17,6 @@ import App from './app.js';
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware()
 
-console.log(initialState);
-
 const AudioContext = window.AudioContext // Default
     || window.webkitAudioContext // Safari and old versions of Chrome
     || false; 
@@ -26,15 +24,19 @@ const AudioContext = window.AudioContext // Default
 let ac = new AudioContext;
 let store;
 
+const persistedState = localStorage.getItem("reduxState") ? JSON.parse(localStorage.getItem("reduxState")) : initialState;
+
 Soundfont.instrument(ac, 'acoustic_grand_piano')
 
         .then(piano => {
             
-            store = createStore(reducers,initialState,applyMiddleware(sagaMiddleware));
+            store = createStore(reducers,persistedState,applyMiddleware(sagaMiddleware));
             sagaMiddleware.run(mySaga)
-            store.dispatch(generateKeys(initialState.gameState.size,initialState.gameState.offset));
+            store.dispatch(generateKeys(persistedState.gameState.size,persistedState.gameState.offset));
             store.dispatch(setPlayer(piano,ac));
-            console.log(store.getState());
+            store.subscribe(() => {
+                localStorage.setItem("reduxState", JSON.stringify(store.getState()));
+            });
             render(
                 
                   <Provider store={store}>

@@ -51,7 +51,7 @@ const Interface = ({ noteString, currentScore, currentMIDI }) => {
             <div style={containerStyle}>
                 <CSSTransitionGroup
                     transitionName="slide"
-                    transitionEnterTimeout={500}
+                    transitionEnterTimeout={600}
                     transitionLeaveTimeout={500}
                 >
                     <div key={Math.random()} style={childStyle}>
