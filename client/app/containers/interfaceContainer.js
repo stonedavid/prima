@@ -31,7 +31,8 @@ const progressContainerStyle = {
     height: 30,
     paddingTop: 20,
     margin: "auto",
-    width: 604
+    width: 604,
+    maxWidth: "90%"
 }
 
 const childStyle = {
@@ -42,17 +43,17 @@ const childStyle = {
 }
 
 const Interface = ({ noteString, currentScore, currentMIDI }) => {
-    const displayChild =  <Display noteString = {noteString} active = {true} key = {Math.random()}/>;
+    const displayChild =  <Display noteString = {noteString} active = {true} zDepth={5} />;
 
     return (
     <div>
       
-        <Card>
+        <Card style={{margin:20}}>
             <div style={containerStyle}>
                 <CSSTransitionGroup
                     transitionName="slide"
                     transitionEnterTimeout={250}
-                    transitionLeaveTimeout={500}
+                    transitionLeaveTimeout={150}
                 >
                     <div key={noteString} style={childStyle}>
                         {displayChild}

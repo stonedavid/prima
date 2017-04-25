@@ -10,8 +10,8 @@ const ProgressBar = ({progress}) => {
             margin: "auto",
             position: "relative",
             display: "block",
-            width: "100%",
-            height: 10
+            height: 18,
+            borderRadius: 10
             
         },
         
@@ -19,7 +19,8 @@ const ProgressBar = ({progress}) => {
             position: "absolute",
             top: 0,
             width: `${progress}%`,
-            height: 10
+            height: "inherit",
+            borderRadius: "inherit"
         }
     }
     

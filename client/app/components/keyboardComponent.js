@@ -1,4 +1,5 @@
 import  React, { PropTypes } from "react";
+import Paper from "material-ui/Paper";
 import { WhiteKey, BlackWhiteKey } from "./keyComponent";
 
 const populateKeyComponents = (keyObjects, onPress, onRelease) => {
@@ -108,18 +109,17 @@ const Keyboard = ({ keys, onPress, onRelease }) => {
     };
     let wrapperStyle = {
         display: "inline-block",
-        margin: "0 auto",
         width: "100%",
         maxWidth: (keyComponentArray.length * 40) + "px"
     };
     return (
-        <div style={{display:"block", padding:"18px"}}>
-            <div id="p-wrapper" style={wrapperStyle}>
-                <ul id="piano" style={ulStyle}>
-                    {keyComponentArray}
-                </ul>
-		    </div>
-		</div>
+        <Paper zDepth={5} style={{display: "inline-block",margin: 20,maxWidth: "90%"}}>
+                <div id="p-wrapper" style={wrapperStyle}>
+                    <ul id="piano" style={ulStyle}>
+                        {keyComponentArray}
+                    </ul>
+    		    </div>
+    	</Paper>
         );
 };
 

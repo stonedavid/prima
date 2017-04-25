@@ -34,8 +34,8 @@ const state = {
             nextCard: null,
             history: [],
             currentScore: 0,
-            size: 25,
-            offset: 48,
+            size: 49,
+            offset: 36,
             settings: {
                 clock: 20
             },

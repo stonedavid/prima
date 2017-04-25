@@ -5,9 +5,6 @@ const WhiteKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation,xOffset
     const left = xOffset - 300 + "px";
     const top = yOffset - 300 + "px";
     const offsetStyle = {left: left, top: top}
-    if (pressed) {
-        console.log("STYLE",offsetStyle)
-    };
     const ripple = 
         <div 
             key={midiValue * Math.random() + "key"}
@@ -18,7 +15,7 @@ const WhiteKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation,xOffset
     const transitionChild = pressed ? ripple : "";
 
     return (
-    <div className={"white " + (pressed ? "pressed" : "")} 
+    <span className={"white " + (pressed ? "pressed" : "")} 
         onMouseDown={(e) => onPress(e,midiValue)} 
         onTouchStart={(e) => onPress(e,midiValue)}
         onMouseEnter={(e) => onPress(e,midiValue)}
@@ -26,16 +23,28 @@ const WhiteKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation,xOffset
         onMouseUp={(e) => onRelease(e,midiValue)} 
         onTouchEnd={(e) => onRelease(e,midiValue)}
         onMouseLeave={(e) => onRelease(e,midiValue)}>
-        <div style={{overflow:"hidden",width:"100%",height:"100%", background:"#fff",opacity:0.99}}>
+        <div style={{width:"100%",height:"100%", background:"#fff",opacity:0.99}}>
         <CSSTransitionGroup
             transitionName="ripple"
-            transitionEnterTimeout={300}
-            transitionLeaveTimeout={600}
+            transitionEnterTimeout={400}
+            transitionLeave={false}
             >
                 {transitionChild}
         </CSSTransitionGroup>
+        { midiValue == 60 && <div style={{
+            width: 0,
+	        height: 0,
+    	    borderLeft: "5px solid transparent",
+	        borderRight: "5px solid transparent",
+	        borderTop: "10px solid red",
+	        borderTopLeftRadius: 10,
+	        borderTopRightRadius: 10,
+	        position: "absolute",
+	        left: 15,
+	        bottom: 5
+        }}></div> }
         </div>
-    </div>
+    </span>
     );
 };
 
@@ -64,8 +73,8 @@ const BlackKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation,xOffset
         <div>
         <CSSTransitionGroup
             transitionName="ripple"
-            transitionEnterTimeout={300}
-            transitionLeaveTimeout={600}
+            transitionEnterTimeout={400}
+            transitionLeave={false}
             >
                 {transitionChild}
         </CSSTransitionGroup>

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from "react"
 import CSSTransitionGroup from "react-transition-group/CSSTransitionGroup";
+import Paper from "material-ui/Paper";
 import { Flow } from "vexflow";
 import { createVexFlowChord } from "../game/vexflow.js";
 import Rational from "rational-number";
@@ -24,11 +25,15 @@ const {
 class Display extends Component{
   constructor(props) {
     super(props);
+    this.state = {
+      zDepth: this.props.zDepth
+    };
     this.drawCanvas = this.drawCanvas.bind(this);
   }
   
   componentDidMount() {
     this.drawCanvas();
+    setTimeout(() => {if(this.props.zDepth) {this.setState({ zDepth: 3})}},300);
   }
   
   componentDidUpdate() {
@@ -214,8 +219,8 @@ class Display extends Component{
   render() {
     
     return (
+      <Paper zDepth={this.state.zDepth} style={{borderRadius: 20, display: "inline-block"}}>
         <div ref="vfWrap" style={{
-                        border: "2px gray solid",
                         padding: 10,
                         borderRadius: 20,
                         margin: 0,
@@ -223,6 +228,7 @@ class Display extends Component{
                         display: "inline-block"
                       }}>
         </div>
+      </Paper>
     );
   }
 }
@@ -230,7 +236,7 @@ class Display extends Component{
 Display.propTypes = {
   noteString: PropTypes.string.isRequired,
   line: PropTypes.bool,
-  active: PropTypes.bool.isRequired
+  active: PropTypes.bool.isRequired,
 };
 
 export default Display;

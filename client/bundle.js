@@ -37077,8 +37077,8 @@
 	        nextCard: null,
 	        history: [],
 	        currentScore: 0,
-	        size: 25,
-	        offset: 48,
+	        size: 49,
+	        offset: 36,
 	        settings: {
 	            clock: 20
 	        },
@@ -50051,6 +50051,10 @@
 
 	var _CSSTransitionGroup2 = _interopRequireDefault(_CSSTransitionGroup);
 
+	var _Paper = __webpack_require__(785);
+
+	var _Paper2 = _interopRequireDefault(_Paper);
+
 	var _vexflow = __webpack_require__(829);
 
 	var _vexflow2 = __webpack_require__(830);
@@ -50093,6 +50097,9 @@
 
 	    var _this = _possibleConstructorReturn(this, (Display.__proto__ || Object.getPrototypeOf(Display)).call(this, props));
 
+	    _this.state = {
+	      zDepth: _this.props.zDepth
+	    };
 	    _this.drawCanvas = _this.drawCanvas.bind(_this);
 	    return _this;
 	  }
@@ -50100,7 +50107,14 @@
 	  _createClass(Display, [{
 	    key: "componentDidMount",
 	    value: function componentDidMount() {
+	      var _this2 = this;
+
 	      this.drawCanvas();
+	      setTimeout(function () {
+	        if (_this2.props.zDepth) {
+	          _this2.setState({ zDepth: 3 });
+	        }
+	      }, 300);
 	    }
 	  }, {
 	    key: "componentDidUpdate",
@@ -50137,22 +50151,22 @@
 	        } });
 
 	      VF.prototype.draw = function () {
-	        var _this2 = this;
+	        var _this3 = this;
 
 	        this.systems.forEach(function (i) {
-	          return i.setContext(_this2.context).format();
+	          return i.setContext(_this3.context).format();
 	        });
 	        this.staves.forEach(function (i) {
-	          return i.setContext(_this2.context).draw();
+	          return i.setContext(_this3.context).draw();
 	        });
 	        this.voices.forEach(function (i) {
-	          return i.setContext(_this2.context).draw();
+	          return i.setContext(_this3.context).draw();
 	        });
 	        this.renderQ.forEach(function (i) {
-	          if (!i.isRendered()) i.setContext(_this2.context).draw();
+	          if (!i.isRendered()) i.setContext(_this3.context).draw();
 	        });
 	        this.systems.forEach(function (i) {
-	          return i.setContext(_this2.context).draw();
+	          return i.setContext(_this3.context).draw();
 	        });
 	      };
 
@@ -50283,14 +50297,17 @@
 	    key: "render",
 	    value: function render() {
 
-	      return _react2.default.createElement("div", { ref: "vfWrap", style: {
-	          border: "2px gray solid",
-	          padding: 10,
-	          borderRadius: 20,
-	          margin: 0,
-	          backgroundColor: "rgba(255,255,255,0.8)",
-	          display: "inline-block"
-	        } });
+	      return _react2.default.createElement(
+	        _Paper2.default,
+	        { zDepth: this.state.zDepth, style: { borderRadius: 20, display: "inline-block" } },
+	        _react2.default.createElement("div", { ref: "vfWrap", style: {
+	            padding: 10,
+	            borderRadius: 20,
+	            margin: 0,
+	            backgroundColor: "rgba(255,255,255,0.8)",
+	            display: "inline-block"
+	          } })
+	      );
 	    }
 	  }]);
 
@@ -84499,7 +84516,8 @@
 	    height: 30,
 	    paddingTop: 20,
 	    margin: "auto",
-	    width: 604
+	    width: 604,
+	    maxWidth: "90%"
 	};
 
 	var childStyle = {
@@ -84514,14 +84532,14 @@
 	        currentScore = _ref.currentScore,
 	        currentMIDI = _ref.currentMIDI;
 
-	    var displayChild = _react2.default.createElement(_displayComponent2.default, { noteString: noteString, active: true, key: Math.random() });
+	    var displayChild = _react2.default.createElement(_displayComponent2.default, { noteString: noteString, active: true, zDepth: 5 });
 
 	    return _react2.default.createElement(
 	        "div",
 	        null,
 	        _react2.default.createElement(
 	            _Card2.default,
-	            null,
+	            { style: { margin: 20 } },
 	            _react2.default.createElement(
 	                "div",
 	                { style: containerStyle },
@@ -84530,7 +84548,7 @@
 	                    {
 	                        transitionName: "slide",
 	                        transitionEnterTimeout: 250,
-	                        transitionLeaveTimeout: 500
+	                        transitionLeaveTimeout: 150
 	                    },
 	                    _react2.default.createElement(
 	                        "div",
@@ -85562,6 +85580,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _Paper = __webpack_require__(785);
+
+	var _Paper2 = _interopRequireDefault(_Paper);
+
 	var _keyComponent = __webpack_require__(903);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -85640,13 +85662,12 @@
 	    };
 	    var wrapperStyle = {
 	        display: "inline-block",
-	        margin: "0 auto",
 	        width: "100%",
 	        maxWidth: keyComponentArray.length * 40 + "px"
 	    };
 	    return _react2.default.createElement(
-	        "div",
-	        { style: { display: "block", padding: "18px" } },
+	        _Paper2.default,
+	        { zDepth: 5, style: { display: "inline-block", margin: 20, maxWidth: "90%" } },
 	        _react2.default.createElement(
 	            "div",
 	            { id: "p-wrapper", style: wrapperStyle },
@@ -85703,9 +85724,6 @@
 	    var left = xOffset - 300 + "px";
 	    var top = yOffset - 300 + "px";
 	    var offsetStyle = { left: left, top: top };
-	    if (pressed) {
-	        console.log("STYLE", offsetStyle);
-	    };
 	    var ripple = _react2.default.createElement("div", {
 	        key: midiValue * Math.random() + "key",
 	        className: evaluation ? "ripple-effect-correct" : "ripple-effect-incorrect",
@@ -85714,7 +85732,7 @@
 	    var transitionChild = pressed ? ripple : "";
 
 	    return _react2.default.createElement(
-	        "div",
+	        "span",
 	        { className: "white " + (pressed ? "pressed" : ""),
 	            onMouseDown: function onMouseDown(e) {
 	                return onPress(e, midiValue);
@@ -85737,16 +85755,28 @@
 	            } },
 	        _react2.default.createElement(
 	            "div",
-	            { style: { overflow: "hidden", width: "100%", height: "100%", background: "#fff", opacity: 0.99 } },
+	            { style: { width: "100%", height: "100%", background: "#fff", opacity: 0.99 } },
 	            _react2.default.createElement(
 	                _CSSTransitionGroup2.default,
 	                {
 	                    transitionName: "ripple",
-	                    transitionEnterTimeout: 300,
-	                    transitionLeaveTimeout: 600
+	                    transitionEnterTimeout: 400,
+	                    transitionLeave: false
 	                },
 	                transitionChild
-	            )
+	            ),
+	            midiValue == 60 && _react2.default.createElement("div", { style: {
+	                    width: 0,
+	                    height: 0,
+	                    borderLeft: "5px solid transparent",
+	                    borderRight: "5px solid transparent",
+	                    borderTop: "10px solid red",
+	                    borderTopLeftRadius: 10,
+	                    borderTopRightRadius: 10,
+	                    position: "absolute",
+	                    left: 15,
+	                    bottom: 5
+	                } })
 	        )
 	    );
 	};
@@ -85799,8 +85829,8 @@
 	                _CSSTransitionGroup2.default,
 	                {
 	                    transitionName: "ripple",
-	                    transitionEnterTimeout: 300,
-	                    transitionLeaveTimeout: 600
+	                    transitionEnterTimeout: 400,
+	                    transitionLeave: false
 	                },
 	                transitionChild
 	            )
@@ -85913,8 +85943,8 @@
 	            margin: "auto",
 	            position: "relative",
 	            display: "block",
-	            width: "100%",
-	            height: 10
+	            height: 18,
+	            borderRadius: 10
 
 	        },
 
@@ -85922,7 +85952,8 @@
 	            position: "absolute",
 	            top: 0,
 	            width: progress + "%",
-	            height: 10
+	            height: "inherit",
+	            borderRadius: "inherit"
 	        }
 	    };
 
@@ -89004,7 +89035,7 @@
 
 
 	// module
-	exports.push([module.id, "/**\n * Pure CSS3 Piano by Taufik Nurrohman\n * On: 1 December 2011\n * URL: http://hompimpaalaihumgambreng.blogspot.com/\n * Note: This experiment is under the God Almighty License.\n * Please do not replace or remove the attribution above if you want to save/modify this project legally.\n * Good luck!\n */\n\n* {\n  margin:0px;\n  padding:0px;\n  list-style:none;\n}\n\ninput:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {\n    background-color: rgb(255,255,255);\n    background-image: none;\n    color: rgb(0, 0, 0);\n}\n\n:focus {\n  outline:none !important;\n}\n\n/*body {\n  background:#666;\n  background:-webkit-radial-gradient(bottom left,cover,#999,#666);\n  background:-moz-radial-gradient(bottom left,cover,#999,#666);\n  background:-ms-radial-gradient(bottom left,cover,#999,#666);\n  background:-o-radial-gradient(bottom left,cover,#999,#666);\n  background:radial-gradient(bottom left,cover,#999,#666);\n  height:500px;\n}*/\n\na {\n  color:indigo;\n  text-decoration:none;\n}\n\na:hover {\n  text-decoration:underline;\n}\n\n/* Piano Wrapper */\n#p-wrapper {\n  white-space: nowrap;\n  overflow-x:scroll;\n  overflow-y:hidden;\n  background:#000;\n  background:-webkit-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:-moz-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:-ms-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:-o-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  background:linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);\n  position:relative;\n  -webkit-box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;\n  -moz-box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;\n  box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;\n  border:2px solid #333;\n  -webkit-border-radius:0 0 5px 5px;\n  -moz-border-radius:0 0 5px 5px;\n  border-radius:0 0 5px 5px;\n  -webkit-animation:taufik 2s;\n  -moz-animation:taufik 2s;\n  animation:taufik 2s;\n}\n\n/* Tuts */\nul#piano {\n  display: inline-block;\n  height:220px;\n  margin: 0px;\n  border-top:2px solid #222;\n}\n\nul#piano li {\n  list-style:none;\n  float:left;\n  background:#aaa;\n  width:40px;\n  position:relative;\n  white-space:nowrap;\n}\n\nul#piano li a,ul#piano li div.white {\n  -webkit-user-select: none;\n  display:block;\n  height:220px;\n  background:#fff;\n  overflow: hidden;\n  background:-webkit-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-moz-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-ms-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-o-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:linear-gradient(-30deg,#f5f5f5,#fff);\n  border:1px solid #ccc;\n  -webkit-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -moz-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -webkit-border-radius:0 0 3px 3px;\n  -moz-border-radius:0 0 3px 3px;\n  border-radius:0 0 3px 3px;\n}\n\n#piano li a.pressed,  ul#piano li div.white.pressed {\n  -webkit-tap-highlight-color: #ccc;\n  -webkit-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  -moz-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  overflow:hidden;\n  box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  position:relative;\n  top:2px;\n  height:216px;\n}\n\n\nul#piano li a.pressed:before,ul#piano li div.white.pressed:before {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent transparent transparent rgba(0,0,0,0.1);\n  position:absolute;\n  left:0px;\n  top:0px;\n}\n\nul#piano li a.pressed:after,ul#piano li div.white.pressed:after {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent rgba(0,0,0,0.1) transparent transparent;\n  position:absolute;\n  right:0px;\n  top:0px;\n}\n\n/* Black Tuts */\nul#piano li span.black {\n  position:absolute;\n  top:0px;\n  left:-12px;\n  width:20px;\n  height:120px;\n  background:#333;\n  overflow: hidden;\n  background:-webkit-linear-gradient(-20deg,#333,#000,#333);\n  background:-moz-linear-gradient(-20deg,#333,#000,#333);\n  background:-ms-linear-gradient(-20deg,#333,#000,#333);\n  background:-o-linear-gradient(-20deg,#333,#000,#333);\n  background:linear-gradient(-20deg,#333,#000,#333);\n  z-index:10;\n  border-width:1px 2px 7px;\n  border-style:solid;\n  border-color:#666 #222 #111 #555;\n  -webkit-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -moz-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -webkit-border-radius:0 0 2px 2px;\n  -moz-border-radius:0 0 2px 2px;\n  border-radius:0 0 2px 2px;\n}\n\nul#piano li span.black.pressed {\n  border-bottom-width:2px;\n  height:123px;\n  -webkit-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  -moz-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n}\n\n.progress {\n  background:-webkit-linear-gradient(-90deg,#32ff32,#adffad);\n  background:-moz-linear-gradient(-90deg,#32ff32,#adffad);\n  background:-ms-linear-gradient(-90deg,#32ff32,#adffad);\n  background:-o-linear-gradient(-90deg,#32ff32,#adffad);\n  background:linear-gradient(-90deg,#32ff32,#adffad);\n  transition: width 200ms ease-in;\n}\n\n/* React Transition Class */\n\n.slide-enter {\n  opacity: 0.01;\n  transform: translate(20%,0);\n}\n\n.slide-enter.slide-enter-active {\n  opacity: 1;\n  transform: translate(0,0);\n  -webkit-transition: all 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 50ms;\n  -moz-webkit-transition: all 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 50ms;\n  -o-webkit-transition: all 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 50ms;\n  transition: all 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 50ms;\n}\n\n.slide-leave {\n  opacity: 1;\n  transform: translate(0,0);\n}\n\n.slide-leave.slide-leave-active {\n  opacity: 0.01;\n  transform: translate(-20%,0);\n  transition: all 200ms linear;\n}\n\n.ripple-enter {\n  opacity: 1;\n  transform: scale(0.01);\n}\n\n.ripple-enter.ripple-enter-active {\n  opacity: 0.5;\n  transform: scale(1);\n  transition: all 200ms ease-out;\n}\n\n.ripple-leave {\n  opacity: 0.5;\n  transform: scale(1);\n}\n\n.ripple-leave.ripple-leave-active {\n  opacity: 0.1;\n  transform: scale(0.1);\n  transition: all 600ms linear;\n}\n\n.ripple-effect-correct{\n  position: absolute;\n  border-radius: 50%;\n  width: 600px;\n  height: 600px;\n  background: #32ff32;\n  opacity: 0.5;\n  pointer-events: none;\n}\n\n.ripple-effect-incorrect{\n  position: absolute;\n  border-radius: 50%;\n  width: 600px;\n  height: 600px;\n  background: red;\n  opacity: 0.5;\n  pointer-events: none;\n  \n}\n\n\n/* Animation */\n@-webkit-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@-moz-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n\n@keyframes ripple-animation {\n    from {\n      transform: scale(1);\n      opacity: 0.7;\n    }\n    to {\n      transform: scale(10);\n      opacity: 0.4;\n    }\n}\n", ""]);
+	exports.push([module.id, "/**\n * Pure CSS3 Piano by Taufik Nurrohman\n * On: 1 December 2011\n * URL: http://hompimpaalaihumgambreng.blogspot.com/\n * Note: This experiment is under the God Almighty License.\n * Please do not replace or remove the attribution above if you want to save/modify this project legally.\n * Good luck!\n */\n\n* {\n  margin:0px;\n  padding:0px;\n  list-style:none;\n}\n\ninput:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {\n    background-color: rgb(255,255,255);\n    background-image: none;\n    color: rgb(0, 0, 0);\n}\n\n:focus {\n  outline:none !important;\n}\n\n/*body {\n  background:#666;\n  background:-webkit-radial-gradient(bottom left,cover,#999,#666);\n  background:-moz-radial-gradient(bottom left,cover,#999,#666);\n  background:-ms-radial-gradient(bottom left,cover,#999,#666);\n  background:-o-radial-gradient(bottom left,cover,#999,#666);\n  background:radial-gradient(bottom left,cover,#999,#666);\n  height:500px;\n}*/\n\na {\n  color:indigo;\n  text-decoration:none;\n}\n\na:hover {\n  text-decoration:underline;\n}\n\n/* Piano Wrapper */\n#p-wrapper {\n  white-space: nowrap;\n  overflow-x:scroll;\n  overflow-y:hidden;\n  position:relative;\n  margin-bottom: -5px;\n  -webkit-animation:taufik 2s;\n  -moz-animation:taufik 2s;\n  animation:taufik 2s;\n}\n\n/* Tuts */\nul#piano {\n  display: inline-block;\n  height:220px;\n  margin: 0px;\n}\n\nul#piano li {\n  list-style:none;\n  float:left;\n  background:#aaa;\n  width:40px;\n  position:relative;\n  white-space:nowrap;\n}\n\nul#piano li a,ul#piano li span.white {\n  -webkit-user-select: none;\n  display:block;\n  height:220px;\n  background:#fff;\n  overflow: hidden;\n  background:-webkit-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-moz-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-ms-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-o-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:linear-gradient(-30deg,#f5f5f5,#fff);\n  border:1px solid #ccc;\n  -webkit-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -moz-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -webkit-border-radius:0 0 3px 3px;\n  -moz-border-radius:0 0 3px 3px;\n  border-radius:0 0 3px 3px;\n}\n\n#piano li a.pressed,  ul#piano li span.white.pressed {\n  -webkit-tap-highlight-color: #ccc;\n  -webkit-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  -moz-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  position:relative;\n  top:2px;\n  height:216px;\n}\n\n\nul#piano li a.pressed:before,ul#piano li span.white.pressed:before {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent transparent transparent rgba(0,0,0,0.1);\n  position:absolute;\n  left:0px;\n  top:0px;\n}\n\nul#piano li a.pressed:after,ul#piano li span.white.pressed:after {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent rgba(0,0,0,0.1) transparent transparent;\n  position:absolute;\n  right:0px;\n  top:0px;\n}\n\n/* Black Tuts */\nul#piano li span.black {\n  position:absolute;\n  top:0px;\n  left:-12px;\n  width:20px;\n  height:120px;\n  background:#333;\n  overflow: hidden;\n  background:-webkit-linear-gradient(-20deg,#333,#000,#333);\n  background:-moz-linear-gradient(-20deg,#333,#000,#333);\n  background:-ms-linear-gradient(-20deg,#333,#000,#333);\n  background:-o-linear-gradient(-20deg,#333,#000,#333);\n  background:linear-gradient(-20deg,#333,#000,#333);\n  z-index:10;\n  border-width:1px 2px 7px;\n  border-style:solid;\n  border-color:#666 #222 #111 #555;\n  -webkit-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -moz-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -webkit-border-radius:0 0 2px 2px;\n  -moz-border-radius:0 0 2px 2px;\n  border-radius:0 0 2px 2px;\n}\n\nul#piano li span.black.pressed {\n  border-bottom-width:2px;\n  height:123px;\n  -webkit-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  -moz-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n}\n\n.progress {\n  background:-webkit-linear-gradient(-90deg,#32ff32,#adffad);\n  background:-moz-linear-gradient(-90deg,#32ff32,#adffad);\n  background:-ms-linear-gradient(-90deg,#32ff32,#adffad);\n  background:-o-linear-gradient(-90deg,#32ff32,#adffad);\n  background:linear-gradient(-90deg,#32ff32,#adffad);\n  transition: width 200ms ease-in;\n}\n\n/* React Transition Class */\n\n.slide-enter {\n  opacity: 0.01;\n  transform: translate(20%,0);\n}\n\n.slide-enter.slide-enter-active {\n  opacity: 1;\n  transform: translate(0,0);\n  -webkit-transition: all 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 50ms;\n  -moz-webkit-transition: all 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 50ms;\n  -o-webkit-transition: all 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 50ms;\n  transition: all 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275) 50ms;\n}\n\n.slide-leave {\n  opacity: 1;\n  transform: translate(0,0);\n}\n\n.slide-leave.slide-leave-active {\n  opacity: 0.01;\n  transform: translate(-20%,0);\n  transition: all 150ms linear;\n}\n\n.ripple-enter {\n  opacity: 1;\n  transform: scale(0.1);\n}\n\n.ripple-enter.ripple-enter-active {\n  opacity: 0.5;\n  transform: scale(1);\n  transition: all 400ms ease-in-out;\n}\n\n.ripple-leave {\n  opacity: 0.5;\n}\n\n.ripple-leave.ripple-leave-active {\n  opacity: 0.1;\n  transition: all 50ms linear;\n}\n\n.ripple-effect-correct{\n  position: absolute;\n  border-radius: 50%;\n  width: 600px;\n  height: 600px;\n  background: radial-gradient(#32ff32 ,white);\n  opacity: 0.5;\n  pointer-events: none;\n}\n\n.ripple-effect-incorrect{\n  position: absolute;\n  border-radius: 50%;\n  width: 600px;\n  height: 600px;\n  background: radial-gradient(red,white);\n  opacity: 0.5;\n  pointer-events: none;\n  \n}\n\n\n/* Animation */\n@-webkit-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@-moz-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n\n@keyframes ripple-animation {\n    from {\n      transform: scale(1);\n      opacity: 0.7;\n    }\n    to {\n      transform: scale(10);\n      opacity: 0.4;\n    }\n}\n", ""]);
 
 	// exports
 

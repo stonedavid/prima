@@ -47,20 +47,8 @@ a:hover {
   white-space: nowrap;
   overflow-x:scroll;
   overflow-y:hidden;
-  background:#000;
-  background:-webkit-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);
-  background:-moz-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);
-  background:-ms-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);
-  background:-o-linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);
-  background:linear-gradient(-60deg,#000,#333,#000,#666,#333 70%);
   position:relative;
-  -webkit-box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;
-  -moz-box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;
-  box-shadow:0 2px 0px #666,0 3px 0px #555,0 4px 0px #444,0 6px 6px #000,inset 0 -1px 1px rgba(255,255,255,0.5),inset 0 -4px 5px #000;
-  border:2px solid #333;
-  -webkit-border-radius:0 0 5px 5px;
-  -moz-border-radius:0 0 5px 5px;
-  border-radius:0 0 5px 5px;
+  margin-bottom: -5px;
   -webkit-animation:taufik 2s;
   -moz-animation:taufik 2s;
   animation:taufik 2s;
@@ -71,7 +59,6 @@ ul#piano {
   display: inline-block;
   height:220px;
   margin: 0px;
-  border-top:2px solid #222;
 }
 
 ul#piano li {
@@ -83,7 +70,7 @@ ul#piano li {
   white-space:nowrap;
 }
 
-ul#piano li a,ul#piano li div.white {
+ul#piano li a,ul#piano li span.white {
   -webkit-user-select: none;
   display:block;
   height:220px;
@@ -103,11 +90,10 @@ ul#piano li a,ul#piano li div.white {
   border-radius:0 0 3px 3px;
 }
 
-#piano li a.pressed,  ul#piano li div.white.pressed {
+#piano li a.pressed,  ul#piano li span.white.pressed {
   -webkit-tap-highlight-color: #ccc;
   -webkit-box-shadow:0 2px 2px rgba(0,0,0,0.4);
   -moz-box-shadow:0 2px 2px rgba(0,0,0,0.4);
-  overflow:hidden;
   box-shadow:0 2px 2px rgba(0,0,0,0.4);
   position:relative;
   top:2px;
@@ -115,7 +101,7 @@ ul#piano li a,ul#piano li div.white {
 }
 
 
-ul#piano li a.pressed:before,ul#piano li div.white.pressed:before {
+ul#piano li a.pressed:before,ul#piano li span.white.pressed:before {
   content:"";
   width:0px;
   height:0px;
@@ -127,7 +113,7 @@ ul#piano li a.pressed:before,ul#piano li div.white.pressed:before {
   top:0px;
 }
 
-ul#piano li a.pressed:after,ul#piano li div.white.pressed:after {
+ul#piano li a.pressed:after,ul#piano li span.white.pressed:after {
   content:"";
   width:0px;
   height:0px;
@@ -206,29 +192,27 @@ ul#piano li span.black.pressed {
 .slide-leave.slide-leave-active {
   opacity: 0.01;
   transform: translate(-20%,0);
-  transition: all 200ms linear;
+  transition: all 150ms linear;
 }
 
 .ripple-enter {
   opacity: 1;
-  transform: scale(0.01);
+  transform: scale(0.1);
 }
 
 .ripple-enter.ripple-enter-active {
   opacity: 0.5;
   transform: scale(1);
-  transition: all 200ms ease-out;
+  transition: all 400ms ease-in-out;
 }
 
 .ripple-leave {
   opacity: 0.5;
-  transform: scale(1);
 }
 
 .ripple-leave.ripple-leave-active {
   opacity: 0.1;
-  transform: scale(0.1);
-  transition: all 600ms linear;
+  transition: all 50ms linear;
 }
 
 .ripple-effect-correct{
@@ -236,7 +220,7 @@ ul#piano li span.black.pressed {
   border-radius: 50%;
   width: 600px;
   height: 600px;
-  background: #32ff32;
+  background: radial-gradient(#32ff32 ,white);
   opacity: 0.5;
   pointer-events: none;
 }
@@ -246,7 +230,7 @@ ul#piano li span.black.pressed {
   border-radius: 50%;
   width: 600px;
   height: 600px;
-  background: red;
+  background: radial-gradient(red,white);
   opacity: 0.5;
   pointer-events: none;
   
