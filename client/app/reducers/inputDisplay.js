@@ -25,15 +25,17 @@ const key = (state = {}, action) => {
     switch (action.type) {
         case "PRESS_KEY": 
             if (state.midiValue != action.midiValue) {
-                return state
+                return state;
             }
             
-            let color = action.evaluation ? "green" : "red";
+            console.log("OFFSETS IN REDUCER", action.xOffset, action.yOffset);
             
             return Object.assign({},state, {
                 pressed: true,
                 node: action.node,
-                evaluation: action.evaluation
+                evaluation: action.evaluation,
+                xOffset: action.xOffset,
+                yOffset: action.yOffset
                 
             });
             
@@ -46,13 +48,17 @@ const key = (state = {}, action) => {
             return Object.assign({},state, {
                 pressed: false,
                 node: undefined,
-                evaluation: false
+                evaluation: false,
+                xOffset: -50,
+                yOffset: -50
             });
             
         case "CREATE_KEY":
             return {
                 midiValue: action.midiValue,
-                pressed: false
+                pressed: false,
+                xOffset: -50,
+                yOffset: -50
             }
         default:
             return state;

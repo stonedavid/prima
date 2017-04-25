@@ -1,13 +1,24 @@
-/*TODO FIRST THING ---
-
-FINISH UP KEY COMPONENTS SO THEY CONTROL THEIR OWN PRESSED STATE PROPERLY
-*/
-
-
 import React, { PropTypes } from "react";
+import CSSTransitionGroup from "react-transition-group/CSSTransitionGroup";
 
-const WhiteKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation}) => (
-    <div className={"white " + (pressed ? "pressed" : "") + (evaluation ? "-correct" : "-incorrect") } 
+const WhiteKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation,xOffset,yOffset}) => {
+    const left = xOffset - 300 + "px";
+    const top = yOffset - 300 + "px";
+    const offsetStyle = {left: left, top: top}
+    if (pressed) {
+        console.log("STYLE",offsetStyle)
+    };
+    const ripple = 
+        <div 
+            key={midiValue * Math.random() + "key"}
+            className={ evaluation ? "ripple-effect-correct" : "ripple-effect-incorrect"}
+            style={offsetStyle}
+            >
+        </div>;
+    const transitionChild = pressed ? ripple : "";
+
+    return (
+    <div className={"white " + (pressed ? "pressed" : "")} 
         onMouseDown={(e) => onPress(e,midiValue)} 
         onTouchStart={(e) => onPress(e,midiValue)}
         onMouseEnter={(e) => onPress(e,midiValue)}
@@ -15,22 +26,55 @@ const WhiteKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation}) => (
         onMouseUp={(e) => onRelease(e,midiValue)} 
         onTouchEnd={(e) => onRelease(e,midiValue)}
         onMouseLeave={(e) => onRelease(e,midiValue)}>
+        <div style={{overflow:"hidden",width:"100%",height:"100%", background:"#fff",opacity:0.99}}>
+        <CSSTransitionGroup
+            transitionName="ripple"
+            transitionEnterTimeout={300}
+            transitionLeaveTimeout={600}
+            >
+                {transitionChild}
+        </CSSTransitionGroup>
+        </div>
     </div>
+    );
+};
 
-);
-
-const BlackKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation}) => (
-    <span className={(pressed ? "pressed" : "") + (evaluation ? "-correct" : "-incorrect")} 
+const BlackKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation,xOffset,yOffset}) => {
+    const left = xOffset - 300 + "px";
+    const top = yOffset - 300 + "px";
+    const offsetStyle = {left: left, top: top}
+    const ripple = 
+        <div 
+            key={midiValue * Math.random() + "key"}
+            className={ evaluation ? "ripple-effect-correct" : "ripple-effect-incorrect"}
+            style={offsetStyle}
+            >
+        </div>;
+    const transitionChild = pressed ? ripple : "";
+    
+    return (
+    <span className={"black " + (pressed ? "pressed" : "")} 
         onMouseDown={(e) => onPress(e,midiValue)} 
         onTouchStart={(e) => onPress(e,midiValue)}
         onMouseEnter={(e) => onPress(e,midiValue)}
         
         onMouseUp={(e) => onRelease(e,midiValue)} 
         onTouchEnd={(e) => onRelease(e,midiValue)}
-        onMouseLeave={(e) => onRelease(e,midiValue)}/>
-);
+        onMouseLeave={(e) => onRelease(e,midiValue)}>
+        <div>
+        <CSSTransitionGroup
+            transitionName="ripple"
+            transitionEnterTimeout={300}
+            transitionLeaveTimeout={600}
+            >
+                {transitionChild}
+        </CSSTransitionGroup>
+        </div>
+    </span>
+    );
+};
 
-const WhiteKey = ({onPress,onRelease,midiValue,pressed,evaluation}) => (
+const WhiteKey = ({onPress,onRelease,midiValue,pressed,evaluation,xOffset,yOffset}) => (
     <li>
         <WhiteKeyElement
         onPress={onPress}
@@ -38,11 +82,14 @@ const WhiteKey = ({onPress,onRelease,midiValue,pressed,evaluation}) => (
         midiValue={midiValue}
         pressed={pressed}
         evaluation={evaluation}
+        xOffset={xOffset}
+        yOffset={yOffset}
         />
     </li>
 );
 
-const BlackWhiteKey = ({onPress,onRelease,midiValue,whitePressed,blackPressed,whiteEvaluation,blackEvaluation}) => (
+const BlackWhiteKey = ({onPress,onRelease,midiValue,whitePressed,blackPressed,
+    whiteEvaluation,blackEvaluation,blackxOffset,blackyOffset,whitexOffset,whiteyOffset}) => (
     <li>
         <WhiteKeyElement
         onPress={onPress}
@@ -50,6 +97,8 @@ const BlackWhiteKey = ({onPress,onRelease,midiValue,whitePressed,blackPressed,wh
         midiValue={midiValue + 1}
         pressed={whitePressed}
         evaluation={whiteEvaluation}
+        xOffset={whitexOffset}
+        yOffset={whiteyOffset}
         />
         
         <BlackKeyElement
@@ -58,6 +107,8 @@ const BlackWhiteKey = ({onPress,onRelease,midiValue,whitePressed,blackPressed,wh
         midiValue={midiValue}
         pressed={blackPressed}
         evaluation={blackEvaluation}
+        xOffset={blackxOffset}
+        yOffset={blackyOffset}
         />
     </li>
 );

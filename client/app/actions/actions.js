@@ -5,6 +5,7 @@
 export const GENERATE_KEYS = "GENERATE_KEYS";
 export const CREATE_KEY = "CREATE_KEY";
 export const PRESS_KEY = "PRESS_KEY";
+export const PRESS_KEY_SAGA = "PRESS_KEY_SAGA";
 export const RELEASE_KEY = "RELEASE_KEY";
 export const PLAY_MIDI = "PLAY_MIDI";
 export const SET_PLAYER = "SET_PLAYER";
@@ -59,8 +60,8 @@ export function createKey(midiValue) {
     return { type: CREATE_KEY, midiValue: midiValue };
 }
  
-export function pressKey(midiValue,evaluation) {
-    return { type: PRESS_KEY, midiValue: midiValue, evaluation: evaluation };
+export function pressKey(midiValue,evaluation,xOffset,yOffset) {
+    return { type: PRESS_KEY, midiValue, evaluation, xOffset, yOffset };
 }
 
 export function releaseKey(midiValue) {
@@ -131,8 +132,12 @@ export function evalSaga(midiValue) {
     return { type: EVAL_SAGA, midiValue };
 }
 
-export function advanceCard(midiValue) {
-    return { type: ADVANCE_CARD, midiValue };
+export function pressKeySaga(midiValue, xOffset, yOffset) {
+    return { type: PRESS_KEY_SAGA, midiValue, xOffset, yOffset }
+}
+
+export function advanceCard() {
+    return { type: ADVANCE_CARD };
 }
 
 export function setGameUser(form) {

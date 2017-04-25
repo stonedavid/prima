@@ -31,6 +31,14 @@ const populateKeyComponents = (keyObjects, onPress, onRelease) => {
                         evaluation = {
                             keyObjects[i].evaluation
                         }
+                        
+                        xOffset = {
+                            keyObjects[i].xOffset
+                        }
+                        
+                        yOffset = {
+                            keyObjects[i].yOffset
+                        }
                         // Key
                         key = {keyObjects[i].midiValue}
                         />);
@@ -63,6 +71,22 @@ const populateKeyComponents = (keyObjects, onPress, onRelease) => {
                         }
                         whiteEvaluation = {
                             keyObjects[i+1].evaluation
+                        }
+                        
+                        whitexOffset = {
+                            keyObjects[i + 1].xOffset
+                        }
+                        
+                        blackxOffset = {
+                            keyObjects[i].xOffset
+                        }
+                        
+                        whiteyOffset = {
+                            keyObjects[i + 1].yOffset
+                        }
+                        
+                        blackyOffset = {
+                            keyObjects[i].yOffset
                         }
                         
                         // Key

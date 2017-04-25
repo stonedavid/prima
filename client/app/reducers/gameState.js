@@ -1,4 +1,4 @@
-import { ADVANCE_CARD, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META } from "../actions/actions.js";
+import { EVAL_NOTE, ADVANCE_CARD, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META } from "../actions/actions.js";
 import { calculateNextDueDate } from "../game/sm.js";
 
 function gameState(state = {}, action) {
@@ -24,7 +24,7 @@ function gameState(state = {}, action) {
 
             });
         
-        case ADVANCE_CARD:
+        case EVAL_NOTE:
             
             // TODO: set up to handle an object of notestring keys, not an array
             
@@ -37,7 +37,7 @@ function gameState(state = {}, action) {
             score,
             updatedCard,
             updatedCardSet,
-            newCard;
+            nextCard;
             
             // Helper variables
             
@@ -73,15 +73,23 @@ function gameState(state = {}, action) {
                 return ((x < y) ? 1 : ((x > y) ? -1 : 0));
             });
                 
-            newCard = sortedCardSet[0];
+            nextCard = sortedCardSet[0];
 
             return Object.assign({}, state, {
-                currentCard: newCard,
+                currentCard: currentCard,
                 currentScore: (score > threshold ? state.currentScore + 1
                 : Math.max(state.currentScore - 1, 0)),
+                nextCard: nextCard,
                 cardset: sortedCardSet,
                 timestamp: Date.now() / 1000
                 });
+                
+        case ADVANCE_CARD:
+            
+            return Object.assign({}, state, {
+                currentCard: state.nextCard,
+                nextCard: null
+            });
                 
         case UPDATE_META:
             let updatedMeta = calculateNextDueDate(state.lessonMeta, 1.0, 0.5);

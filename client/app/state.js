@@ -31,6 +31,7 @@ const state = {
             lessonMeta: null, // timestamp, difficulty, period data for cardset
             cardset: null, // array of cards
             currentCard: null,
+            nextCard: null,
             history: [],
             currentScore: 0,
             size: 25,

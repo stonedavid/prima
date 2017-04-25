@@ -2,6 +2,7 @@ import {
     put,
     call,
     takeEvery,
+    takeLatest,
     select
 }
 from 'redux-saga/effects'
@@ -19,7 +20,7 @@ import {
     clearErrors,
     setGameUser,
     saveError,
-    advanceCard,
+    evalNote,
     mountUserLessons,
     updateMeta,
     pressKey,
@@ -50,21 +51,24 @@ export function* loginSaga(action) {
 }
 
 /**
- * evalSaga
+ * pressKeySaga
  * @param action = { score, threshold }
  * 
  * Triggers saveCards if score lesson completed
  **/
 
-export function* evalSaga(action) {
-    
-    
+export function* pressKeySaga(action) {
     const correctMIDI = yield select(state => state.gameState.currentCard.midiValue);
     const evaluation = correctMIDI == action.midiValue;
     console.log("CORRECT MIDI", correctMIDI);
     console.log("INPUT MIDI", action.midiValue);
     console.log("SAGA EVALUATION",evaluation);
-    yield put(pressKey(action.midiValue, evaluation));
+    yield put(pressKey(action.midiValue, evaluation, action.xOffset, action.yOffset));
+    yield put(evalNote(action.midiValue));
+    yield call(pollScoreAndSave);
+}
+
+export function* pollScoreAndSave() {
     const score = yield select(state => state.gameState.currentScore);
     if (score === 3) {
         yield put({ type: "SAVE_CARDS" });
@@ -118,6 +122,6 @@ export function* getUserLessons() {
 export default function* rootSaga() {
     yield takeEvery("LOGIN", loginSaga);
     yield takeEvery("SAVE_CARDS", saveCards);
-    yield takeEvery("EVAL_SAGA", evalSaga);
+    yield takeLatest("PRESS_KEY_SAGA", pressKeySaga);
     yield takeEvery("GET_USER_LESSONS", getUserLessons);
 }
