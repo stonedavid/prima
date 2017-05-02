@@ -10,7 +10,8 @@ const state = {
             keys: []
         },
         audioPlayer: undefined,
-        audioContext: undefined
+        audioContext: undefined,
+        
     },
     
     auth: {
@@ -34,13 +35,15 @@ const state = {
             nextCard: null,
             history: [],
             currentScore: 0,
+            totalNumberOfQuestions: 0,
             size: 49,
             offset: 36,
             settings: {
                 clock: 20
             },
             timestamp: 0,
-            errors: null
+            errors: null,
+            modal: false
     }
 };
 

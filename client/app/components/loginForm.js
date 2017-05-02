@@ -4,7 +4,6 @@ import React, { PropTypes, Component } from 'react';
 import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import MuiThemeProvider  from "material-ui/styles/MuiThemeProvider";
 
 class LoginForm extends Component {
     constructor(props) {
@@ -37,7 +36,6 @@ class LoginForm extends Component {
     
     render() {
         return (
-        <MuiThemeProvider>
             <form onSubmit={(e) => this.props.onSubmit(e,this.state)}>
                 <Card>
                     <CardHeader
@@ -76,7 +74,6 @@ class LoginForm extends Component {
                     </CardActions>
                 </Card>
             </form>
-        </MuiThemeProvider>
             );
     }
 }

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { changeUrl } from "../actions/actions.js";
+import { changeUrl, logout } from "../actions/actions.js";
 import NavBar from "../components/navBarComponent.js";
 
 const mapDispatchToProps = (dispatch) => {
@@ -7,6 +7,10 @@ const mapDispatchToProps = (dispatch) => {
         onChange: (event) => {
             console.log(event.toString());
             dispatch(changeUrl(event.toString()));
+            if (event.toString() == "/logout") {
+                console.log("LOGGING OUT...");
+                dispatch(logout());
+            }
         }
     };
 };

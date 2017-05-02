@@ -206,12 +206,11 @@ class Display extends Component{
     svgContainer.style.position = "relative";
     svgContainer.style.display = "inline-block";
     
-    var pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    pathEl.setAttribute('d','M 50 0 V 180' );
-    pathEl.style.stroke = 'rgb(0,0,0)';
-    pathEl.style.strokeWidth = '5';
-    pathEl.style.fill = 'none';
-    //svg.appendChild(pathEl);
+    var pathEl = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    pathEl.style.width = width + 20 + "px";
+    pathEl.style.height = this.props.lessonHealth ? this.props.lessonHealth * 180 : 0;
+    pathEl.style.fill = "rgba(255,255,255,0.9)";
+    svg.appendChild(pathEl);
     //svg.removeChild(pathEl);
     //svg.parentNode.replaceChild(svg.cloneNode(false), svg);
 
@@ -220,14 +219,14 @@ class Display extends Component{
     
     return (
       <Paper zDepth={this.state.zDepth} style={{borderRadius: 20, display: "inline-block"}}>
-        <div ref="vfWrap" style={{
-                        padding: 10,
-                        borderRadius: 20,
-                        margin: 0,
-                        backgroundColor: "rgba(255,255,255,0.8)",
-                        display: "inline-block"
-                      }}>
-        </div>
+          <div ref="vfWrap" style={{
+                          padding: 10,
+                          borderRadius: 20,
+                          margin: 0,
+                          backgroundColor: "rgba(255,255,255,0.8)",
+                          display: "inline-block"
+                        }}>
+          </div>
       </Paper>
     );
   }

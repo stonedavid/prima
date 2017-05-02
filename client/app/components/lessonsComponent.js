@@ -23,6 +23,10 @@ import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 
+import Status from "./statusComponent.js";
+
+
+
 const styles = {
     root: {
         display: 'flex',
@@ -34,9 +38,10 @@ const styles = {
         marginTop: 30,
     },
     card: {
-        backgroundColor: "#FEFEFE",
-        margin: 30,
-        borderRadius: 50
+        padding: 20,
+        borderRadius: 5,
+        display: "inline-block",
+        background: "linear-gradient(rgb(244, 244, 244) 0%, rgba(255, 255, 255, 0.741176) 26%, rgb(255, 255, 255) 100%)"
     }
 };
 
@@ -73,6 +78,7 @@ class Lessons extends Component {
         return (!this.props.lessons.length ? (
             <h1>Loading...</h1>
         ) : (
+            <Paper zDepth={3} style={{display: "inline-block"}}>
             <Card style={styles.card}>
                 <CardTitle title={"Note Skills"} subtitle={"Level 25"} />
                     <div style={styles.root}>
@@ -85,6 +91,12 @@ class Lessons extends Component {
                             {this.props.lessons.map( lessonMeta => {
               
                             let active = lessonMeta.unlocked;
+                            
+                            let overdueRatio = ((Date.now() / 1000) - lessonMeta.timestamp) / lessonMeta.period;
+                            let status = 1 / overdueRatio;
+                            
+                            console.log("LESSON STATUS", lessonMeta.name, status);
+                            console.log(((Date.now() / 1000) - lessonMeta.timestamp) / 60, lessonMeta.period / 60 );
               
                             return (
                                 <GridTile 
@@ -93,16 +105,17 @@ class Lessons extends Component {
                                     }
                                     children={
                                         <FloatingTile
-                                            initZ = {0}
-                                            floatZ = {3}
+                                            initZ = {2}
+                                            floatZ = {5}
                                             lessonMeta = { lessonMeta }
                                             email = { this.props.email }
-                                            children = {
+                                            children = {[
+                                            <Status status={status} />,
                                             <Display
                                                 noteString = {this.cardsetToNoteString(lessonMeta)}
                                                 line = {true}
                                                 active = {active}
-                                            />
+                                            />]
                                             }
                                         />
                                     }
@@ -112,6 +125,7 @@ class Lessons extends Component {
                         </GridList> 
                      </div> 
                 </Card>
+            </Paper>
             ));
         }
     }

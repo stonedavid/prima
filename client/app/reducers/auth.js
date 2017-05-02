@@ -1,4 +1,6 @@
-import { SUBMIT_USER, SUBMISSION_ERROR, CLEAR_ERRORS } from "../actions/actions.js";
+import { SUBMIT_USER, SUBMISSION_ERROR, CLEAR_ERRORS, LOGOUT } from "../actions/actions.js";
+
+import cleanState from "../state.js";
 
 function auth(state = {}, action) {
     switch (action.type) {
@@ -25,6 +27,9 @@ function auth(state = {}, action) {
                 isAuthenticated: true,
                 errors: {}
             });
+            
+        case LOGOUT:
+            return Object.assign({}, state, cleanState.auth);
             
         default:
             return state;

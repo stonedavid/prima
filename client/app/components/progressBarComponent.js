@@ -6,12 +6,13 @@ import CSSTransitionGroup from "react-transition-group/CSSTransitionGroup";
 const ProgressBar = ({progress}) => {
     const styles = {
         outer: {
-            background: "#eee",
+            background: "#FFF",
             margin: "auto",
             position: "relative",
             display: "block",
             height: 18,
-            borderRadius: 10
+            borderRadius: 12,
+            boxShadow: "inset 1px 2px 15px grey"
             
         },
         

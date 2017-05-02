@@ -35,8 +35,10 @@ Soundfont.instrument(ac, 'acoustic_grand_piano')
             store.dispatch(generateKeys(persistedState.gameState.size,persistedState.gameState.offset));
             store.dispatch(setPlayer(piano,ac));
             store.subscribe(() => {
+                console.log("saving state",store.getState());
                 localStorage.setItem("reduxState", JSON.stringify(store.getState()));
             });
+            
             render(
                 
                   <Provider store={store}>
@@ -48,21 +50,8 @@ Soundfont.instrument(ac, 'acoustic_grand_piano')
                   </Provider>
                 ,
               document.getElementById('root')
-            )
+            );
         });
-            
 
 
 
-
-
-if (module.hot) {
-    module.hot.accept("./app", function() {
-        var NextApp = require("./app.js");
-        render(
-            <Provider store={store}>
-                <NextApp/>
-            </Provider>,
-            document.getElementById("root"));
-    });
-}

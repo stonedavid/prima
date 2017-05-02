@@ -12,7 +12,7 @@ export const calculateNextDueDate = (card,score,threshold) => {
         difficulty = Math.max(0,card.difficulty + overdue * ( 1/17 * ( 8 - 9 * score ) ));
         
         difficultyWeight = 3 - ( 1.7 * difficulty );
-        period = card.period * ( 1 + ( difficultyWeight - 1) * overdue );
+        period = card.period * Math.min( 2, ( 1 + ( difficultyWeight - 1) * overdue ) ); //clipping to doubling the period -- otherwise it can be up to 6 times longer
         
         correct = 1;
         
@@ -20,7 +20,7 @@ export const calculateNextDueDate = (card,score,threshold) => {
         overdue = 1;
         difficulty = Math.min(1,card.difficulty + overdue * ( 1/17 * ( 8 - 9 * score ) ));
         difficultyWeight = 3 - ( 1.7 * difficulty );
-        period = card.period * ( 1/( difficultyWeight * difficultyWeight ) );
+        period = Math.max( 2, card.period * ( 1/( difficultyWeight * difficultyWeight ) ) );
         
         incorrect = 1;
     }

@@ -4,7 +4,6 @@ import React, { PropTypes, Component } from "react";
 
 import { browserHistory } from "react-router";
 
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Tabs, Tab } from "material-ui/Tabs";
 
 import Auth from "../src/modules/Auth.js";
@@ -38,11 +37,13 @@ const newVisitorTabs = [
     }
 ];
 
+const tabStyle = {background: "linear-gradient(to left,orangered,violet)"}
+
 const NavBar = ({ currentPage, onChange, isAuthenticated }) => (
-    <MuiThemeProvider>
         <Tabs 
             value={Auth.isUserAuthenticated() && currentPage==="/" ? "/lessons" : currentPage} //sorry kludge, but i'd rather do this than wrap the whole router with connect and browserHistory is async so it makes a mess
             onChange={onChange}
+            tabItemContainerStyle = {tabStyle}
         >
             { Auth.isUserAuthenticated() ?
                 loggedInTabs.map( (tab,key) => {
@@ -57,7 +58,6 @@ const NavBar = ({ currentPage, onChange, isAuthenticated }) => (
                 })
             }
         </Tabs>
-    </MuiThemeProvider>
 );
     
 export default NavBar;

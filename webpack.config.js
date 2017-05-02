@@ -13,7 +13,7 @@ module.exports = {
     
     output: {
         path: __dirname + "/client",
-        publicPath: "https://gradus-dxstone.c9users.io/",
+        publicPath: "https://prima-dxstone.c9users.io/",
         filename: "bundle.js"
     },
     
@@ -61,6 +61,11 @@ module.exports = {
             {
                 test: /\.css$/,
                 loader: "style-loader!css-loader"
+            },
+            {
+                test: /\.png$/, 
+                exclude: /node_modules/,
+                loader: 'file-loader?name=webpackImages/[name].[ext]'
             }
         ]
     },

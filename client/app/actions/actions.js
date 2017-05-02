@@ -16,6 +16,7 @@ export const DISPLAY_NOTE = "DISPLAY_NOTE";
  */
  
 export const LOGIN = "LOGIN"; 
+export const LOGOUT = "LOGOUT";
 export const SUBMIT_USER = "SUBMIT_USER";
 export const SUBMISSION_ERROR ="SUBMISSION_ERROR";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
@@ -47,6 +48,7 @@ export const EVAL_SAGA = "EVAL_SAGA";
 export const ADVANCE_CARD = "ADVANCE_CARD";
 export const SET_GAME_USER = "SET_GAME_USER";
 export const SET_CLOCK = "SET_CLOCK";
+export const SET_MODAL_STATE = "SET_MODAL_STATE";
 
 /*
  * action creators
@@ -108,6 +110,10 @@ export function login(user) {
     return { type: LOGIN, user: user };
 }
 
+export function logout() {
+    return { type: LOGOUT };
+}
+
 export function submitUser(form) {
     return { type: SUBMIT_USER, form };
 }
@@ -146,4 +152,8 @@ export function setGameUser(form) {
 
 export function setClock() {
     return { type: SET_CLOCK };
+}
+
+export function setModalState(modalState) {
+    return { type: SET_MODAL_STATE, modalState }
 }

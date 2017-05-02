@@ -9,11 +9,13 @@ import { pressKey, releaseKey, evalSaga } from '../actions/actions.js';
 import Keyboard from '../containers/keyboardContainer.js';
 import Display from "../components/displayComponent.js";
 import ProgressBar from "../components/progressBarComponent.js";
+import Modal from "../containers/modalContainer.js";
 
 const mapStateToProps = (state) => {
     return {
         noteString: state.gameState.currentCard.noteString,
-        currentScore: state.gameState.currentScore
+        currentScore: state.gameState.currentScore,
+        modal: state.inputDisplay.modal
     };
 };
 
@@ -42,17 +44,23 @@ const childStyle = {
     left: 0
 }
 
-const Interface = ({ noteString, currentScore, currentMIDI }) => {
-    const displayChild =  <Display noteString = {noteString} active = {true} zDepth={5} />;
+const cardStyle = {
+    background: "-moz-linear-gradient(top, rgba(244,244,244,1) 0%, rgba(255,255,255,0.74) 26%, rgba(255,255,255,1) 100%)", /* FF3.6-15 */
+    background: "-webkit-linear-gradient(top, rgba(244,244,244,1) 0%,rgba(255,255,255,0.74) 26%,rgba(255,255,255,1) 100%)", /* Chrome10-25,Safari5.1-6 */
+    background: "linear-gradient(to bottom, rgba(244,244,244,1) 0%,rgba(255,255,255,0.74) 26%,rgba(255,255,255,1) 100%)", /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    margin: 20
+}
 
+const Interface = ({ noteString, currentScore, currentMIDI, modal }) => {
+    const displayChild =  <Display noteString = {noteString} active = {true} zDepth={5} />;
     return (
     <div>
       
-        <Card style={{margin:20}}>
+        <Card style={cardStyle}>
             <div style={containerStyle}>
                 <CSSTransitionGroup
                     transitionName="slide"
-                    transitionEnterTimeout={250}
+                    transitionEnterTimeout={450}
                     transitionLeaveTimeout={150}
                 >
                     <div key={noteString} style={childStyle}>
@@ -65,6 +73,7 @@ const Interface = ({ noteString, currentScore, currentMIDI }) => {
             </div>
             <Keyboard />
         </Card>
+        <Modal/>
     </div>
   )
 }

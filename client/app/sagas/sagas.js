@@ -24,6 +24,7 @@ import {
     mountUserLessons,
     updateMeta,
     pressKey,
+    setModalState,
     GET_USER_LESSONS
 }
 from "../actions/actions.js";
@@ -70,7 +71,7 @@ export function* pressKeySaga(action) {
 
 export function* pollScoreAndSave() {
     const score = yield select(state => state.gameState.currentScore);
-    if (score === 3) {
+    if (score === 10) {
         yield put({ type: "SAVE_CARDS" });
     }
 }
@@ -90,7 +91,7 @@ export function* saveCards() {
         const score = yield select(state => state.gameState.currentScore);
         console.log(user,cardset,lessonMeta,score);
         const response = yield call(API.saveCards,form);
-        console.log("SAVE RESPONSE", response);
+        yield put(setModalState(true));
     }
     catch (e) {
         const errors = e.errors ? e.errors : {};

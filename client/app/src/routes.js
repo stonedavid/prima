@@ -7,7 +7,6 @@ import Login from "../containers/loginContainer.js";
 import Lessons from "../containers/lessonsContainer.js";
 import Dashboard from "../containers/DashboardPage.js";
 
-
 import Auth from "./modules/Auth";
 
 const routes = {
@@ -48,7 +47,6 @@ const routes = {
             path: "/logout",
             onEnter: (nextState, replace) => {
                 Auth.deauthenticateUser();
-                
                 replace("/");
             }
         }

@@ -1,5 +1,6 @@
-import { EVAL_NOTE, ADVANCE_CARD, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META } from "../actions/actions.js";
+import { EVAL_NOTE, ADVANCE_CARD, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META, SET_MODAL_STATE, LOGOUT } from "../actions/actions.js";
 import { calculateNextDueDate } from "../game/sm.js";
+import cleanState from "../state.js";
 
 function gameState(state = {}, action) {
     switch (action.type) {
@@ -77,6 +78,7 @@ function gameState(state = {}, action) {
 
             return Object.assign({}, state, {
                 currentCard: currentCard,
+                totalNumberOfQuestions: state.totalNumberOfQuestions + 1,
                 currentScore: (score > threshold ? state.currentScore + 1
                 : Math.max(state.currentScore - 1, 0)),
                 nextCard: nextCard,
@@ -92,7 +94,9 @@ function gameState(state = {}, action) {
             });
                 
         case UPDATE_META:
-            let updatedMeta = calculateNextDueDate(state.lessonMeta, 1.0, 0.5);
+            let updatedMeta = calculateNextDueDate(state.lessonMeta, state.currentScore/state.totalNumberOfQuestions, 0.8);
+            
+            console.log("WL RATIO", state.currentScore/state.totalNumberOfQuestions);
             
             return Object.assign({}, state, {
                 lessonMeta: updatedMeta
@@ -104,7 +108,8 @@ function gameState(state = {}, action) {
                 lessonMeta: action.lessonMeta,
                 cardset: action.cardset,
                 currentCard: action.cardset[0],
-                currentScore: 0
+                currentScore: 0,
+                totalNumberOfQuestions: 0
             });
             
         case SAVE_ERROR:
@@ -114,6 +119,14 @@ function gameState(state = {}, action) {
                 errors: action.errors
             });
             
+        case SET_MODAL_STATE: 
+            console.log("SETTING MODAL STATE", action.modalState);
+            return Object.assign({}, state, {
+                modal: action.modalState
+            })
+            
+        case LOGOUT:
+            return Object.assign({}, state, cleanState.gameState);
             
         default:
             return state;
