@@ -148,7 +148,7 @@ router.post("/", (req, res, next) => {
             success: true,
             message: "You have successfully logged in!",
             token,
-            user: userData
+            userData
         });
     })(req, res, next);
 });

@@ -3,6 +3,7 @@ import { browserHistory } from "react-router";
 import { Card, CardTitle, CardActions } from "material-ui/Card";
 import FlatButton from "material-ui/FlatButton";
 import Display from "./displayComponent";
+import Xp from "./xpComponent.js";
 
 const genRandomNoteString = (length) => {
   var string = "";
@@ -10,13 +11,13 @@ const genRandomNoteString = (length) => {
   var rhythms = ["q","h"];
   var octaves = ["4","5"];
   for (var i = 0; i<length; i++) {
-    string+= notes[Math.floor(Math.random() * 7)] + "#" + octaves[Math.floor(Math.random() * octaves.length)] + "/" + rhythms[Math.floor(Math.random() * rhythms.length)] + ",";
+    string+= notes[Math.floor(Math.random() * 7)] + octaves[Math.floor(Math.random() * octaves.length)] + "/" + rhythms[Math.floor(Math.random() * rhythms.length)] + ",";
   }
   
   return string.substring(0, string.length - 1);
 };
 
-let noteString = genRandomNoteString(16);
+let noteString = genRandomNoteString(3);
 
 console.log(noteString);
 

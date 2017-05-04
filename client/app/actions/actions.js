@@ -47,6 +47,7 @@ export const EVAL_NOTE = "EVAL_NOTE";
 export const EVAL_SAGA = "EVAL_SAGA";
 export const ADVANCE_CARD = "ADVANCE_CARD";
 export const SET_GAME_USER = "SET_GAME_USER";
+export const UPDATE_TOTAL_XP = "UPDATE_TOTAL_XP";
 export const SET_CLOCK = "SET_CLOCK";
 export const SET_MODAL_STATE = "SET_MODAL_STATE";
 
@@ -146,8 +147,12 @@ export function advanceCard() {
     return { type: ADVANCE_CARD };
 }
 
-export function setGameUser(form) {
-    return { type: SET_GAME_USER, form };
+export function setGameUser(response) {
+    return { type: SET_GAME_USER, response };
+}
+
+export function updateTotalXp() {
+    return { type: UPDATE_TOTAL_XP };
 }
 
 export function setClock() {

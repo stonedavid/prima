@@ -9,9 +9,7 @@ function auth(state = {}, action) {
             console.log(action.form);
             return Object.assign({},state, {
                 email: action.form.email,
-                userName: action.form.userName,
-                password: action.form.password,
-                token: "12345",
+                name: action.form.name,
                 isAuthenticated: true
             });
             

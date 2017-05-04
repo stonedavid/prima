@@ -205,12 +205,7 @@ class Display extends Component{
     svgContainer.style.height = "180px";
     svgContainer.style.position = "relative";
     svgContainer.style.display = "inline-block";
-    
-    var pathEl = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    pathEl.style.width = width + 20 + "px";
-    pathEl.style.height = this.props.lessonHealth ? this.props.lessonHealth * 180 : 0;
-    pathEl.style.fill = "rgba(255,255,255,0.9)";
-    svg.appendChild(pathEl);
+  
     //svg.removeChild(pathEl);
     //svg.parentNode.replaceChild(svg.cloneNode(false), svg);
 

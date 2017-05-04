@@ -1,4 +1,4 @@
-import { EVAL_NOTE, ADVANCE_CARD, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META, SET_MODAL_STATE, LOGOUT } from "../actions/actions.js";
+import { EVAL_NOTE, UPDATE_TOTAL_XP, ADVANCE_CARD, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META, SET_MODAL_STATE, LOGOUT } from "../actions/actions.js";
 import { calculateNextDueDate } from "../game/sm.js";
 import cleanState from "../state.js";
 
@@ -7,9 +7,18 @@ function gameState(state = {}, action) {
         case SET_GAME_USER:
             return Object.assign({},state, {
                 player: {
-                    name: action.form.userName,
-                    email: action.form.email
+                    name: action.response.name,
+                    email: action.response.email,
+                    totalXp: action.response.totalXp,
+                    xpHistory: action.response.xpHistory
                 }
+            });
+            
+        case UPDATE_TOTAL_XP:
+            return Object.assign({}, state, {
+                player: Object.assign({}, state.player, {
+                    totalXp: state.player.totalXp + state.gameValue
+                })
             });
             
         case MOUNT_USER_LESSONS:

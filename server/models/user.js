@@ -19,7 +19,9 @@ const UserSchema = new mongoose.Schema({
     curriculum: {
         lessons: { type: Object, default: curriculum },
         cards: { type: Object, default: cards } 
-    }
+    },
+    xpHistory: { type: Array, default: [] },
+    totalXp: { type: Number, default: 0 }
 });
 
 

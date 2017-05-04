@@ -2,11 +2,13 @@ import { connect } from "react-redux";
 
 import ModalComponent from "../components/modalComponent.js";
 
-import { setModalState } from "../actions/actions.js";
+import { setModalState, changeUrl, updateTotalXp } from "../actions/actions.js";
 
 const mapStateToProps = (state) => {
     return {
-        open: state.gameState.modal
+        open: state.gameState.modal,
+        startValue: state.gameState.player.totalXp,
+        endValue: state.gameState.player.totalXp + state.gameState.gameValue
     };
 };
 
@@ -17,7 +19,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         
         handleClose: () => {
-            dispatch(setModalState(false));
+            dispatch(updateTotalXp());
+            dispatch(setModalState(false))
+            dispatch(changeUrl("/lessons"));
         }
     };
 };

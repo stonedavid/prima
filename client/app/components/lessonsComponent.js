@@ -80,7 +80,7 @@ class Lessons extends Component {
         ) : (
             <Paper zDepth={3} style={{display: "inline-block"}}>
             <Card style={styles.card}>
-                <CardTitle title={"Note Skills"} subtitle={"Level 25"} />
+                <CardTitle title={"Note Skills"} subtitle={"Total XP: " + this.props.totalXp} />
                     <div style={styles.root}>
                         <GridList
                             cellHeight={"auto"}

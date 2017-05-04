@@ -26,14 +26,17 @@ const state = {
     gameState: {
             player: {
                 name: "",
-                email: ""
+                email: "",
+                totalXp: 0,
+                currentDayXp: 0,
+                xpHistory: []
             },
             userLessons: [], // array of data to create links on the curriculum page
             lessonMeta: null, // timestamp, difficulty, period data for cardset
             cardset: null, // array of cards
+            gameValue: 10,
             currentCard: null,
             nextCard: null,
-            history: [],
             currentScore: 0,
             totalNumberOfQuestions: 0,
             size: 49,

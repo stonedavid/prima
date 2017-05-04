@@ -5,7 +5,8 @@ import LessonsComponent from "../components/lessonsComponent.js";
 const mapStateToProps = (state) => {
     return {
         lessons: state.gameState.userLessons,
-        email: state.gameState.player.email
+        email: state.gameState.player.email,
+        totalXp: state.gameState.player.totalXp
     };
 };
 

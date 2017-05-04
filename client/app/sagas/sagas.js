@@ -39,8 +39,9 @@ export function* loginSaga(action) {
     try {
         const response = yield call(API.login, action.user);
         Auth.authenticateUser(response.token);
-        yield put(submitUser(action.user));
-        yield put(setGameUser(action.user));
+        console.log("LOGIN API RESPONSE", response);
+        yield put(submitUser(response.user));
+        yield put(setGameUser(response.user));
         yield put(clearErrors());
         yield put(changeUrl("/lessons"));
     }
@@ -61,9 +62,6 @@ export function* loginSaga(action) {
 export function* pressKeySaga(action) {
     const correctMIDI = yield select(state => state.gameState.currentCard.midiValue);
     const evaluation = correctMIDI == action.midiValue;
-    console.log("CORRECT MIDI", correctMIDI);
-    console.log("INPUT MIDI", action.midiValue);
-    console.log("SAGA EVALUATION",evaluation);
     yield put(pressKey(action.midiValue, evaluation, action.xOffset, action.yOffset));
     yield put(evalNote(action.midiValue));
     yield call(pollScoreAndSave);
@@ -83,11 +81,11 @@ export function* pollScoreAndSave() {
  
 export function* saveCards() {
     try {
-        yield(put(updateMeta()));
+        yield put(updateMeta());
         const user = yield select(state => state.gameState.player.email);
         const cardset = yield select(state => state.gameState.cardset);
         const lessonMeta = yield select(state => state.gameState.lessonMeta);
-        const form = { user: user, cardset: cardset, lessonMeta: lessonMeta };
+        const form = { user: user, cardset: cardset, lessonMeta: lessonMeta, lessonXp: 10 };
         const score = yield select(state => state.gameState.currentScore);
         console.log(user,cardset,lessonMeta,score);
         const response = yield call(API.saveCards,form);

@@ -1,8 +1,9 @@
 import React from "react";
+import Xp from "./xpComponent.js";
 import Dialog from "material-ui/Dialog";
 import RaisedButton from "material-ui/RaisedButton";
 
-const Modal = ({open,handleOpen,handleClose}) => {
+const Modal = ({open,handleOpen,handleClose,startValue,endValue}) => {
         const actions = [
             <RaisedButton
                 label="Close"
@@ -18,8 +19,9 @@ const Modal = ({open,handleOpen,handleClose}) => {
                 actions={actions}
                 modal={false}
                 open={open}
+                contentStyle={{textAlign: "center"}}
                 onRequestClose={handleClose}>
-                The actions in this window were passed in as an array of React objects.
+                You have earned <Xp startValue={startValue} endValue={endValue} /> XP today!
             </Dialog>
         </div>
     )

@@ -209,13 +209,15 @@ app.post("/api/save/:email", (req, res) => {
         
         var cardset = data.cardset;
         var lessonMeta = data.lessonMeta;
-    
+        var lessonXp = data.lessonXp;
         
         cardset.forEach( card => {
             user.curriculum.cards[card.noteString] = card;
         });
         
         user.curriculum.lessons[lessonMeta.name] = lessonMeta;
+        
+        user.totalXp = user.totalXp + lessonXp;
         
         user.markModified("curriculum");
         
@@ -225,7 +227,7 @@ app.post("/api/save/:email", (req, res) => {
             }
         });
         
-        res.status(200).json({data: user.curriculum});
+        res.status(200).json({curriculum: user.curriculum, totalXp: user.totalXp });
     });
 });
 
