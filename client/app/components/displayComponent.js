@@ -195,6 +195,7 @@ class Display extends Component{
 
     const svg = svgContainer.childNodes[0];
     //console.log("SVG",svg.childNodes);
+    if (this.props.golden) {svg.setAttribute("class","goldenSVG")}
     svg.style.top = "0px";
     svg.style.height = 180;
     svg.style.width = width + 20 + "px";
@@ -231,6 +232,7 @@ Display.propTypes = {
   noteString: PropTypes.string.isRequired,
   line: PropTypes.bool,
   active: PropTypes.bool.isRequired,
+  golden: PropTypes.bool
 };
 
 export default Display;

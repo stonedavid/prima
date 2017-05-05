@@ -24,6 +24,7 @@ import {
     mountUserLessons,
     updateMeta,
     pressKey,
+    releaseKey,
     setModalState,
     GET_USER_LESSONS
 }
@@ -63,13 +64,19 @@ export function* pressKeySaga(action) {
     const correctMIDI = yield select(state => state.gameState.currentCard.midiValue);
     const evaluation = correctMIDI == action.midiValue;
     yield put(pressKey(action.midiValue, evaluation, action.xOffset, action.yOffset));
+}
+
+export function* releaseKeySaga(action) {
+    yield put(releaseKey(action.midiValue));
     yield put(evalNote(action.midiValue));
     yield call(pollScoreAndSave);
+    
 }
 
 export function* pollScoreAndSave() {
     const score = yield select(state => state.gameState.currentScore);
     if (score === 10) {
+        yield put(setModalState(true));
         yield put({ type: "SAVE_CARDS" });
     }
 }
@@ -89,7 +96,6 @@ export function* saveCards() {
         const score = yield select(state => state.gameState.currentScore);
         console.log(user,cardset,lessonMeta,score);
         const response = yield call(API.saveCards,form);
-        yield put(setModalState(true));
     }
     catch (e) {
         const errors = e.errors ? e.errors : {};
@@ -122,5 +128,6 @@ export default function* rootSaga() {
     yield takeEvery("LOGIN", loginSaga);
     yield takeEvery("SAVE_CARDS", saveCards);
     yield takeLatest("PRESS_KEY_SAGA", pressKeySaga);
+    yield takeEvery("RELEASE_KEY_SAGA", releaseKeySaga);
     yield takeEvery("GET_USER_LESSONS", getUserLessons);
 }

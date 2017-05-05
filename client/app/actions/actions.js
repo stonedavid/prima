@@ -7,6 +7,7 @@ export const CREATE_KEY = "CREATE_KEY";
 export const PRESS_KEY = "PRESS_KEY";
 export const PRESS_KEY_SAGA = "PRESS_KEY_SAGA";
 export const RELEASE_KEY = "RELEASE_KEY";
+export const RELEASE_KEY_SAGA = "RELEASE_KEY_SAGA";
 export const PLAY_MIDI = "PLAY_MIDI";
 export const SET_PLAYER = "SET_PLAYER";
 export const DISPLAY_NOTE = "DISPLAY_NOTE";
@@ -141,6 +142,10 @@ export function evalSaga(midiValue) {
 
 export function pressKeySaga(midiValue, xOffset, yOffset) {
     return { type: PRESS_KEY_SAGA, midiValue, xOffset, yOffset }
+}
+
+export function releaseKeySaga(midiValue) {
+    return { type: RELEASE_KEY_SAGA, midiValue }
 }
 
 export function advanceCard() {

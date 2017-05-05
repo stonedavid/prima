@@ -31074,6 +31074,7 @@
 	exports.evalNote = evalNote;
 	exports.evalSaga = evalSaga;
 	exports.pressKeySaga = pressKeySaga;
+	exports.releaseKeySaga = releaseKeySaga;
 	exports.advanceCard = advanceCard;
 	exports.setGameUser = setGameUser;
 	exports.updateTotalXp = updateTotalXp;
@@ -31088,6 +31089,7 @@
 	var PRESS_KEY = exports.PRESS_KEY = "PRESS_KEY";
 	var PRESS_KEY_SAGA = exports.PRESS_KEY_SAGA = "PRESS_KEY_SAGA";
 	var RELEASE_KEY = exports.RELEASE_KEY = "RELEASE_KEY";
+	var RELEASE_KEY_SAGA = exports.RELEASE_KEY_SAGA = "RELEASE_KEY_SAGA";
 	var PLAY_MIDI = exports.PLAY_MIDI = "PLAY_MIDI";
 	var SET_PLAYER = exports.SET_PLAYER = "SET_PLAYER";
 	var DISPLAY_NOTE = exports.DISPLAY_NOTE = "DISPLAY_NOTE";
@@ -31222,6 +31224,10 @@
 
 	function pressKeySaga(midiValue, xOffset, yOffset) {
 	    return { type: PRESS_KEY_SAGA, midiValue: midiValue, xOffset: xOffset, yOffset: yOffset };
+	}
+
+	function releaseKeySaga(midiValue) {
+	    return { type: RELEASE_KEY_SAGA, midiValue: midiValue };
 	}
 
 	function advanceCard() {
@@ -36657,6 +36663,7 @@
 	});
 	exports.loginSaga = loginSaga;
 	exports.pressKeySaga = pressKeySaga;
+	exports.releaseKeySaga = releaseKeySaga;
 	exports.pollScoreAndSave = pollScoreAndSave;
 	exports.saveCards = saveCards;
 	exports.getUserLessons = getUserLessons;
@@ -36674,7 +36681,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _marked = [loginSaga, pressKeySaga, pollScoreAndSave, saveCards, getUserLessons, rootSaga].map(regeneratorRuntime.mark);
+	var _marked = [loginSaga, pressKeySaga, releaseKeySaga, pollScoreAndSave, saveCards, getUserLessons, rootSaga].map(regeneratorRuntime.mark);
 
 	var API = __webpack_require__(595);
 
@@ -36750,22 +36757,10 @@
 	                case 2:
 	                    correctMIDI = _context2.sent;
 	                    evaluation = correctMIDI == action.midiValue;
-
-	                    console.log("CORRECT MIDI", correctMIDI);
-	                    console.log("INPUT MIDI", action.midiValue);
-	                    console.log("SAGA EVALUATION", evaluation);
-	                    _context2.next = 9;
+	                    _context2.next = 6;
 	                    return (0, _effects.put)((0, _actions.pressKey)(action.midiValue, evaluation, action.xOffset, action.yOffset));
 
-	                case 9:
-	                    _context2.next = 11;
-	                    return (0, _effects.put)((0, _actions.evalNote)(action.midiValue));
-
-	                case 11:
-	                    _context2.next = 13;
-	                    return (0, _effects.call)(pollScoreAndSave);
-
-	                case 13:
+	                case 6:
 	                case 'end':
 	                    return _context2.stop();
 	            }
@@ -36773,27 +36768,21 @@
 	    }, _marked[1], this);
 	}
 
-	function pollScoreAndSave() {
-	    var score;
-	    return regeneratorRuntime.wrap(function pollScoreAndSave$(_context3) {
+	function releaseKeySaga(action) {
+	    return regeneratorRuntime.wrap(function releaseKeySaga$(_context3) {
 	        while (1) {
 	            switch (_context3.prev = _context3.next) {
 	                case 0:
 	                    _context3.next = 2;
-	                    return (0, _effects.select)(function (state) {
-	                        return state.gameState.currentScore;
-	                    });
+	                    return (0, _effects.put)((0, _actions.releaseKey)(action.midiValue));
 
 	                case 2:
-	                    score = _context3.sent;
+	                    _context3.next = 4;
+	                    return (0, _effects.put)((0, _actions.evalNote)(action.midiValue));
 
-	                    if (!(score === 10)) {
-	                        _context3.next = 6;
-	                        break;
-	                    }
-
+	                case 4:
 	                    _context3.next = 6;
-	                    return (0, _effects.put)({ type: "SAVE_CARDS" });
+	                    return (0, _effects.call)(pollScoreAndSave);
 
 	                case 6:
 	                case 'end':
@@ -36803,6 +36792,40 @@
 	    }, _marked[2], this);
 	}
 
+	function pollScoreAndSave() {
+	    var score;
+	    return regeneratorRuntime.wrap(function pollScoreAndSave$(_context4) {
+	        while (1) {
+	            switch (_context4.prev = _context4.next) {
+	                case 0:
+	                    _context4.next = 2;
+	                    return (0, _effects.select)(function (state) {
+	                        return state.gameState.currentScore;
+	                    });
+
+	                case 2:
+	                    score = _context4.sent;
+
+	                    if (!(score === 10)) {
+	                        _context4.next = 8;
+	                        break;
+	                    }
+
+	                    _context4.next = 6;
+	                    return (0, _effects.put)((0, _actions.setModalState)(true));
+
+	                case 6:
+	                    _context4.next = 8;
+	                    return (0, _effects.put)({ type: "SAVE_CARDS" });
+
+	                case 8:
+	                case 'end':
+	                    return _context4.stop();
+	            }
+	        }
+	    }, _marked[3], this);
+	}
+
 	/**
 	 * saveCards
 	 * @param action, with USER and CARDSET fields
@@ -36810,73 +36833,69 @@
 
 	function saveCards() {
 	    var user, cardset, lessonMeta, form, score, response, errors;
-	    return regeneratorRuntime.wrap(function saveCards$(_context4) {
+	    return regeneratorRuntime.wrap(function saveCards$(_context5) {
 	        while (1) {
-	            switch (_context4.prev = _context4.next) {
+	            switch (_context5.prev = _context5.next) {
 	                case 0:
-	                    _context4.prev = 0;
-	                    _context4.next = 3;
+	                    _context5.prev = 0;
+	                    _context5.next = 3;
 	                    return (0, _effects.put)((0, _actions.updateMeta)());
 
 	                case 3:
-	                    _context4.next = 5;
+	                    _context5.next = 5;
 	                    return (0, _effects.select)(function (state) {
 	                        return state.gameState.player.email;
 	                    });
 
 	                case 5:
-	                    user = _context4.sent;
-	                    _context4.next = 8;
+	                    user = _context5.sent;
+	                    _context5.next = 8;
 	                    return (0, _effects.select)(function (state) {
 	                        return state.gameState.cardset;
 	                    });
 
 	                case 8:
-	                    cardset = _context4.sent;
-	                    _context4.next = 11;
+	                    cardset = _context5.sent;
+	                    _context5.next = 11;
 	                    return (0, _effects.select)(function (state) {
 	                        return state.gameState.lessonMeta;
 	                    });
 
 	                case 11:
-	                    lessonMeta = _context4.sent;
+	                    lessonMeta = _context5.sent;
 	                    form = { user: user, cardset: cardset, lessonMeta: lessonMeta, lessonXp: 10 };
-	                    _context4.next = 15;
+	                    _context5.next = 15;
 	                    return (0, _effects.select)(function (state) {
 	                        return state.gameState.currentScore;
 	                    });
 
 	                case 15:
-	                    score = _context4.sent;
+	                    score = _context5.sent;
 
 	                    console.log(user, cardset, lessonMeta, score);
-	                    _context4.next = 19;
+	                    _context5.next = 19;
 	                    return (0, _effects.call)(API.saveCards, form);
 
 	                case 19:
-	                    response = _context4.sent;
-	                    _context4.next = 22;
-	                    return (0, _effects.put)((0, _actions.setModalState)(true));
-
-	                case 22:
-	                    _context4.next = 30;
+	                    response = _context5.sent;
+	                    _context5.next = 28;
 	                    break;
 
-	                case 24:
-	                    _context4.prev = 24;
-	                    _context4.t0 = _context4['catch'](0);
-	                    errors = _context4.t0.errors ? _context4.t0.errors : {};
+	                case 22:
+	                    _context5.prev = 22;
+	                    _context5.t0 = _context5['catch'](0);
+	                    errors = _context5.t0.errors ? _context5.t0.errors : {};
 
-	                    errors.summary = _context4.t0.message;
-	                    _context4.next = 30;
+	                    errors.summary = _context5.t0.message;
+	                    _context5.next = 28;
 	                    return (0, _effects.put)((0, _actions.saveError)(errors));
 
-	                case 30:
+	                case 28:
 	                case 'end':
-	                    return _context4.stop();
+	                    return _context5.stop();
 	            }
 	        }
-	    }, _marked[3], this, [[0, 24]]);
+	    }, _marked[4], this, [[0, 22]]);
 	}
 
 	/**
@@ -36887,75 +36906,79 @@
 
 	function getUserLessons() {
 	    var email, response, errors;
-	    return regeneratorRuntime.wrap(function getUserLessons$(_context5) {
+	    return regeneratorRuntime.wrap(function getUserLessons$(_context6) {
 	        while (1) {
-	            switch (_context5.prev = _context5.next) {
+	            switch (_context6.prev = _context6.next) {
 	                case 0:
 	                    console.log("GET LESSONS SAGA");
-	                    _context5.prev = 1;
+	                    _context6.prev = 1;
 
 	                    console.log("FETCHING LESSONS");
-	                    _context5.next = 5;
+	                    _context6.next = 5;
 	                    return (0, _effects.select)(function (state) {
 	                        return state.auth.email;
 	                    });
 
 	                case 5:
-	                    email = _context5.sent;
-	                    _context5.next = 8;
+	                    email = _context6.sent;
+	                    _context6.next = 8;
 	                    return (0, _effects.call)(API.getUserLessons, email);
 
 	                case 8:
-	                    response = _context5.sent;
-	                    _context5.next = 11;
+	                    response = _context6.sent;
+	                    _context6.next = 11;
 	                    return (0, _effects.put)((0, _actions.mountUserLessons)(response));
 
 	                case 11:
-	                    _context5.next = 18;
+	                    _context6.next = 18;
 	                    break;
 
 	                case 13:
-	                    _context5.prev = 13;
-	                    _context5.t0 = _context5['catch'](1);
-	                    errors = _context5.t0.errors ? _context5.t0.errors : {};
+	                    _context6.prev = 13;
+	                    _context6.t0 = _context6['catch'](1);
+	                    errors = _context6.t0.errors ? _context6.t0.errors : {};
 
-	                    errors.summary = _context5.t0.message;
+	                    errors.summary = _context6.t0.message;
 	                    console.log(errors);
 
 	                case 18:
 	                case 'end':
-	                    return _context5.stop();
-	            }
-	        }
-	    }, _marked[4], this, [[1, 13]]);
-	}
-
-	function rootSaga() {
-	    return regeneratorRuntime.wrap(function rootSaga$(_context6) {
-	        while (1) {
-	            switch (_context6.prev = _context6.next) {
-	                case 0:
-	                    _context6.next = 2;
-	                    return (0, _effects.takeEvery)("LOGIN", loginSaga);
-
-	                case 2:
-	                    _context6.next = 4;
-	                    return (0, _effects.takeEvery)("SAVE_CARDS", saveCards);
-
-	                case 4:
-	                    _context6.next = 6;
-	                    return (0, _effects.takeLatest)("PRESS_KEY_SAGA", pressKeySaga);
-
-	                case 6:
-	                    _context6.next = 8;
-	                    return (0, _effects.takeEvery)("GET_USER_LESSONS", getUserLessons);
-
-	                case 8:
-	                case 'end':
 	                    return _context6.stop();
 	            }
 	        }
-	    }, _marked[5], this);
+	    }, _marked[5], this, [[1, 13]]);
+	}
+
+	function rootSaga() {
+	    return regeneratorRuntime.wrap(function rootSaga$(_context7) {
+	        while (1) {
+	            switch (_context7.prev = _context7.next) {
+	                case 0:
+	                    _context7.next = 2;
+	                    return (0, _effects.takeEvery)("LOGIN", loginSaga);
+
+	                case 2:
+	                    _context7.next = 4;
+	                    return (0, _effects.takeEvery)("SAVE_CARDS", saveCards);
+
+	                case 4:
+	                    _context7.next = 6;
+	                    return (0, _effects.takeLatest)("PRESS_KEY_SAGA", pressKeySaga);
+
+	                case 6:
+	                    _context7.next = 8;
+	                    return (0, _effects.takeEvery)("RELEASE_KEY_SAGA", releaseKeySaga);
+
+	                case 8:
+	                    _context7.next = 10;
+	                    return (0, _effects.takeEvery)("GET_USER_LESSONS", getUserLessons);
+
+	                case 10:
+	                case 'end':
+	                    return _context7.stop();
+	            }
+	        }
+	    }, _marked[6], this);
 		}
 
 /***/ },
@@ -37249,9 +37272,9 @@
 
 	var _lessonsContainer2 = _interopRequireDefault(_lessonsContainer);
 
-	var _DashboardPage = __webpack_require__(942);
+	var _dashboardComponent = __webpack_require__(1021);
 
-	var _DashboardPage2 = _interopRequireDefault(_DashboardPage);
+	var _dashboardComponent2 = _interopRequireDefault(_dashboardComponent);
 
 	var _Auth = __webpack_require__(594);
 
@@ -37265,7 +37288,7 @@
 	        path: "/",
 	        getComponent: function getComponent(location, callback) {
 	            if (_Auth2.default.isUserAuthenticated()) {
-	                callback(null, _DashboardPage2.default);
+	                callback(null, _dashboardComponent2.default);
 	            } else {
 	                callback(null, _homePage2.default);
 	            }
@@ -37281,7 +37304,7 @@
 	        component: _loginContainer2.default
 	    }, {
 	        path: "/lessons",
-	        component: _lessonsContainer2.default
+	        component: _dashboardComponent2.default
 	    }, {
 	        path: "/logout",
 	        onEnter: function onEnter(nextState, replace) {
@@ -44922,6 +44945,9 @@
 
 	      var svg = svgContainer.childNodes[0];
 	      //console.log("SVG",svg.childNodes);
+	      if (this.props.golden) {
+	        svg.setAttribute("class", "goldenSVG");
+	      }
 	      svg.style.top = "0px";
 	      svg.style.height = 180;
 	      svg.style.width = width + 20 + "px";
@@ -44960,7 +44986,8 @@
 	Display.propTypes = {
 	  noteString: _react.PropTypes.string.isRequired,
 	  line: _react.PropTypes.bool,
-	  active: _react.PropTypes.bool.isRequired
+	  active: _react.PropTypes.bool.isRequired,
+	  golden: _react.PropTypes.bool
 	};
 
 	exports.default = Display;
@@ -80294,9 +80321,8 @@
 	        onRelease: function onRelease(e, midiValue) {
 	            e.preventDefault();
 	            if (e.buttons || e.type == "mouseup") {
-	                console.log("RELEASED MIDIVALUE", midiValue);
+	                dispatch((0, _actions.releaseKeySaga)(midiValue));
 	                dispatch((0, _actions.advanceCard)());
-	                dispatch((0, _actions.releaseKey)(midiValue));
 	            }
 	        }
 
@@ -89900,11 +89926,9 @@
 	                                var active = lessonMeta.unlocked;
 
 	                                var overdueRatio = (Date.now() / 1000 - lessonMeta.timestamp) / lessonMeta.period;
-	                                var status = 1 / overdueRatio;
+	                                var status = 1 / overdueRatio * 0.9; // 90% when lesson is due
 
-	                                console.log("LESSON STATUS", lessonMeta.name, status);
-	                                console.log((Date.now() / 1000 - lessonMeta.timestamp) / 60, lessonMeta.period / 60);
-
+	                                status = Math.random() * 1.5;
 	                                return _react2.default.createElement(_GridList.GridTile, {
 	                                    style: { overflow: "visible" },
 	                                    children: _react2.default.createElement(_floatingTileContainer2.default, {
@@ -89915,7 +89939,8 @@
 	                                        children: [_react2.default.createElement(_statusComponent2.default, { status: status }), _react2.default.createElement(_displayComponent2.default, {
 	                                            noteString: _this2.cardsetToNoteString(lessonMeta),
 	                                            line: true,
-	                                            active: active
+	                                            active: active,
+	                                            golden: status >= 1
 	                                        })]
 	                                    })
 	                                });
@@ -90725,8 +90750,36 @@
 	var Status = function Status(_ref) {
 	    var status = _ref.status;
 
-	    var bgcolor = status >= 1 ? "gold" : "silver";
-	    var bordercolor = status >= 1 ? "goldenrod" : "slategrey";
+	    var bgcolor = void 0,
+	        bordercolor = void 0,
+	        textcolor = void 0;
+	    switch (true) {
+	        case status >= 1:
+	            console.log("STATUS GREATER THAN 1");
+	            bgcolor = "#ffd700";
+	            bordercolor = "goldenrod";
+	            textcolor = "darkgoldenrod";
+	            break;
+
+	        case status >= 0.75:
+	            bgcolor = "#eae6dd";
+	            bordercolor = "#eae6dd";
+	            textcolor = "dimgrey";
+	            break;
+
+	        case status >= 0.25:
+	            bgcolor = "#f3f2f1";
+	            bordercolor = "#f3f2f1";
+	            textcolor = "silver";
+	            break;
+
+	        default:
+	            bgcolor = "#ffffff";
+	            bordercolor = "#ffffff";
+	            textcolor = "silver";
+
+	    }
+
 	    var percentage = status >= 1 ? "100%" : Math.round(status * 100) + "%";
 
 	    var style = {
@@ -90747,7 +90800,7 @@
 	        { className: "statusBar", style: style },
 	        _react2.default.createElement(
 	            "h2",
-	            { fontFamily: "Roboto", style: { marginTop: 20, color: status > 1 ? "darkgoldenrod" : "black" } },
+	            { fontFamily: "Roboto", style: { marginTop: 15, color: textcolor } },
 	            percentage
 	        )
 	    );
@@ -90756,144 +90809,8 @@
 	exports.default = Status;
 
 /***/ },
-/* 942 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Auth = __webpack_require__(594);
-
-	var _Auth2 = _interopRequireDefault(_Auth);
-
-	var _reactRedux = __webpack_require__(468);
-
-	var _Dashboard = __webpack_require__(943);
-
-	var _Dashboard2 = _interopRequireDefault(_Dashboard);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var DashboardPage = function (_React$Component) {
-	    _inherits(DashboardPage, _React$Component);
-
-	    /**
-	     * Class constructor
-	     **/
-	    function DashboardPage(props) {
-	        _classCallCheck(this, DashboardPage);
-
-	        var _this = _possibleConstructorReturn(this, (DashboardPage.__proto__ || Object.getPrototypeOf(DashboardPage)).call(this, props));
-
-	        console.log("props", _this.props);
-	        _this.state = {
-	            secretData: ""
-	        };
-	        return _this;
-	    }
-
-	    /**
-	     * This method will exec post init render
-	     **/
-
-
-	    _createClass(DashboardPage, [{
-	        key: "componentDidMount",
-	        value: function componentDidMount() {
-	            var _this2 = this;
-
-	            var xhr = new XMLHttpRequest();
-	            console.log("email", this.props.email);
-	            xhr.open("get", "/api/users/" + this.props.email);
-	            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	            xhr.setRequestHeader("Authorization", "bearer " + _Auth2.default.getToken());
-	            xhr.responseType = "json";
-	            xhr.addEventListener("load", function () {
-	                if (xhr.status === 200) {
-	                    _this2.setState({
-	                        secretData: xhr.response.message
-	                    });
-	                }
-	            });
-	            xhr.send();
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(_Dashboard2.default, { secretData: this.state.secretData });
-	        }
-	    }]);
-
-	    return DashboardPage;
-	}(_react2.default.Component);
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        email: state.auth.email
-	    };
-	};
-
-	DashboardPage = (0, _reactRedux.connect)(mapStateToProps)(DashboardPage);
-
-	exports.default = DashboardPage;
-
-/***/ },
-/* 943 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Card = __webpack_require__(732);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Dashboard = function Dashboard(_ref) {
-	    var secretData = _ref.secretData;
-	    return _react2.default.createElement(
-	        _Card.Card,
-	        { className: "container" },
-	        _react2.default.createElement(_Card.CardTitle, {
-	            title: "Dashboard",
-	            subtitle: "You should get access to this page only after authorization."
-	        }),
-	        secretData && _react2.default.createElement(
-	            _Card.CardText,
-	            { style: { fontSize: "16px", color: "green" } },
-	            secretData
-	        )
-	    );
-	};
-
-	Dashboard.propTypes = {
-	    secretData: _react.PropTypes.string.isRequired
-	};
-
-		exports.default = Dashboard;
-
-/***/ },
+/* 942 */,
+/* 943 */,
 /* 944 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -90969,7 +90886,7 @@
 
 
 	// module
-	exports.push([module.id, "/**\n * Pure CSS3 Piano by Taufik Nurrohman\n * On: 1 December 2011\n * URL: http://hompimpaalaihumgambreng.blogspot.com/\n * Note: This experiment is under the God Almighty License.\n * Please do not replace or remove the attribution above if you want to save/modify this project legally.\n * Good luck!\n */\n\n* {\n  margin:0px;\n  padding:0px;\n  list-style:none;\n}\n\ninput:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {\n    background-color: rgb(255,255,255);\n    background-image: none;\n    color: rgb(0, 0, 0);\n}\n\n:focus {\n  outline:none !important;\n}\n\n/*body {\n  background:#666;\n  background:-webkit-radial-gradient(bottom left,cover,#999,#666);\n  background:-moz-radial-gradient(bottom left,cover,#999,#666);\n  background:-ms-radial-gradient(bottom left,cover,#999,#666);\n  background:-o-radial-gradient(bottom left,cover,#999,#666);\n  background:radial-gradient(bottom left,cover,#999,#666);\n  height:500px;\n}*/\n\na {\n  color:indigo;\n  text-decoration:none;\n}\n\na:hover {\n  text-decoration:underline;\n}\n\n/* Piano Wrapper */\n#p-wrapper {\n  white-space: nowrap;\n  overflow-x:scroll;\n  overflow-y:hidden;\n  position:relative;\n  margin-bottom: -5px;\n  -webkit-animation:taufik 2s;\n  -moz-animation:taufik 2s;\n  animation:taufik 2s;\n}\n\n/* Tuts */\nul#piano {\n  display: inline-block;\n  height:220px;\n  margin: 0px;\n}\n\nul#piano li {\n  list-style:none;\n  float:left;\n  background:#aaa;\n  width:40px;\n  position:relative;\n  white-space:nowrap;\n}\n\nul#piano li a,ul#piano li span.white {\n  -webkit-user-select: none;\n  display:block;\n  height:220px;\n  background:#fff;\n  overflow: hidden;\n  background:-webkit-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-moz-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-ms-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-o-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:linear-gradient(-30deg,#f5f5f5,#fff);\n  border:1px solid #ccc;\n  -webkit-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -moz-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -webkit-border-radius:0 0 3px 3px;\n  -moz-border-radius:0 0 3px 3px;\n  border-radius:0 0 3px 3px;\n}\n\n#piano li a.pressed,  ul#piano li span.white.pressed {\n  -webkit-tap-highlight-color: #ccc;\n  -webkit-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  -moz-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  position:relative;\n  top:2px;\n  height:216px;\n}\n\n\nul#piano li a.pressed:before,ul#piano li span.white.pressed:before {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent transparent transparent rgba(0,0,0,0.1);\n  position:absolute;\n  left:0px;\n  top:0px;\n}\n\nul#piano li a.pressed:after,ul#piano li span.white.pressed:after {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent rgba(0,0,0,0.1) transparent transparent;\n  position:absolute;\n  right:0px;\n  top:0px;\n}\n\n/* Black Tuts */\nul#piano li span.black {\n  position:absolute;\n  top:0px;\n  left:-12px;\n  width:20px;\n  height:120px;\n  background:#333;\n  overflow: hidden;\n  background:-webkit-linear-gradient(-20deg,#333,#000,#333);\n  background:-moz-linear-gradient(-20deg,#333,#000,#333);\n  background:-ms-linear-gradient(-20deg,#333,#000,#333);\n  background:-o-linear-gradient(-20deg,#333,#000,#333);\n  background:linear-gradient(-20deg,#333,#000,#333);\n  z-index:10;\n  border-width:1px 2px 7px;\n  border-style:solid;\n  border-color:#666 #222 #111 #555;\n  -webkit-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -moz-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -webkit-border-radius:0 0 2px 2px;\n  -moz-border-radius:0 0 2px 2px;\n  border-radius:0 0 2px 2px;\n}\n\nul#piano li span.black.pressed {\n  border-bottom-width:2px;\n  height:123px;\n  -webkit-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  -moz-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n}\n\n.progress {\n  background:-webkit-linear-gradient(-90deg,springgreen,#adffad);\n  background:-moz-linear-gradient(-90deg,springgreen,#adffad);\n  background:-ms-linear-gradient(-90deg,springgreen,#adffad);\n  background:-o-linear-gradient(-90deg,springgreen,#adffad);\n  background:linear-gradient(-90deg,springgreen,#adffad);\n  transition: width 200ms ease-in;\n}\n\n/* React Transition Class */\n\n.slide-enter {\n  opacity: 0.01;\n  transform: translate(20%,0);\n}\n\n.slide-enter.slide-enter-active {\n  opacity: 1;\n  transform: translate(0,0);\n  -webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;\n  -moz-webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;\n  -o-webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;\n  transition: all 400ms cubic-bezier(.17,.67,.19,1.58) 50ms;\n}\n\n.slide-leave {\n  opacity: 1;\n  transform: translate(0,0);\n}\n\n.slide-leave.slide-leave-active {\n  opacity: 0.01;\n  transform: translate(-20%,0);\n  transition: all 150ms linear;\n}\n\n.ripple-enter {\n  opacity: 1;\n  transform: scale(0.1);\n}\n\n.ripple-enter.ripple-enter-active {\n  opacity: 0.8;\n  transform: scale(1);\n  transition: all 400ms ease-in-out;\n}\n\n.ripple-leave {\n  opacity: 0.5;\n}\n\n.ripple-leave.ripple-leave-active {\n  opacity: 0.1;\n  transition: all 50ms linear;\n}\n\n.ripple-effect-correct{\n  position: absolute;\n  border-radius: 50%;\n  width: 600px;\n  height: 600px;\n  background: radial-gradient(springgreen ,lawngreen);\n  opacity: 0.8;\n  pointer-events: none;\n}\n\n.ripple-effect-incorrect{\n  position: absolute;\n  border-radius: 50%;\n  width: 600px;\n  height: 600px;\n  background: radial-gradient(red,white);\n  opacity: 0.8;\n  pointer-events: none;\n  \n}\n\n\n/* Animation */\n@-webkit-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@-moz-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n\n@keyframes ripple-animation {\n    from {\n      transform: scale(1);\n      opacity: 0.7;\n    }\n    to {\n      transform: scale(10);\n      opacity: 0.4;\n    }\n}\n", ""]);
+	exports.push([module.id, "/**\n * Pure CSS3 Piano by Taufik Nurrohman\n * On: 1 December 2011\n * URL: http://hompimpaalaihumgambreng.blogspot.com/\n * Note: This experiment is under the God Almighty License.\n * Please do not replace or remove the attribution above if you want to save/modify this project legally.\n * Good luck!\n */\n\n* {\n  margin:0px;\n  padding:0px;\n  list-style:none;\n}\n\ninput:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {\n    background-color: rgb(255,255,255);\n    background-image: none;\n    color: rgb(0, 0, 0);\n}\n\n:focus {\n  outline:none !important;\n}\n\n/*body {\n  background:#666;\n  background:-webkit-radial-gradient(bottom left,cover,#999,#666);\n  background:-moz-radial-gradient(bottom left,cover,#999,#666);\n  background:-ms-radial-gradient(bottom left,cover,#999,#666);\n  background:-o-radial-gradient(bottom left,cover,#999,#666);\n  background:radial-gradient(bottom left,cover,#999,#666);\n  height:500px;\n}*/\n\na {\n  color:indigo;\n  text-decoration:none;\n}\n\na:hover {\n  text-decoration:underline;\n}\n\n/* Piano Wrapper */\n#p-wrapper {\n  white-space: nowrap;\n  overflow-x:scroll;\n  overflow-y:hidden;\n  position:relative;\n  margin-bottom: -5px;\n  -webkit-animation:taufik 2s;\n  -moz-animation:taufik 2s;\n  animation:taufik 2s;\n}\n\n/* Tuts */\nul#piano {\n  display: inline-block;\n  height:220px;\n  margin: 0px;\n}\n\nul#piano li {\n  list-style:none;\n  float:left;\n  background:#aaa;\n  width:40px;\n  position:relative;\n  white-space:nowrap;\n}\n\nul#piano li a,ul#piano li span.white {\n  -webkit-user-select: none;\n  display:block;\n  height:220px;\n  background:#fff;\n  overflow: hidden;\n  background:-webkit-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-moz-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-ms-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:-o-linear-gradient(-30deg,#f5f5f5,#fff);\n  background:linear-gradient(-30deg,#f5f5f5,#fff);\n  border:1px solid #ccc;\n  -webkit-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -moz-box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  box-shadow:inset 0 1px 0px #fff,inset 0 -1px 0px #fff,inset 1px 0px 0px #fff,inset -1px 0px 0px #fff,0 4px 3px rgba(0,0,0,0.7);\n  -webkit-border-radius:0 0 3px 3px;\n  -moz-border-radius:0 0 3px 3px;\n  border-radius:0 0 3px 3px;\n}\n\n#piano li a.pressed,  ul#piano li span.white.pressed {\n  -webkit-tap-highlight-color: #ccc;\n  -webkit-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  -moz-box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  box-shadow:0 2px 2px rgba(0,0,0,0.4);\n  position:relative;\n  top:2px;\n  height:216px;\n}\n\n\nul#piano li a.pressed:before,ul#piano li span.white.pressed:before {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent transparent transparent rgba(0,0,0,0.1);\n  position:absolute;\n  left:0px;\n  top:0px;\n}\n\nul#piano li a.pressed:after,ul#piano li span.white.pressed:after {\n  content:\"\";\n  width:0px;\n  height:0px;\n  border-width:216px 5px 0px;\n  border-style:solid;\n  border-color:transparent rgba(0,0,0,0.1) transparent transparent;\n  position:absolute;\n  right:0px;\n  top:0px;\n}\n\n/* Black Tuts */\nul#piano li span.black {\n  position:absolute;\n  top:0px;\n  left:-12px;\n  width:20px;\n  height:120px;\n  background:#333;\n  overflow: hidden;\n  background:-webkit-linear-gradient(-20deg,#333,#000,#333);\n  background:-moz-linear-gradient(-20deg,#333,#000,#333);\n  background:-ms-linear-gradient(-20deg,#333,#000,#333);\n  background:-o-linear-gradient(-20deg,#333,#000,#333);\n  background:linear-gradient(-20deg,#333,#000,#333);\n  z-index:10;\n  border-width:1px 2px 7px;\n  border-style:solid;\n  border-color:#666 #222 #111 #555;\n  -webkit-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -moz-box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  box-shadow:inset 0px -1px 2px rgba(255,255,255,0.4),0 2px 3px rgba(0,0,0,0.4);\n  -webkit-border-radius:0 0 2px 2px;\n  -moz-border-radius:0 0 2px 2px;\n  border-radius:0 0 2px 2px;\n}\n\nul#piano li span.black.pressed {\n  border-bottom-width:2px;\n  height:123px;\n  -webkit-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  -moz-box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n  box-shadow:inset 0px -1px 1px rgba(255,255,255,0.4),0 1px 0px rgba(0,0,0,0.8),0 2px 2px rgba(0,0,0,0.4),0 -1px 0px #000;\n}\n\n.progress {\n  background:-webkit-linear-gradient(-90deg,springgreen,#adffad);\n  background:-moz-linear-gradient(-90deg,springgreen,#adffad);\n  background:-ms-linear-gradient(-90deg,springgreen,#adffad);\n  background:-o-linear-gradient(-90deg,springgreen,#adffad);\n  background:linear-gradient(-90deg,springgreen,#adffad);\n  transition: width 200ms ease-in;\n}\n\n.goldenSVG rect {\n  fill: goldenrod;\n  stroke: goldenrod;\n  opacity: 0.9;\n}\n\n.goldenSVG path {\n  fill: goldenrod;\n  stroke: goldenrod;\n  opacity: 0.9;\n}\n\n/* React Transition Class */\n\n.slide-enter {\n  opacity: 0.01;\n  transform: translate(20%,0);\n}\n\n.slide-enter.slide-enter-active {\n  opacity: 1;\n  transform: translate(0,0);\n  -webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;\n  -moz-webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;\n  -o-webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;\n  transition: all 400ms cubic-bezier(.17,.67,.19,1.58) 50ms;\n}\n\n.slide-leave {\n  opacity: 1;\n  transform: translate(0,0);\n}\n\n.slide-leave.slide-leave-active {\n  opacity: 0.01;\n  transform: translate(-20%,0);\n  transition: all 150ms linear;\n}\n\n.ripple-enter {\n  opacity: 1;\n  transform: scale(0.1);\n}\n\n.ripple-enter.ripple-enter-active {\n  opacity: 0.8;\n  transform: scale(1);\n  transition: all 400ms ease-in-out;\n}\n\n.ripple-leave {\n  opacity: 0.5;\n}\n\n.ripple-leave.ripple-leave-active {\n  opacity: 0.1;\n  transition: all 50ms linear;\n}\n\n.ripple-effect-correct{\n  position: absolute;\n  border-radius: 50%;\n  width: 600px;\n  height: 600px;\n  background: radial-gradient(springgreen ,lawngreen);\n  opacity: 0.8;\n  pointer-events: none;\n}\n\n.ripple-effect-incorrect{\n  position: absolute;\n  border-radius: 50%;\n  width: 600px;\n  height: 600px;\n  background: radial-gradient(red,white);\n  opacity: 0.8;\n  pointer-events: none;\n  \n}\n\n\n/* Animation */\n@-webkit-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@-moz-keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n@keyframes taufik {\n  from {opacity:0;}\n  to {opacity:1;}\n}\n\n@keyframes ripple-animation {\n    from {\n      transform: scale(1);\n      opacity: 0.7;\n    }\n    to {\n      transform: scale(10);\n      opacity: 0.4;\n    }\n}\n", ""]);
 
 	// exports
 
@@ -93339,6 +93256,81 @@
 
 	module.exports = getPrototype;
 
+
+/***/ },
+/* 1021 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _lessonsContainer = __webpack_require__(931);
+
+	var _lessonsContainer2 = _interopRequireDefault(_lessonsContainer);
+
+	var _progressReportComponent = __webpack_require__(1022);
+
+	var _progressReportComponent2 = _interopRequireDefault(_progressReportComponent);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Dashboard = function Dashboard() {
+	    return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(_lessonsContainer2.default, null),
+	        _react2.default.createElement(_progressReportComponent2.default, { currentDayXp: 25, totalXp: 2500, xpHistory: [1, 2, 3] })
+	    );
+	};
+
+	exports.default = Dashboard;
+
+/***/ },
+/* 1022 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Card = __webpack_require__(732);
+
+	var _Paper = __webpack_require__(734);
+
+	var _Paper2 = _interopRequireDefault(_Paper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ProgressReport = function ProgressReport(_ref) {
+	    var currentDayXp = _ref.currentDayXp,
+	        totalXp = _ref.totalXp,
+	        xpHistory = _ref.xpHistory;
+
+	    return _react2.default.createElement(
+	        _Paper2.default,
+	        { zDepth: 3, style: { display: "inline-block", borderRadius: "10%" } },
+	        _react2.default.createElement(
+	            _Card.Card,
+	            null,
+	            _react2.default.createElement(_Card.CardTitle, { title: "Progress Report", subtitle: "Current Day XP, Total XP, Recent History" })
+	        )
+	    );
+	};
+
+	exports.default = ProgressReport;
 
 /***/ }
 /******/ ])));

@@ -93,11 +93,9 @@ class Lessons extends Component {
                             let active = lessonMeta.unlocked;
                             
                             let overdueRatio = ((Date.now() / 1000) - lessonMeta.timestamp) / lessonMeta.period;
-                            let status = 1 / overdueRatio;
+                            let status = 1 / overdueRatio * 0.9; // 90% when lesson is due
                             
-                            console.log("LESSON STATUS", lessonMeta.name, status);
-                            console.log(((Date.now() / 1000) - lessonMeta.timestamp) / 60, lessonMeta.period / 60 );
-              
+                            status = Math.random() * 1.5;
                             return (
                                 <GridTile 
                                     style={
@@ -115,6 +113,7 @@ class Lessons extends Component {
                                                 noteString = {this.cardsetToNoteString(lessonMeta)}
                                                 line = {true}
                                                 active = {active}
+                                                golden = {status >= 1}
                                             />]
                                             }
                                         />

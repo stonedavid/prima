@@ -5,7 +5,7 @@ import Interface from "../containers/interfaceContainer.js";
 import Signup from "../containers/signupContainer.js";
 import Login from "../containers/loginContainer.js";
 import Lessons from "../containers/lessonsContainer.js";
-import Dashboard from "../containers/DashboardPage.js";
+import Dashboard from "../components/dashboardComponent.js";
 
 import Auth from "./modules/Auth";
 
@@ -40,7 +40,7 @@ const routes = {
         
         {
             path: "/lessons",
-            component: Lessons
+            component: Dashboard
         },
         
         {

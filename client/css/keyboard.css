@@ -168,6 +168,18 @@ ul#piano li span.black.pressed {
   transition: width 200ms ease-in;
 }
 
+.goldenSVG rect {
+  fill: goldenrod;
+  stroke: goldenrod;
+  opacity: 0.9;
+}
+
+.goldenSVG path {
+  fill: goldenrod;
+  stroke: goldenrod;
+  opacity: 0.9;
+}
+
 /* React Transition Class */
 
 .slide-enter {
