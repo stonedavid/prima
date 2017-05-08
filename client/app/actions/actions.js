@@ -46,9 +46,10 @@ export const CHANGE_URL = "CHANGE_URL";
 
 export const EVAL_NOTE = "EVAL_NOTE";
 export const EVAL_SAGA = "EVAL_SAGA";
+export const SET_LESSON_DETAILS = "SET_LESSON_DETAILS";
 export const ADVANCE_CARD = "ADVANCE_CARD";
 export const SET_GAME_USER = "SET_GAME_USER";
-export const UPDATE_TOTAL_XP = "UPDATE_TOTAL_XP";
+export const UPDATE_XP = "UPDATE_XP";
 export const SET_CLOCK = "SET_CLOCK";
 export const SET_MODAL_STATE = "SET_MODAL_STATE";
 
@@ -156,8 +157,12 @@ export function setGameUser(response) {
     return { type: SET_GAME_USER, response };
 }
 
-export function updateTotalXp() {
-    return { type: UPDATE_TOTAL_XP };
+export function setLessonDetails(details) {
+    return { type: SET_LESSON_DETAILS, details }
+}
+
+export function updateXp(totalXp,xpHistory) {
+    return { type: UPDATE_XP,totalXp,xpHistory };
 }
 
 export function setClock() {

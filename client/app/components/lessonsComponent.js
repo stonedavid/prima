@@ -21,7 +21,6 @@ from 'material-ui/Card';
 import Paper from "material-ui/Paper";
 import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 
 import Status from "./statusComponent.js";
 
@@ -39,9 +38,15 @@ const styles = {
     },
     card: {
         padding: 20,
-        borderRadius: 5,
+        borderRadius: "inherit",
         display: "inline-block",
         background: "linear-gradient(rgb(244, 244, 244) 0%, rgba(255, 255, 255, 0.741176) 26%, rgb(255, 255, 255) 100%)"
+    },
+    
+    paper: {
+        display: "inline-block",
+        margin: 20,
+        borderRadius: 20
     }
 };
 
@@ -78,7 +83,7 @@ class Lessons extends Component {
         return (!this.props.lessons.length ? (
             <h1>Loading...</h1>
         ) : (
-            <Paper zDepth={3} style={{display: "inline-block"}}>
+            <Paper zDepth={3} style={styles.paper}>
             <Card style={styles.card}>
                 <CardTitle title={"Note Skills"} subtitle={"Total XP: " + this.props.totalXp} />
                     <div style={styles.root}>
@@ -94,8 +99,7 @@ class Lessons extends Component {
                             
                             let overdueRatio = ((Date.now() / 1000) - lessonMeta.timestamp) / lessonMeta.period;
                             let status = 1 / overdueRatio * 0.9; // 90% when lesson is due
-                            
-                            status = Math.random() * 1.5;
+                            status = 2;
                             return (
                                 <GridTile 
                                     style={
@@ -113,7 +117,7 @@ class Lessons extends Component {
                                                 noteString = {this.cardsetToNoteString(lessonMeta)}
                                                 line = {true}
                                                 active = {active}
-                                                golden = {status >= 1}
+                                                golden = {false}
                                             />]
                                             }
                                         />

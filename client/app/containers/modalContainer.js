@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 
 import ModalComponent from "../components/modalComponent.js";
 
-import { setModalState, changeUrl, updateTotalXp } from "../actions/actions.js";
+import { setModalState, changeUrl } from "../actions/actions.js";
 
 const mapStateToProps = (state) => {
     return {
@@ -19,7 +19,6 @@ const mapDispatchToProps = (dispatch) => {
         },
         
         handleClose: () => {
-            dispatch(updateTotalXp());
             dispatch(setModalState(false))
             dispatch(changeUrl("/lessons"));
         }

@@ -145,7 +145,7 @@ app.get("/api/getLessons/:email", (req, res) => {
         }
         
         return res.status(200).json({
-            lessons: user.curriculum.lessons
+            lessons: user.lessons
         });
     });
     
@@ -159,7 +159,7 @@ app.get("/api/getCards/:email/:min/:max/:accidentals/:durations", (req, res) => 
     var min = parseInt(req.params.min);
     var max = parseInt(req.params.max);
     var durations = req.params.durations.split("_");
-    var accidentals = req.params.accidentals === "none" ? [] : req.params.accidentals.split("_");
+    var accidentals = req.params.accidentals === "none" ? [] : req.params.accidentals.split("_").map((acc) => {return acc === "s" ? "#" : acc});
     
     var cardNames = generateCardNames(min,max+1,accidentals,durations);
     
@@ -180,7 +180,7 @@ app.get("/api/getCards/:email/:min/:max/:accidentals/:durations", (req, res) => 
         var selectedCards = [];
         
         cardNames.forEach( cardName => {
-            selectedCards.push(user.curriculum.cards[cardName]);
+            selectedCards.push(user.cards[cardName]);
         });
         
     
@@ -193,6 +193,31 @@ app.get("/api/getCards/:email/:min/:max/:accidentals/:durations", (req, res) => 
 app.post("/api/save/:email", (req, res) => {
     var email = req.params.email;
     var data = req.body;
+    
+    function updateXpHistory(user,lessonXp) {
+        
+        var today = new Date().toDateString();
+        var xpHistory = user.xpHistory;
+        
+        if(xpHistory.hasOwnProperty(today)) {
+            xpHistory[today]+=lessonXp;
+        } else {
+            xpHistory[today] = lessonXp;
+        }
+        
+        user.xpHistory = xpHistory;
+        
+        return user;
+    }
+    
+    function updateCards(user,cardset) {
+        
+        cardset.forEach(card=>{
+            user.cards[card.noteString] = card;
+        });
+        
+        return user;
+    }
     
     User.findOne({ "email": email }, (err, user) => {
         if (err) {
@@ -211,15 +236,13 @@ app.post("/api/save/:email", (req, res) => {
         var lessonMeta = data.lessonMeta;
         var lessonXp = data.lessonXp;
         
-        cardset.forEach( card => {
-            user.curriculum.cards[card.noteString] = card;
-        });
+        user = updateCards(user,cardset);
         
-        user.curriculum.lessons[lessonMeta.name] = lessonMeta;
+        user = updateXpHistory(user,lessonXp);
+        
+        user.lessons[lessonMeta.name] = lessonMeta;
         
         user.totalXp = user.totalXp + lessonXp;
-        
-        user.markModified("curriculum");
         
         user.save(function (err) {
             if(err) {
@@ -227,7 +250,7 @@ app.post("/api/save/:email", (req, res) => {
             }
         });
         
-        res.status(200).json({curriculum: user.curriculum, totalXp: user.totalXp });
+        res.status(200).json({lessons: user.lessons, cards: user.cards, totalXp: user.totalXp, xpHistory: user.xpHistory});
     });
 });
 
@@ -251,7 +274,7 @@ app.get("/tests/checkCards/:email", (req, res) => {
                 return res.status(500).json({ error: error});
             }
             
-            res.json(user.curriculum.cards);
+            res.json(user.cards);
         });
         
     }
@@ -273,7 +296,7 @@ app.get("/tests/checkLessons/:email", (req, res) => {
                 return res.status(500).json({ error: error});
             }
             
-            res.json(user.curriculum.lessons);
+            res.json(user.lessons);
         });
         
     }

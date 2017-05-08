@@ -37,7 +37,7 @@ const newVisitorTabs = [
     }
 ];
 
-const tabStyle = {background: "linear-gradient(to left,orangered,violet)"}
+const tabStyle = {background: "linear-gradient(to right, #feac5e, #c779d0, #4bc0c8)"}
 
 const NavBar = ({ currentPage, onChange, isAuthenticated }) => (
         <Tabs 

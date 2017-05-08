@@ -26,6 +26,7 @@ class FloatingTile extends Component {
     
     render() {
         return (
+        <div onMouseEnter={this.props.onMouseEnter} onMouseLeave={this.props.onMouseLeave}>
             <Paper 
                 style = {{
                     textAlign: 'center',
@@ -40,6 +41,7 @@ class FloatingTile extends Component {
                 >
                 { this.props.children }
             </Paper>
+        </div>
         );
             
     }

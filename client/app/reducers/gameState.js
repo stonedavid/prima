@@ -1,4 +1,4 @@
-import { EVAL_NOTE, UPDATE_TOTAL_XP, ADVANCE_CARD, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META, SET_MODAL_STATE, LOGOUT } from "../actions/actions.js";
+import { EVAL_NOTE, UPDATE_XP, ADVANCE_CARD, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META, SET_MODAL_STATE, LOGOUT, SET_LESSON_DETAILS } from "../actions/actions.js";
 import { calculateNextDueDate } from "../game/sm.js";
 import cleanState from "../state.js";
 
@@ -14,10 +14,11 @@ function gameState(state = {}, action) {
                 }
             });
             
-        case UPDATE_TOTAL_XP:
+        case UPDATE_XP:
             return Object.assign({}, state, {
                 player: Object.assign({}, state.player, {
-                    totalXp: state.player.totalXp + state.gameValue
+                    totalXp: action.totalXp,
+                    xpHistory: action.xpHistory
                 })
             });
             
@@ -132,7 +133,12 @@ function gameState(state = {}, action) {
             console.log("SETTING MODAL STATE", action.modalState);
             return Object.assign({}, state, {
                 modal: action.modalState
-            })
+            });
+            
+        case SET_LESSON_DETAILS:
+            return Object.assign({}, state, {
+                lessonDetails: action.details
+            });
             
         case LOGOUT:
             return Object.assign({}, state, cleanState.gameState);

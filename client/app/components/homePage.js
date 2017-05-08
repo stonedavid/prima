@@ -5,6 +5,8 @@ import FlatButton from "material-ui/FlatButton";
 import Display from "./displayComponent";
 import Xp from "./xpComponent.js";
 
+import Sharp from "./sharpSvgComponent.js";
+
 const genRandomNoteString = (length) => {
   var string = "";
   var notes = ["A","B","C","D","E","F","G"];
@@ -20,11 +22,17 @@ const genRandomNoteString = (length) => {
 let noteString = genRandomNoteString(3);
 
 console.log(noteString);
+let currentDate = new Date();
+let yesterday = new Date(Date.now() - (1000 * 3600 * 24)).toDateString();
 
+     
 const Home = () =>
   (
       <Card>
-        <CardTitle title="Welcome to Prima!" subtitle="Improve your sight-reading" />
+        <CardTitle title={yesterday} subtitle="Improve your sight-reading" />
+        <Sharp viewBox={"0 0 1.1 3.0000001"} width="6.8493137"
+   height="18.679947"
+ />
         <Display
           noteString={noteString}
           active={true}
@@ -38,6 +46,7 @@ const Home = () =>
               }}
               />
         </CardActions>
+        <h2>{currentDate.toDateString()}</h2>
       </Card>
     )
     

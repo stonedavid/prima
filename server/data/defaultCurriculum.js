@@ -216,6 +216,64 @@ module.exports = {
         timesCorrect: 0,
         timesIncorrect: 0,
         timestampReadable: 0
-    }
+    },
+    
+    /**
+     * Intermediate Lessons: sharps and flats
+     * */
+    
+    "A3-E4_s_q" : {
+        index: 12,
+        name: "A3-E4_s_q",
+        minimumMidi: 57,
+        maximumMidi: 64,
+        accidentals: ["#"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "A3-E4_f_q" : {
+        index: 12,
+        name: "A3-E4_f_q",
+        minimumMidi: 56,
+        maximumMidi: 64,
+        accidentals: ["b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "A3-E4_sf_q" : {
+        index: 13,
+        name: "A3-E4_sf_q",
+        minimumMidi: 56,
+        maximumMidi: 64,
+        accidentals: ["#","b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
     
 };

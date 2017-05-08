@@ -26,6 +26,7 @@ import {
     pressKey,
     releaseKey,
     setModalState,
+    updateXp,
     GET_USER_LESSONS
 }
 from "../actions/actions.js";
@@ -93,9 +94,8 @@ export function* saveCards() {
         const cardset = yield select(state => state.gameState.cardset);
         const lessonMeta = yield select(state => state.gameState.lessonMeta);
         const form = { user: user, cardset: cardset, lessonMeta: lessonMeta, lessonXp: 10 };
-        const score = yield select(state => state.gameState.currentScore);
-        console.log(user,cardset,lessonMeta,score);
         const response = yield call(API.saveCards,form);
+        yield put(updateXp(response.totalXp,response.xpHistory));
     }
     catch (e) {
         const errors = e.errors ? e.errors : {};
