@@ -1,7 +1,5 @@
 /node_modules
 /.c9
 /Extra
-/client/bundle.js
-/client/bundle.js.map
 /data
 mongod
