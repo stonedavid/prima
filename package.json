@@ -44,7 +44,8 @@
   "scripts": {
     "start": "nodemon server.js",
     "dev": "webpack-dev-server --inline --hot",
-    "build": "webpack --watch --progress"
+    "build": "webpack --watch --progress",
+    "heroku-postbuild": "webpack"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
