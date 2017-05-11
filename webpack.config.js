@@ -20,7 +20,6 @@ module.exports = {
     plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         // This has effect on the react lib size
