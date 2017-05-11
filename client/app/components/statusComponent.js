@@ -4,33 +4,29 @@ import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import Star from 'material-ui/svg-icons/toggle/star';
 
 const Status = ({status}) => {
-    let bgcolor, bordercolor, textcolor, stars;
+    let bgcolor, bgcolor2, bordercolor, textcolor, stars;
     let shinecolor = "white";
+    bgcolor= "linear-gradient(80deg, #fac64c 13%, transparent 14%), linear-gradient(#fef0d0  9%, #fac64c  66%)";
     switch (true) {
         case (status >= 1):
-            console.log("STATUS GREATER THAN 1")
-            bgcolor= "linear-gradient(70deg,goldenrod 20%, white 20%, goldenrod)";
-            bordercolor = "goldenrod";
+            bordercolor = "#fac64c";
             textcolor = "darkgoldenrod";
-            stars = [<Star color={"gold"} />,<Star color={"gold"} />,<Star color={"gold"} />];
+            stars = [<Star color={"#fef0d0"} />,<Star color={"#fef0d0"} />,<Star color={"#fef0d0"} />];
             break;
         
         case (status >= 0.75):
-            bgcolor = "linear-gradient(to right, white, white)"; 
             bordercolor = "#eae6dd";
             textcolor = "dimgrey";
             stars = [<Star color={"dimgrey"} />,<Star color={"dimgrey"} />,<StarBorder color={"dimgrey"} />];
             break;
             
         case (status >= 0.25):
-            bgcolor = "linear-gradient(to right, white, white)"; 
             bordercolor = "#f3f2f1";
             textcolor = "silver";
             stars = [<Star color={"dimgrey"} />,<StarBorder color={"dimgrey"} />,<StarBorder color={"dimgrey"} />];
             break;
             
         default:
-            bgcolor = "linear-gradient(to right, white, white)"; 
             bordercolor = "#ffffff";
             textcolor = "silver";
             stars = [<StarBorder color={"dimgrey"} />,<StarBorder color={"dimgrey"} />,<StarBorder color={"dimgrey"} />];
@@ -48,7 +44,8 @@ const Status = ({status}) => {
             position: "absolute",
             border: `5px solid ${bordercolor}`,
             bottom: -1,
-            opacity: 0.7
+            opacity: status >= 1 ? 0.7 : 0,
+            transition: "all 2000ms ease-in-out"
         },
         
         starBar: {

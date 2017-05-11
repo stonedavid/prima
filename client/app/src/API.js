@@ -50,7 +50,7 @@ export const saveCards = (form) => {
 
     return new Promise((resolve, reject) => {
 
-        console.log("Saving these cards", form.cardset);
+        console.log("Saving these cards", form);
 
         const email = encodeURIComponent(form.user);
         const xhr = new XMLHttpRequest();

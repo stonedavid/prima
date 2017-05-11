@@ -8,7 +8,11 @@ import {
     GridTile
 }
 from 'material-ui/GridList';
+
 import FloatingTile from "../containers/floatingTileContainer.js";
+
+
+
 import {
     Card,
     CardActions,
@@ -23,6 +27,7 @@ import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
 
 import Status from "./statusComponent.js";
+import Sharp from "./sharpSvgComponent.js";
 
 
 
@@ -68,21 +73,14 @@ class Lessons extends Component {
         let range = name[0].split("-");
         let low = range[0];
         let high = range[1];
-        let accidentals = name[1];
         let durations = name[2];
         let noteString = `${low}/${durations},${high}/${durations}`;
         return noteString;
 
     }
 
-    componentDidMount() {
-        this.props.getUserLessons();
-    }
-
     render() {
-        return (!this.props.lessons.length ? (
-            <h1>Loading...</h1>
-        ) : (
+        return (
             <Paper zDepth={3} style={styles.paper}>
             <Card style={styles.card}>
                 <CardTitle title={"Note Skills"} subtitle={"Total XP: " + this.props.totalXp} />
@@ -98,8 +96,10 @@ class Lessons extends Component {
                             let active = lessonMeta.unlocked;
                             
                             let overdueRatio = ((Date.now() / 1000) - lessonMeta.timestamp) / lessonMeta.period;
+                            console.log("overdueratio",overdueRatio)
                             let status = 1 / overdueRatio * 0.9; // 90% when lesson is due
-                            status = 2;
+                            console.log("STATUS", status);
+
                             return (
                                 <GridTile 
                                     style={
@@ -107,8 +107,8 @@ class Lessons extends Component {
                                     }
                                     children={
                                         <FloatingTile
-                                            initZ = {2}
-                                            floatZ = {5}
+                                            initZ = {0.1}
+                                            floatZ = {0.5}
                                             lessonMeta = { lessonMeta }
                                             email = { this.props.email }
                                             children = {[
@@ -118,6 +118,7 @@ class Lessons extends Component {
                                                 line = {true}
                                                 active = {active}
                                                 golden = {false}
+                                                accidentals = {lessonMeta.accidentals}
                                             />]
                                             }
                                         />
@@ -129,7 +130,7 @@ class Lessons extends Component {
                      </div> 
                 </Card>
             </Paper>
-            ));
+            );
         }
     }
 

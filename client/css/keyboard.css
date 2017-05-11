@@ -49,9 +49,9 @@ a:hover {
   overflow-y:hidden;
   position:relative;
   margin-bottom: -5px;
-  -webkit-animation:taufik 2s;
-  -moz-animation:taufik 2s;
-  animation:taufik 2s;
+  -webkit-animation:taufik 200ms;
+  -moz-animation:taufik 200ms;
+  animation:taufik 200ms;
 }
 
 /* Tuts */
@@ -205,6 +205,29 @@ ul#piano li span.black.pressed {
   opacity: 0.01;
   transform: translate(-20%,0);
   transition: all 150ms linear;
+}
+
+.slide-box-enter {
+  opacity: 1;
+  transform: translate(20%,0);
+}
+
+.slide-box-enter.slide-box-enter-active {
+  opacity: 1;
+  transform: translate(0,0);
+  -webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;
+  -moz-webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;
+  -o-webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;
+  transition: all 800ms cubic-bezier(.17,.67,.19,1.58) 50ms;
+}
+
+.slide-box-leave {
+  transform: translate(0,0);
+}
+
+.slide-box-leave.slide-box-leave-active {
+  transform: translate(-30%,0);
+  transition: all 450ms linear;
 }
 
 .ripple-enter {

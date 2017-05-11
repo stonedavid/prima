@@ -1,10 +1,9 @@
 import React from "react";
 
-import SvgIcon from "material-ui/SvgIcon"
+import SvgIcon from "material-ui/SvgIcon";
 
-
-
-var ActionAccessibility = function ActionAccessibility(props) {
+var SharpSvg = function SharpSvg(props) {
+  props = Object.assign({}, props, {viewBox:"0 0 1.1 3.0000001", width:"6.8493137", height:"18.679947"});
   return React.createElement(
     SvgIcon,
     props,
@@ -14,4 +13,4 @@ var ActionAccessibility = function ActionAccessibility(props) {
 };
 
 
-export default ActionAccessibility;
+export default SharpSvg;

@@ -16,8 +16,6 @@ const Chart = ({xpHistory,style}) => {
         day = new Date(Date.now() - (i*(1000 * 3600 * 24))).toDateString();
     }
     
-    console.log("History array",xpHistoryArray);
-    
     const data = {
         labels: labels,
             datasets: [

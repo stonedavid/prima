@@ -14,11 +14,6 @@ const loggedInTabs = [
         value: "/lessons"
     },
     
-    {
-        label: "Progress",
-        value: "/progress"
-    },
-    
     { 
         label: "Log Out",
         value: "/logout"
@@ -27,11 +22,6 @@ const loggedInTabs = [
 
 const newVisitorTabs = [
     {
-        label: "Play",
-        value: "/lessons"
-    },
-    
-    {
         label: "Log In",
         value: "/login"
     }
@@ -39,10 +29,11 @@ const newVisitorTabs = [
 
 const tabStyle = {background: "linear-gradient(to right, #feac5e, #c779d0, #4bc0c8)"}
 
-const NavBar = ({ currentPage, onChange, isAuthenticated }) => (
+const NavBar = ({ currentPage, onChange, isAuthenticated, style }) => (
         <Tabs 
             value={Auth.isUserAuthenticated() && currentPage==="/" ? "/lessons" : currentPage} //sorry kludge, but i'd rather do this than wrap the whole router with connect and browserHistory is async so it makes a mess
             onChange={onChange}
+            style={Object.assign({},style,{zIndex: 999})}
             tabItemContainerStyle = {tabStyle}
         >
             { Auth.isUserAuthenticated() ?

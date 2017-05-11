@@ -194,13 +194,11 @@ app.post("/api/save/:email", (req, res) => {
     var email = req.params.email;
     var data = req.body;
     
-    function updateXpHistory(user,lessonXp) {
-        
-        var today = new Date().toDateString();
+    function updateXpHistory(user,lessonXp,today) {
         var xpHistory = user.xpHistory;
         
         if(xpHistory.hasOwnProperty(today)) {
-            xpHistory[today]+=lessonXp;
+            xpHistory[today] = xpHistory[today] + lessonXp;
         } else {
             xpHistory[today] = lessonXp;
         }
@@ -235,14 +233,19 @@ app.post("/api/save/:email", (req, res) => {
         var cardset = data.cardset;
         var lessonMeta = data.lessonMeta;
         var lessonXp = data.lessonXp;
+        var today = data.date;
         
         user = updateCards(user,cardset);
         
-        user = updateXpHistory(user,lessonXp);
+        user = updateXpHistory(user,lessonXp,today);
         
         user.lessons[lessonMeta.name] = lessonMeta;
         
         user.totalXp = user.totalXp + lessonXp;
+        
+        user.markModified("lessons");
+        user.markModified("cards");
+        user.markModified("xpHistory");
         
         user.save(function (err) {
             if(err) {

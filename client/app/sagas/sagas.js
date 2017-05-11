@@ -76,8 +76,7 @@ export function* releaseKeySaga(action) {
 
 export function* pollScoreAndSave() {
     const score = yield select(state => state.gameState.currentScore);
-    if (score === 10) {
-        yield put(setModalState(true));
+    if (score === 20) {
         yield put({ type: "SAVE_CARDS" });
     }
 }
@@ -93,9 +92,12 @@ export function* saveCards() {
         const user = yield select(state => state.gameState.player.email);
         const cardset = yield select(state => state.gameState.cardset);
         const lessonMeta = yield select(state => state.gameState.lessonMeta);
-        const form = { user: user, cardset: cardset, lessonMeta: lessonMeta, lessonXp: 10 };
+        const date = new Date().toDateString();
+        const form = { user: user, cardset: cardset, lessonMeta: lessonMeta, lessonXp: 10, date: date };
         const response = yield call(API.saveCards,form);
+        console.log("SAVE RESPONSE", response);
         yield put(updateXp(response.totalXp,response.xpHistory));
+        yield put(setModalState(true));
     }
     catch (e) {
         const errors = e.errors ? e.errors : {};

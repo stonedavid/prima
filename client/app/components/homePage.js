@@ -6,6 +6,7 @@ import Display from "./displayComponent";
 import Xp from "./xpComponent.js";
 
 import Sharp from "./sharpSvgComponent.js";
+import Flat from "./flatSvgComponent.js";
 
 const genRandomNoteString = (length) => {
   var string = "";
@@ -21,18 +22,13 @@ const genRandomNoteString = (length) => {
 
 let noteString = genRandomNoteString(3);
 
-console.log(noteString);
-let currentDate = new Date();
-let yesterday = new Date(Date.now() - (1000 * 3600 * 24)).toDateString();
 
      
 const Home = () =>
   (
       <Card>
-        <CardTitle title={yesterday} subtitle="Improve your sight-reading" />
-        <Sharp viewBox={"0 0 1.1 3.0000001"} width="6.8493137"
-   height="18.679947"
- />
+        <CardTitle title={<Sharp style={{width: 60, height: 60}} />} subtitle="Improve your sight-reading" />
+
         <Display
           noteString={noteString}
           active={true}
@@ -46,7 +42,6 @@ const Home = () =>
               }}
               />
         </CardActions>
-        <h2>{currentDate.toDateString()}</h2>
       </Card>
     )
     

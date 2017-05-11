@@ -5,6 +5,8 @@
 
 import React from "react";
 
+import {StickyContainer} from "react-sticky";
+
 import { Router, browserHistory } from 'react-router';
 import routes from "./src/routes.js";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';

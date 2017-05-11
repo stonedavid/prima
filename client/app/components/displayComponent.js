@@ -3,6 +3,8 @@ import CSSTransitionGroup from "react-transition-group/CSSTransitionGroup";
 import Paper from "material-ui/Paper";
 import { Flow } from "vexflow";
 import { createVexFlowChord } from "../game/vexflow.js";
+import Sharp from "./sharpSvgComponent.js";
+import Flat from "./flatSvgComponent.js";
 import Rational from "rational-number";
 import v1 from "node-uuid";
 
@@ -22,6 +24,13 @@ const {
   StaveNote,
 } = Flow;
 
+const styles = {
+  symbols: {
+    position: "absolute",
+    right: "20px"
+  }
+}
+
 class Display extends Component{
   constructor(props) {
     super(props);
@@ -33,7 +42,6 @@ class Display extends Component{
   
   componentDidMount() {
     this.drawCanvas();
-    setTimeout(() => {if(this.props.zDepth) {this.setState({ zDepth: 3})}},300);
   }
   
   componentDidUpdate() {
@@ -212,9 +220,12 @@ class Display extends Component{
 
   }
   render() {
-    
+    const sharp = this.props.accidentals ? (this.props.accidentals.indexOf("#") !== -1) : false;
+    const flat = this.props.accidentals ? (this.props.accidentals.indexOf("b") !== -1) : false;
     return (
       <Paper zDepth={this.state.zDepth} style={{borderRadius: 20, display: "inline-block"}}>
+          {sharp && <Sharp style={{position:"absolute", top: 12, right: flat ? 40 : 20}}/>}
+          {flat && <Flat style={{position:"absolute", top: 12, right: 20}}/>}
           <div ref="vfWrap" style={{
                           padding: 10,
                           borderRadius: 20,

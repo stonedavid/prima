@@ -44,11 +44,37 @@ const childStyle = {
     left: 0
 }
 
+const childStyleBox = {
+    position: "absolute",
+    display: "inline",
+    right: 0,
+    left: 0
+}
+
 const cardStyle = {
     background: "-moz-linear-gradient(top, rgba(244,244,244,1) 0%, rgba(255,255,255,0.74) 26%, rgba(255,255,255,1) 100%)", /* FF3.6-15 */
     background: "-webkit-linear-gradient(top, rgba(244,244,244,1) 0%,rgba(255,255,255,0.74) 26%,rgba(255,255,255,1) 100%)", /* Chrome10-25,Safari5.1-6 */
     background: "linear-gradient(to bottom, rgba(244,244,244,1) 0%,rgba(255,255,255,0.74) 26%,rgba(255,255,255,1) 100%)", /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     margin: 20
+}
+
+
+
+const boxStyle = {
+    
+    position: "absolute",
+    height: 220,
+    width: 180,
+    left: 0,
+    right: 0,
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginTop: "10px",
+    background: "linear-gradient(70deg, #DDD -4%, transparent 61%),linear-gradient(#FFF,#DDD)",
+    zIndex: 998,
+    boxShadow: "0px 10px 60px #333",
+    borderRadius: "20px",
+    border: "5px solid #c9c9c9"
 }
 
 const Interface = ({ noteString, currentScore, currentMIDI, modal }) => {
@@ -63,7 +89,7 @@ const Interface = ({ noteString, currentScore, currentMIDI, modal }) => {
                     transitionEnterTimeout={450}
                     transitionLeaveTimeout={150}
                 >
-                    <div key={noteString} style={childStyle}>
+                    <div key={noteString} style={childStyleBox}>
                         {displayChild}
                     </div>
                 </CSSTransitionGroup>

@@ -12,6 +12,18 @@ import Paper from "material-ui/Paper";
  * 
  **/
  
+ const shadowStyle = {
+     boxShadow: "0px 10px 30px black",
+     position: "absolute",
+     top: 0,
+     right: 0,
+     left: 3,
+     width: "97%",
+     height: "100%",
+     borderRadius: "20px",
+     pointerEvents: "none",
+ };
+ 
 class FloatingTile extends Component {
     constructor(props) {
         super(props);
@@ -20,9 +32,10 @@ class FloatingTile extends Component {
         }
     };
     
-    onMouseOver = () => this.setState({ zDepth: this.props.floatZ});
+    onMouseOver = () => {console.log("mouseover");this.setState({ zDepth: this.props.floatZ});}
     onMouseOut = () => this.setState({ zDepth: this.props.initZ});
     onClick = this.props.onClick;
+    
     
     render() {
         return (
@@ -34,13 +47,14 @@ class FloatingTile extends Component {
                     borderRadius: "20px",
                     padding: 0
                 }}
-                zDepth = { this.state.zDepth }
+                zDepth = { 1 }
                 onMouseOver = { this.onMouseOver }
                 onMouseOut = { this.onMouseOut }
                 onClick = { this.onClick }
                 >
                 { this.props.children }
             </Paper>
+            <div style={Object.assign({},shadowStyle,{opacity: this.state.zDepth})}></div>
         </div>
         );
             

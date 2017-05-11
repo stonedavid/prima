@@ -1,11 +1,14 @@
 import React, { PropTypes } from "react";
 import Nav from "./navBarContainer.js";
+import  { Sticky, StickyContainer } from "react-sticky"
 
 const Base = ({ children }) => (
-    <div>
-        <Nav />
+    <StickyContainer>
+        <Sticky className={"Sticky"} topOffset={-10}>
+                {(props)=> <Nav style={props.style}/>}
+            </Sticky>
         {children}
-    </div>
+    </StickyContainer>
     ); 
     
 Base.propTypes = {

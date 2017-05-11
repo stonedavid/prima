@@ -6,20 +6,23 @@ class Xp extends Component {
         this.state = {
             displayValue: this.props.startValue
         }
+        console.log("START+END", this.props.startValue, this.props.endValue);
     }
     
     componentDidMount() {
-        setTimeout(() => {this.increment()},500);
+        setTimeout(() => this.increment(), 500);
     }
     
     componentDidUpdate() {
+        console.log('xp updated');
         if (this.state.displayValue < this.props.endValue) {
             this.increment();
         }
     }
     
     increment() {
-        const timeout = 1000 / (this.state.endValue - this.props.startValue);
+        const timeout = 1500 / (this.props.endValue - this.props.startValue);
+        console.log("timeout", timeout);
         setTimeout(() => {this.setState({displayValue: this.state.displayValue + 1})}, timeout);
     }
     

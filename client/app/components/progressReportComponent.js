@@ -27,16 +27,25 @@ const styles = {
     chart: {
         margin: 10,
         padding: 10
+    },
+    
+    paper: {
+        display: "inline-block", 
+        borderRadius: 20, 
+        verticalAlign: "top", 
+        margin: 20,
+        maxWidth: 300,
+        maxHeight: 400
     }
 }
 
-const ProgressReport = ({totalXp, xpHistory, details}) => {
+const ProgressReport = ({totalXp, xpHistory, details, style}) => {
     return (
-        <Paper zDepth={3} style={{display: "inline-block", borderRadius: 20, verticalAlign: "top", margin: 20}}>
+        <Paper zDepth={3} style={Object.assign({}, styles.paper, style)}>
             <Card style={styles.card}>
                 <CardTitle title={"Progress Report"} subtitle={`XP Today: ${xpHistory[new Date().toDateString()] || "0"} Total XP: ${totalXp}`}  />
                 <XpHistoryChart xpHistory={xpHistory} style={styles.chart}/>
-                <LessonDetails details={details} />
+                {details && <LessonDetails details={details} />}
             </Card>
         </Paper>
     )

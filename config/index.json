@@ -1,4 +1,4 @@
 {
-    "dbUri": "mongodb://dxstone-prima-4415957:27017/data",
+    "dbUri": "mongodb://stonedavid:Jaurisova6$MLB@ds137801.mlab.com:37801/prima",
     "jwtSecret": "a secret phrase!!"
 }
