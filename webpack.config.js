@@ -27,8 +27,8 @@ module.exports = {
       }
     }),
     new webpack.optimize.DedupePlugin(),
-    /*new webpack.optimize.UglifyJsPlugin({
-      mangle: true,
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: false,
       compress: {
         warnings: false, // Suppress uglification warnings
         pure_getters: true,
@@ -41,7 +41,7 @@ module.exports = {
       },
       exclude: [/\.min\.js$/gi] // skip pre-minified libs
     })
-    */],
+    ],
     module: {
         loaders: [
             {
