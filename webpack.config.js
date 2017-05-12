@@ -30,10 +30,12 @@ module.exports = {
       mangle: true,
       compress: {
         warnings: false, // Suppress uglification warnings
-        pure_getters: false,
-        unsafe: false,
-        unsafe_comps: false,
-        screw_ie8: false
+        pure_getters: true,
+        passes: 2,
+        drop_console: true,
+        unsafe_comps: true,
+        comparisons: true,
+        screw_ie8: true
       },
       output: {
         comments: false,
