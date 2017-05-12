@@ -19,7 +19,6 @@ module.exports = {
     
     plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         // This has effect on the react lib size
@@ -28,10 +27,10 @@ module.exports = {
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      mangle: false,
+      mangle: true,
       compress: {
         warnings: false, // Suppress uglification warnings
-        pure_getters: true,
+        pure_getters: false,
         unsafe: true,
         unsafe_comps: true,
         screw_ie8: true
