@@ -18,9 +18,9 @@ const mapDispatchToProps = (dispatch) => {
             }
             
         },
-        onRelease: (e,midiValue) => {
+        onRelease: (e,midiValue,pressed) => {
             e.preventDefault();
-            if (e.buttons || (e.type == "mouseup")) {
+            if (pressed && (e.buttons || (e.type == "mouseup"))) {
                 dispatch(releaseKeySaga(midiValue));
             }
         }
