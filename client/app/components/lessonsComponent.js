@@ -52,7 +52,7 @@ const styles = {
         display: "inline-block",
         marginTop: 20,
         marginLeft: 20,
-        marginRight: 400,
+        marginRight: "60vw",
         borderRadius: 20,
     }
 };
