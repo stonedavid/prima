@@ -81,12 +81,12 @@ export function* pressKeySaga(action) {
 export function* releaseKeySaga(action) {
     const correctMIDI = yield select(state => state.gameState.currentCard.midiValue);
     const evaluation = correctMIDI == action.midiValue;
-    yield put(releaseKey(action.midiValue));
     yield put(evalNote(action.midiValue));
+    yield put(releaseKey(action.midiValue));
     if (evaluation) {
         yield put(advanceCard());
     } else {
-        yield delay(1000);
+        //yield delay(1000);
         yield put(advanceCard());
     }
     yield call(pollScoreAndSave);
@@ -149,7 +149,7 @@ export function* getUserLessons() {
 export default function* rootSaga() {
     yield takeEvery("LOGIN", loginSaga);
     yield takeEvery("SAVE_CARDS", saveCards);
-    yield takeLatest("PRESS_KEY_SAGA", pressKeySaga);
+    yield takeEvery("PRESS_KEY_SAGA", pressKeySaga);
     yield takeEvery("RELEASE_KEY_SAGA", releaseKeySaga);
     yield takeEvery("GET_USER_LESSONS", getUserLessons);
 }

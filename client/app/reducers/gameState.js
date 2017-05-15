@@ -97,7 +97,7 @@ function gameState(state = {}, action) {
                 });
                 
         case ADVANCE_CARD:
-            
+            console.log("ADVANCE_CARD");
             return Object.assign({}, state, {
                 currentCard: state.nextCard,
                 nextCard: null

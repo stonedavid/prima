@@ -46,7 +46,6 @@ const styles = {
         borderRadius: "inherit",
         display: "inline-block",
         background: "linear-gradient(rgb(244, 244, 244) 0%, rgba(255, 255, 255, 0.741176) 26%, rgb(255, 255, 255) 100%)",
-        minHeight: 1200
     },
     
     paper: {

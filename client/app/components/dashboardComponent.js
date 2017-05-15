@@ -19,7 +19,7 @@ class Dashboard extends Component {
     }
     
     render() {
-        return ( !this.props.lessons.length ? <CircularProgress/> :
+        return ( !this.props.lessons.length ? <CircularProgress size={100} thickness={10} style={{marginTop: 200}}/> :
             <div style={styles.container}>
                 <Lessons lessons={this.props.lessons}/>
                 <ProgressReport />

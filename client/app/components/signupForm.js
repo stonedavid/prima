@@ -5,7 +5,16 @@ import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
 import { browserHistory } from "react-router";
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import MuiThemeProvider  from "material-ui/styles/MuiThemeProvider";
+
+
+const styles = {
+  card: {
+    borderRadius: 20,
+    marginTop: 20,
+    padding: 20,
+    display: "inline-block"
+  }
+}
 
 class LoginForm extends Component {
     constructor(props) {
@@ -40,7 +49,7 @@ class LoginForm extends Component {
     render() {
         return (
             <form onSubmit={(e) => this.props.onSubmit(e,this.state)}>
-                <Card>
+                <Card style={styles.card} zDepth={3}>
                     <CardHeader
                         title="Sign Up"
                         subtitle="Create a user name and password below"

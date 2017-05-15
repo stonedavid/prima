@@ -67,9 +67,9 @@ const BlackKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation,xOffset
         onTouchStart={(e) => onPress(e,midiValue)}
         //onMouseEnter={(e) => onPress(e,midiValue)}
         
-        onMouseUp={(e) => onRelease(e,midiValue)} 
-        onTouchEnd={(e) => onRelease(e,midiValue)}
-        onMouseLeave={(e) => onRelease(e,midiValue)}>
+        onMouseUp={(e) => onRelease(e,midiValue,pressed)} 
+        onTouchEnd={(e) => onRelease(e,midiValue,pressed)}
+        onMouseLeave={(e) => onRelease(e,midiValue,pressed)}>
         <div>
         <CSSTransitionGroup
             transitionName="ripple"
