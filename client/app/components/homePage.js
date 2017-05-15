@@ -22,11 +22,18 @@ const genRandomNoteString = (length) => {
 
 let noteString = genRandomNoteString(3);
 
-
+const styles = {
+  card: {
+    borderRadius: 20,
+    marginTop: 20,
+    padding: 20,
+    display: "inline-block"
+  }
+}
      
 const Home = () =>
   (
-      <Card>
+      <Card zDepth={3} style={styles.card}>
         <CardTitle title={<Sharp style={{width: 60, height: 60}} />} subtitle="Improve your sight-reading" />
 
         <Display

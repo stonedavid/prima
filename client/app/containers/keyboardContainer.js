@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { pressKeySaga, releaseKeySaga, advanceCard } from '../actions/actions.js';
+import { pressKeySaga, releaseKeySaga } from '../actions/actions.js';
 import Keyboard from '../components/keyboardComponent.js';
 
 const mapStateToProps = (state) => {
@@ -18,11 +18,11 @@ const mapDispatchToProps = (dispatch) => {
             }
             
         },
-        onRelease: (e,midiValue) => {
+        onRelease: (e,midiValue,pressed) => {
             e.preventDefault();
-            if (e.buttons || (e.type == "mouseup")) {
+            if (pressed && (e.buttons || (e.type == "mouseup"))) {
+                console.log("RELEASING", midiValue)
                 dispatch(releaseKeySaga(midiValue));
-                dispatch(advanceCard());
             }
         }
         

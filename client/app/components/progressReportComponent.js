@@ -33,9 +33,11 @@ const styles = {
         display: "inline-block", 
         borderRadius: 20, 
         verticalAlign: "top", 
-        margin: 20,
+        marginTop: 20,
+        right: 150,
         maxWidth: 300,
-        maxHeight: 400
+        maxHeight: 400,
+        position: "fixed"
     }
 }
 

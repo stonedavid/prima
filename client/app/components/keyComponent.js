@@ -18,16 +18,16 @@ const WhiteKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation,xOffset
     <span className={"white " + (pressed ? "pressed" : "")} 
         onMouseDown={(e) => onPress(e,midiValue)} 
         onTouchStart={(e) => onPress(e,midiValue)}
-        onMouseEnter={(e) => onPress(e,midiValue)}
+        //onMouseEnter={(e) => onPress(e,midiValue)}
         
-        onMouseUp={(e) => onRelease(e,midiValue)} 
-        onTouchEnd={(e) => onRelease(e,midiValue)}
-        onMouseLeave={(e) => onRelease(e,midiValue)}>
+        onMouseUp={(e) => onRelease(e,midiValue,pressed)} 
+        onTouchEnd={(e) => onRelease(e,midiValue,pressed)}
+        onMouseLeave={(e) => onRelease(e,midiValue,pressed)}>
         <div style={{width:"100%",height:"100%", background:"#fff",opacity:0.99}}>
         <CSSTransitionGroup
             transitionName="ripple"
             transitionEnterTimeout={400}
-            transitionLeave={false}
+            transitionLeaveTimeout={1000}
             >
                 {transitionChild}
         </CSSTransitionGroup>
@@ -65,16 +65,16 @@ const BlackKeyElement = ({onPress,onRelease,midiValue,pressed,evaluation,xOffset
     <span className={"black " + (pressed ? "pressed" : "")} 
         onMouseDown={(e) => onPress(e,midiValue)} 
         onTouchStart={(e) => onPress(e,midiValue)}
-        onMouseEnter={(e) => onPress(e,midiValue)}
+        //onMouseEnter={(e) => onPress(e,midiValue)}
         
-        onMouseUp={(e) => onRelease(e,midiValue)} 
-        onTouchEnd={(e) => onRelease(e,midiValue)}
-        onMouseLeave={(e) => onRelease(e,midiValue)}>
+        onMouseUp={(e) => onRelease(e,midiValue,pressed)} 
+        onTouchEnd={(e) => onRelease(e,midiValue,pressed)}
+        onMouseLeave={(e) => onRelease(e,midiValue,pressed)}>
         <div>
         <CSSTransitionGroup
             transitionName="ripple"
             transitionEnterTimeout={400}
-            transitionLeave={false}
+            transitionLeaveTimeout={1000}
             >
                 {transitionChild}
         </CSSTransitionGroup>

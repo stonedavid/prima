@@ -141,6 +141,8 @@ class Display extends Component{
       return a.add(b);
     }, new Rational(0,1));
     
+    let timeString = time._d === 1 ? time.toString() + "/1" : time.toString();
+    
     /*
      * Iterate over notestring, creating orthogonal bass and treble voices
      */
@@ -164,9 +166,8 @@ class Display extends Component{
     
     
     
-    let trebleVoice = voice(trebleNotes, { time: time.toString() });
-    let bassVoice = voice(bassNotes, { time: time.toString() });
-    
+    let trebleVoice = voice(trebleNotes, { time: timeString });
+    let bassVoice = voice(bassNotes, { time: timeString });
     
     
     system.setOptions({

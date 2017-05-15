@@ -5,7 +5,16 @@ import { Card, CardActions, CardHeader, CardText } from "material-ui/Card";
 import { browserHistory } from "react-router";
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import MuiThemeProvider  from "material-ui/styles/MuiThemeProvider";
+
+
+const styles = {
+  card: {
+    borderRadius: 20,
+    marginTop: 20,
+    padding: 20,
+    display: "inline-block"
+  }
+}
 
 class LoginForm extends Component {
     constructor(props) {
@@ -23,6 +32,7 @@ class LoginForm extends Component {
             userName: "",
             email: "",
             password: "",
+            confirmPassword: "",
             successMessage
         };
         
@@ -38,9 +48,8 @@ class LoginForm extends Component {
     
     render() {
         return (
-        <MuiThemeProvider>
             <form onSubmit={(e) => this.props.onSubmit(e,this.state)}>
-                <Card>
+                <Card style={styles.card} zDepth={3}>
                     <CardHeader
                         title="Sign Up"
                         subtitle="Create a user name and password below"
@@ -68,6 +77,13 @@ class LoginForm extends Component {
                         errorText={this.props.errors.password}
                     />
                     <br/>
+                    <TextField
+                        floatingLabelText="Confirm your password"
+                        type="password"
+                        name={"confirmPassword"}
+                        onChange={this.onChange}
+                    />
+                    <br/>
                     <CardActions>
                         <FlatButton label="Sign up" type="submit" primary={true} />
                         <CardText>
@@ -77,7 +93,6 @@ class LoginForm extends Component {
                     </CardActions>
                 </Card>
             </form>
-        </MuiThemeProvider>
             );
     }
 }

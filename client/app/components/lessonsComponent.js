@@ -45,13 +45,15 @@ const styles = {
         padding: 20,
         borderRadius: "inherit",
         display: "inline-block",
-        background: "linear-gradient(rgb(244, 244, 244) 0%, rgba(255, 255, 255, 0.741176) 26%, rgb(255, 255, 255) 100%)"
+        background: "linear-gradient(rgb(244, 244, 244) 0%, rgba(255, 255, 255, 0.741176) 26%, rgb(255, 255, 255) 100%)",
     },
     
     paper: {
         display: "inline-block",
-        margin: 20,
-        borderRadius: 20
+        marginTop: 20,
+        marginLeft: 20,
+        marginRight: 400,
+        borderRadius: 20,
     }
 };
 
@@ -92,15 +94,19 @@ class Lessons extends Component {
                             style={styles.gridList}
                         >
                             {this.props.lessons.map( lessonMeta => {
-              
-                            let active = lessonMeta.unlocked;
                             
-                            let overdueRatio = ((Date.now() / 1000) - lessonMeta.timestamp) / lessonMeta.period;
-                            console.log("overdueratio",overdueRatio)
-                            let status = 1 / overdueRatio * 0.9; // 90% when lesson is due
-                            console.log("STATUS", status);
-
+                            let levelHeading, active, overdueRatio, status;
+                            
+                            if (lessonMeta.levelHeading) {
+                                levelHeading = lessonMeta.levelHeading;
+                            } else {
+                                active = lessonMeta.unlocked;
+                                overdueRatio = ((Date.now() / 1000) - lessonMeta.timestamp) / lessonMeta.period;
+                                status = 1 / overdueRatio * 0.9; // 90% when lesson is due
+                            }
+                            
                             return (
+                                !levelHeading ?
                                 <GridTile 
                                     style={
                                         { overflow: "visible" }
@@ -123,7 +129,12 @@ class Lessons extends Component {
                                             }
                                         />
                                     }
-                                />
+                                /> : <GridTile
+                                        cols={3}
+                                        children={
+                                            <CardTitle title={"Level 2"} subtitle={lessonMeta.title} />
+                                        }
+                                    />
                             )})
                         }
                         </GridList> 
