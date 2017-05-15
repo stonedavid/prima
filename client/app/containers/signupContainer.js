@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { submitUser, submissionError, changeUrl } from '../actions/actions.js';
+import { login, submissionError, changeUrl } from '../actions/actions.js';
 import SignupForm from "../components/signupForm.js";
 
 const mapStateToProps = (state) => {
@@ -10,16 +10,17 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSubmit: (form,state) => {
+        onSubmit: (form,user) => {
             form.preventDefault();
             
             //AJAX request here:
             
-            const name = encodeURIComponent(state.userName);
-            const email = encodeURIComponent(state.email);
-            const password = encodeURIComponent(state.password);
+            const name = encodeURIComponent(user.userName);
+            const email = encodeURIComponent(user.email);
+            const password = encodeURIComponent(user.password);
+            const confirmPassword = encodeURIComponent(user.confirmPassword);
             
-            const formData = `name=${name}&email=${email}&password=${password}`;
+            const formData = `name=${name}&email=${email}&password=${password}&confirmPassword=${confirmPassword}`;
             
             const xhr = new XMLHttpRequest();
             xhr.open("post","/auth/signup");
@@ -28,7 +29,7 @@ const mapDispatchToProps = (dispatch) => {
             xhr.addEventListener("load", () => {
                 if (xhr.status === 200) {
                     dispatch(submissionError({}));
-                    dispatch(changeUrl("/login"));
+                    dispatch(login(user));
                 } else {
                     const errors = xhr.response.errors ? xhr.response.errors : {};
                     errors.summary = xhr.response.message;

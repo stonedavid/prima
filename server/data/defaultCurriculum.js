@@ -2,8 +2,62 @@
 
 module.exports = {
     
-    "A3-E4_d_q" : {
+    "B3-D4_d_q" : {
         index: 0,
+        name: "B3-D4_d_q",
+        minimumMidi: 59,
+        maximumMidi: 62,
+        accidentals: null,
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "C4-E4_d_q" : {
+        index: 1,
+        name: "C4-E4_d_q",
+        minimumMidi: 60,
+        maximumMidi: 64,
+        accidentals: null,
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "A3-C4_d_q" : {
+        index: 2,
+        name: "A3-C4_d_q",
+        minimumMidi: 57,
+        maximumMidi: 60,
+        accidentals: null,
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "A3-E4_d_q" : {
+        index: 3,
         name: "A3-E4_d_q",
         minimumMidi: 57,
         maximumMidi: 64,
@@ -21,7 +75,7 @@ module.exports = {
     },
     
     "F3-C4_d_q" : {
-        index: 1,
+        index: 4,
         name: "F3-C4_d_q",
         minimumMidi: 53,
         maximumMidi: 60,
@@ -39,7 +93,7 @@ module.exports = {
     },
     
     "C4-G4_d_q" : {
-        index: 2,
+        index: 5,
         name: "C4-G4_d_q",
         minimumMidi: 60,
         maximumMidi: 67,
@@ -57,7 +111,7 @@ module.exports = {
     },
     
     "F3-G4_d_q" : {
-        index: 3,
+        index: 6,
         name: "F3-G4_d_q",
         minimumMidi: 53,
         maximumMidi: 67,
@@ -75,7 +129,7 @@ module.exports = {
     },
     
     "D3-A3_d_q" : {
-        index: 4,
+        index: 7,
         name: "D3-A3_d_q",
         minimumMidi: 50,
         maximumMidi: 57,
@@ -93,7 +147,7 @@ module.exports = {
     },
     
     "E4-B4_d_q" : {
-        index: 5,
+        index: 8,
         name: "E4-B4_d_q",
         minimumMidi: 64,
         maximumMidi: 71,
@@ -111,7 +165,7 @@ module.exports = {
     },
     
     "D3-B4_d_q" : {
-        index: 6,
+        index: 9,
         name: "D3-B4_d_q",
         minimumMidi: 50,
         maximumMidi: 71,
@@ -129,7 +183,7 @@ module.exports = {
     },
     
     "B2-F3_d_q" : {
-        index: 7,
+        index: 10,
         name: "B2-F3_d_q",
         minimumMidi: 47,
         maximumMidi: 53,
@@ -147,7 +201,7 @@ module.exports = {
     },
     
     "G4-D5_d_q" : {
-        index: 8,
+        index: 11,
         name: "G4-D5_d_q",
         minimumMidi: 67,
         maximumMidi: 74,
@@ -165,7 +219,7 @@ module.exports = {
     },
     
     "G2-D3_d_q" : {
-        index: 9,
+        index: 12,
         name: "G2-D3_d_q",
         minimumMidi: 43,
         maximumMidi: 50,
@@ -183,7 +237,7 @@ module.exports = {
     },
     
     "B4-F5_d_q" : {
-        index: 10,
+        index: 13,
         name: "B4-F5_d_q",
         minimumMidi: 71,
         maximumMidi: 77,
@@ -201,7 +255,7 @@ module.exports = {
     },
     
     "G2-F5_d_q" : {
-        index: 11,
+        index: 14,
         name: "G2-F5_d_q",
         minimumMidi: 43,
         maximumMidi: 77,
@@ -221,27 +275,15 @@ module.exports = {
     /**
      * Intermediate Lessons: sharps and flats
      * */
-    
-    "A3-E4_s_q" : {
-        index: 12,
-        name: "A3-E4_s_q",
-        minimumMidi: 57,
-        maximumMidi: 64,
-        accidentals: ["#"],
-        durations: ["q"],
-        completed: false,
-        unlocked: true,
-        difficulty: 0.3,
-        timestamp: 0,
-        period: 21600,
-        timesSeen: 0,
-        timesCorrect: 0,
-        timesIncorrect: 0,
-        timestampReadable: 0
+     
+    "intermediateHeading" : {
+        levelHeading: true,
+        title: "Sharps and Flats",
+        index: 15
     },
     
     "A3-E4_f_q" : {
-        index: 12,
+        index: 16,
         name: "A3-E4_f_q",
         minimumMidi: 56,
         maximumMidi: 64,
@@ -258,11 +300,408 @@ module.exports = {
         timestampReadable: 0
     },
     
+    "A3-E4_s_q" : {
+        index: 17,
+        name: "A3-E4_s_q",
+        minimumMidi: 57,
+        maximumMidi: 64,
+        accidentals: ["#"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
     "A3-E4_sf_q" : {
-        index: 13,
+        index: 18,
         name: "A3-E4_sf_q",
         minimumMidi: 56,
         maximumMidi: 64,
+        accidentals: ["#","b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "F3-C4_f_q" : {
+        index: 19,
+        name: "F3-C4_f_q",
+        minimumMidi: 53,
+        maximumMidi: 60,
+        accidentals: ["b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "F3-C4_s_q" : {
+        index: 20,
+        name: "F3-C4_s_q",
+        minimumMidi: 53,
+        maximumMidi: 61,
+        accidentals: ["#"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "F3-C4_sf_q" : {
+        index: 21,
+        name: "F3-C4_sf_q",
+        minimumMidi: 53,
+        maximumMidi: 61,
+        accidentals: ["#","b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "C4-G4_f_q" : {
+        index: 22,
+        name: "C4-G4_f_q",
+        minimumMidi: 60,
+        maximumMidi: 67,
+        accidentals: ["b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "C4-G4_s_q" : {
+        index: 23,
+        name: "C4-G4_s_q",
+        minimumMidi: 60,
+        maximumMidi: 68,
+        accidentals: ["#"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "C4-G4_sf_q" : {
+        index: 24,
+        name: "C4-G4_sf_q",
+        minimumMidi: 60,
+        maximumMidi: 68,
+        accidentals: ["#","b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "F3-G4_f_q" : {
+        index: 25,
+        name: "F3-G4_f_q",
+        minimumMidi: 53,
+        maximumMidi: 67,
+        accidentals: ["b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "F3-G4_s_q" : {
+        index: 26,
+        name: "F3-G4_s_q",
+        minimumMidi: 53,
+        maximumMidi: 68,
+        accidentals: ["#"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "F3-G4_sf_q" : {
+        index: 27,
+        name: "F3-G4_sf_q",
+        minimumMidi: 53,
+        maximumMidi: 68,
+        accidentals: ["#","b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "D3-A3_f_q" : {
+        index: 28,
+        name: "D3-A3_f_q",
+        minimumMidi: 49,
+        maximumMidi: 57,
+        accidentals: ["b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "D3-A3_s_q" : {
+        index: 29,
+        name: "D3-A3_s_q",
+        minimumMidi: 50,
+        maximumMidi: 58,
+        accidentals: ["#"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "D3-A3_sf_q" : {
+        index: 30,
+        name: "D3-A3_sf_q",
+        minimumMidi: 49,
+        maximumMidi: 58,
+        accidentals: ["#","b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    
+    "E4-B4_f_q" : {
+        index: 31,
+        name: "E4-B4_f_q",
+        minimumMidi: 63,
+        maximumMidi: 71,
+        accidentals: ["b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "E4-B4_s_q" : {
+        index: 32,
+        name: "E4-B4_s_q",
+        minimumMidi: 64,
+        maximumMidi: 71,
+        accidentals: ["#"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "E4-B4_sf_q" : {
+        index: 33,
+        name: "E4-B4_sf_q",
+        minimumMidi: 63,
+        maximumMidi: 71,
+        accidentals: ["#","b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "D3-B4_f_q" : {
+        index: 34,
+        name: "D3-B4_f_q",
+        minimumMidi: 49,
+        maximumMidi: 71,
+        accidentals: ["b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "D3-B4_s_q" : {
+        index: 35,
+        name: "D3-B4_s_q",
+        minimumMidi: 50,
+        maximumMidi: 71,
+        accidentals: ["#"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "D3-B4_sf_q" : {
+        index: 36,
+        name: "D3-B4_sf_q",
+        minimumMidi: 49,
+        maximumMidi: 71,
+        accidentals: ["#","b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "B2-F3_f_q" : {
+        index: 37,
+        name: "B2-F3_f_q",
+        minimumMidi: 46,
+        maximumMidi: 53,
+        accidentals: ["b"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "B2-F3_s_q" : {
+        index: 38,
+        name: "B2-F3_s_q",
+        minimumMidi: 47,
+        maximumMidi: 54,
+        accidentals: ["#"],
+        durations: ["q"],
+        completed: false,
+        unlocked: true,
+        difficulty: 0.3,
+        timestamp: 0,
+        period: 21600,
+        timesSeen: 0,
+        timesCorrect: 0,
+        timesIncorrect: 0,
+        timestampReadable: 0
+    },
+    
+    "B2-F3_sf_q" : {
+        index: 39,
+        name: "B2-F3_sf_q",
+        minimumMidi: 46,
+        maximumMidi: 54,
         accidentals: ["#","b"],
         durations: ["q"],
         completed: false,

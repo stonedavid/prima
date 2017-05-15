@@ -86,8 +86,8 @@ const Interface = ({ noteString, currentScore, currentMIDI, modal }) => {
             <div style={containerStyle}>
                 <CSSTransitionGroup
                     transitionName="slide"
-                    transitionEnterTimeout={450}
-                    transitionLeaveTimeout={150}
+                    transitionEnterTimeout={550}
+                    transitionLeaveTimeout={550}
                 >
                     <div key={noteString} style={childStyleBox}>
                         {displayChild}
@@ -95,7 +95,7 @@ const Interface = ({ noteString, currentScore, currentMIDI, modal }) => {
                 </CSSTransitionGroup>
             </div>
             <div style={progressContainerStyle}>
-                <ProgressBar progress={(currentScore/20) * 100}  />
+                <ProgressBar progress={(currentScore/10) * 100}  />
             </div>
             <Keyboard />
         </Card>

@@ -21,7 +21,7 @@ class Xp extends Component {
     }
     
     increment() {
-        const timeout = 1500 / (this.props.endValue - this.props.startValue);
+        const timeout = 750 / (this.props.endValue - this.props.startValue);
         console.log("timeout", timeout);
         setTimeout(() => {this.setState({displayValue: this.state.displayValue + 1})}, timeout);
     }

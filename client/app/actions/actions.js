@@ -6,6 +6,7 @@ export const GENERATE_KEYS = "GENERATE_KEYS";
 export const CREATE_KEY = "CREATE_KEY";
 export const PRESS_KEY = "PRESS_KEY";
 export const PRESS_KEY_SAGA = "PRESS_KEY_SAGA";
+export const HINT_KEY = "HINT_KEY";
 export const RELEASE_KEY = "RELEASE_KEY";
 export const RELEASE_KEY_SAGA = "RELEASE_KEY_SAGA";
 export const PLAY_MIDI = "PLAY_MIDI";
@@ -71,6 +72,10 @@ export function pressKey(midiValue,evaluation,xOffset,yOffset) {
 
 export function releaseKey(midiValue) {
     return { type: RELEASE_KEY, midiValue: midiValue };
+}
+
+export function hintKey(midiValue, xOffset, yOffset) {
+    return { type: HINT_KEY, midiValue, xOffset, yOffset };
 }
 
 export function playMidi(midiValue) {

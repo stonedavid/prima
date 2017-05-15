@@ -165,7 +165,7 @@ ul#piano li span.black.pressed {
   background:-ms-linear-gradient(-90deg,springgreen,#adffad);
   background:-o-linear-gradient(-90deg,springgreen,#adffad);
   background:linear-gradient(-90deg,springgreen,#adffad);
-  transition: width 200ms ease-in;
+  transition: width 500ms ease-in;
 }
 
 .goldenSVG rect {
@@ -190,10 +190,10 @@ ul#piano li span.black.pressed {
 .slide-enter.slide-enter-active {
   opacity: 1;
   transform: translate(0,0);
-  -webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;
-  -moz-webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;
-  -o-webkit-transition: all 400ms cubic-bezier(.17,.67,.19,1) 50ms;
-  transition: all 400ms cubic-bezier(.17,.67,.19,1.58) 50ms;
+  -webkit-transition: all 1000ms ease-out 50ms;
+  -moz-webkit-transition: all 1000ms cubic-bezier(.17,.67,.19,1) 50ms;
+  -o-webkit-transition: all 1000ms cubic-bezier(.17,.67,.19,1) 50ms;
+  transition: all 500ms ease-out 50ms;
 }
 
 .slide-leave {
@@ -204,7 +204,7 @@ ul#piano li span.black.pressed {
 .slide-leave.slide-leave-active {
   opacity: 0.01;
   transform: translate(-20%,0);
-  transition: all 150ms linear;
+  transition: all 500ms ease-in;
 }
 
 .slide-box-enter {
@@ -247,7 +247,7 @@ ul#piano li span.black.pressed {
 
 .ripple-leave.ripple-leave-active {
   opacity: 0.1;
-  transition: all 50ms linear;
+  transition: all 1s linear;
 }
 
 .ripple-effect-correct{

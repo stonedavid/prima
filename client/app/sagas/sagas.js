@@ -24,7 +24,9 @@ import {
     mountUserLessons,
     updateMeta,
     pressKey,
+    hintKey,
     releaseKey,
+    advanceCard,
     setModalState,
     updateXp,
     GET_USER_LESSONS
@@ -62,21 +64,39 @@ export function* loginSaga(action) {
  **/
 
 export function* pressKeySaga(action) {
-    const correctMIDI = yield select(state => state.gameState.currentCard.midiValue);
+    const currentCard = yield select(state => state.gameState.currentCard);
+    const correctMIDI = currentCard.midiValue;
+    const difficulty = currentCard.difficulty;
+    
     const evaluation = correctMIDI == action.midiValue;
-    yield put(pressKey(action.midiValue, evaluation, action.xOffset, action.yOffset));
+    if (!evaluation && (difficulty > .99)) {
+        yield put(pressKey(action.midiValue, evaluation, action.xOffset, action.yOffset));
+        yield put(hintKey(correctMIDI, action.xOffset, action.yOffset));
+    } else {
+        yield put(pressKey(action.midiValue, evaluation, action.xOffset, action.yOffset));
+    }
+    
 }
 
 export function* releaseKeySaga(action) {
+    const correctMIDI = yield select(state => state.gameState.currentCard.midiValue);
+    const evaluation = correctMIDI == action.midiValue;
     yield put(releaseKey(action.midiValue));
     yield put(evalNote(action.midiValue));
+    if (evaluation) {
+        yield put(advanceCard());
+    } else {
+        yield delay(1000);
+        yield put(advanceCard());
+    }
     yield call(pollScoreAndSave);
     
 }
 
+
 export function* pollScoreAndSave() {
     const score = yield select(state => state.gameState.currentScore);
-    if (score === 20) {
+    if (score === 10) {
         yield put({ type: "SAVE_CARDS" });
     }
 }

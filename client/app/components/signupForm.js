@@ -23,6 +23,7 @@ class LoginForm extends Component {
             userName: "",
             email: "",
             password: "",
+            confirmPassword: "",
             successMessage
         };
         
@@ -38,7 +39,6 @@ class LoginForm extends Component {
     
     render() {
         return (
-        <MuiThemeProvider>
             <form onSubmit={(e) => this.props.onSubmit(e,this.state)}>
                 <Card>
                     <CardHeader
@@ -68,6 +68,13 @@ class LoginForm extends Component {
                         errorText={this.props.errors.password}
                     />
                     <br/>
+                    <TextField
+                        floatingLabelText="Confirm your password"
+                        type="password"
+                        name={"confirmPassword"}
+                        onChange={this.onChange}
+                    />
+                    <br/>
                     <CardActions>
                         <FlatButton label="Sign up" type="submit" primary={true} />
                         <CardText>
@@ -77,7 +84,6 @@ class LoginForm extends Component {
                     </CardActions>
                 </Card>
             </form>
-        </MuiThemeProvider>
             );
     }
 }

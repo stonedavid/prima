@@ -15,6 +15,11 @@ function validateSignupForm(payload) {
         errors.password = "Password must have at least 8 characters";
     }
     
+    if (!payload || payload.password != payload.confirmPassword) {
+        isFormValid = false;
+        errors.password = "Passwords must match" + payload.password + " " + payload.confirmPassword;
+    }
+    
     if (!payload || typeof payload.name !== "string" || payload.name.trim().length === 0) {
         isFormValid = false;
         errors.userName = "Please provide your name";

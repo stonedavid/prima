@@ -7,6 +7,7 @@ import {
     GENERATE_KEYS,
     PRESS_KEY,
     RELEASE_KEY,
+    HINT_KEY,
     CREATE_KEY,
     createKey,
     SET_PLAYER,
@@ -39,15 +40,29 @@ const key = (state = {}, action) => {
                 
             });
             
+        case "HINT_KEY":
+            if (state.midiValue !== action.midiValue) {
+                return state;
+            }
+            
+            return Object.assign({}, state, {
+                pressed: true,
+                evaluation: true,
+                hint: true,
+                xOffset: action.xOffset,
+                yOffset: action.yOffset
+            });
+            
         case "RELEASE_KEY":
-            if (state.midiValue != action.midiValue) {
-                return state
+            if ((state.midiValue != action.midiValue) && (!state.hint)) {
+                return state;
             }
 
             if (state.node) state.node.stop();
             return Object.assign({},state, {
                 pressed: false,
                 node: undefined,
+                hint: false,
                 evaluation: false,
                 xOffset: -50,
                 yOffset: -50
@@ -57,6 +72,7 @@ const key = (state = {}, action) => {
             return {
                 midiValue: action.midiValue,
                 pressed: false,
+                hint: false,
                 xOffset: -50,
                 yOffset: -50
             }
@@ -73,6 +89,11 @@ const keys = (state = [], action) => {
     switch (action.type) {
         
         case "PRESS_KEY":
+            return state.map(k =>
+                key(k,action)
+            )
+            
+        case "HINT_KEY":
             return state.map(k =>
                 key(k,action)
             )
@@ -109,9 +130,14 @@ function keyboard(state = {}, action) {
             }); 
             
         case PRESS_KEY:
-            return Object.assign({},state, {
+            return Object.assign({}, state, {
                 keys: keys(state.keys,action)
-            })
+            });
+            
+        case HINT_KEY:
+            return Object.assign({}, state, {
+                keys: keys(state.keys,action)
+            });
             
         case RELEASE_KEY:
             return Object.assign({},state, {
@@ -145,6 +171,11 @@ function inputDisplay(state = {}, action) {
                 {},action, {
                     node: player.play(action.midiValue, ac.currentTime, { release: 0.3 })
                 });
+                
+        case HINT_KEY:
+            return Object.assign({}, state, {
+                keyboard: keyboard(state.keyboard, action)
+            })
                 
         case RELEASE_KEY:
             return Object.assign({}, state, {
