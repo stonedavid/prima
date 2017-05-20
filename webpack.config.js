@@ -18,9 +18,7 @@ module.exports = {
     },
     
     plugins: [
-    /*new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),*/
+    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         // This has effect on the react lib size
@@ -28,13 +26,14 @@ module.exports = {
       }
     }),
     new webpack.optimize.DedupePlugin(),
-    /*new webpack.optimize.UglifyJsPlugin({
+    new webpack.optimize.UglifyJsPlugin({
       mangle: true,
       compress: {
         warnings: false, // Suppress uglification warnings
         pure_getters: true,
-        unsafe: true,
+        drop_console: true,
         unsafe_comps: true,
+        comparisons: true,
         screw_ie8: true
       },
       output: {
@@ -42,7 +41,7 @@ module.exports = {
       },
       exclude: [/\.min\.js$/gi] // skip pre-minified libs
     })
-    */],
+    ],
     module: {
         loaders: [
             {

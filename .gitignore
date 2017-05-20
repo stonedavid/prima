@@ -1,8 +1,11 @@
 /node_modules
 /.c9
 /Extra
+<<<<<<< HEAD
 /client/bundle.js
 /client/bundle.js.map
 /config/index.json
+=======
+>>>>>>> master
 /data
 mongod
