@@ -34,7 +34,7 @@ const styles = {
         borderRadius: 20, 
         verticalAlign: "top", 
         marginTop: 20,
-        right: 150,
+        right: "10vw",
         maxWidth: 300,
         maxHeight: 400,
         position: "fixed"

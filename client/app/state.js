@@ -42,7 +42,7 @@ const state = {
             size: 49,
             offset: 36,
             settings: {
-                clock: 20
+                clock: 9999
             },
             timestamp: 0,
             errors: null,
