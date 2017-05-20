@@ -3,5 +3,6 @@
 /Extra
 /client/bundle.js
 /client/bundle.js.map
+/config/index.json
 /data
 mongod
