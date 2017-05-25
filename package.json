@@ -39,7 +39,8 @@
     "redux-thunk": "^2.2.0",
     "soundfont-player": "^0.10.5",
     "validator": "^6.2.1",
-    "vexflow": "^1.2.83"
+    "vexflow": "^1.2.83",
+    "webmidi": "^2.0.0-rc.5"
   },
   "scripts": {
     "start": "nodemon server.js",
