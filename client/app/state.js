@@ -46,7 +46,9 @@ const state = {
             },
             timestamp: 0,
             errors: null,
-            modal: false
+            modal: false,
+            modalXpDisplay: {start: 0, end: 0},
+            wrongPause: false
     }
 };
 

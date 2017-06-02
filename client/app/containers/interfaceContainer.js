@@ -2,14 +2,13 @@ import React, { Component, PropTypes } from "react";
 import CSSTransitionGroup from "react-transition-group/CSSTransitionGroup";
 import { connect } from "react-redux"
 
-import Slider from "material-ui/Slider";
 import Card from "material-ui/Card";
 
-import { pressKey, releaseKey, evalSaga } from '../actions/actions.js';
 import Keyboard from '../containers/keyboardContainer.js';
 import Display from "../components/displayComponent.js";
 import ProgressBar from "../components/progressBarComponent.js";
 import Modal from "../containers/modalContainer.js";
+import WrongPauseModal from "../containers/wrongPauseModalContainer.js";
 
 const mapStateToProps = (state) => {
     return {
@@ -100,6 +99,7 @@ const Interface = ({ noteString, currentScore, currentMIDI, modal }) => {
             <Keyboard />
         </Card>
         <Modal/>
+        <WrongPauseModal/>
     </div>
   )
 }

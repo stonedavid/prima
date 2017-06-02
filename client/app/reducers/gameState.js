@@ -1,4 +1,4 @@
-import { EVAL_NOTE, UPDATE_XP, ADVANCE_CARD, MOUNT_CARDS, SET_GAME_USER, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META, SET_MODAL_STATE, LOGOUT, SET_LESSON_DETAILS } from "../actions/actions.js";
+import { EVAL_NOTE, UPDATE_XP, ADVANCE_CARD, MOUNT_CARDS, SET_GAME_USER, SET_WRONG_PAUSE, SET_CLOCK, MOUNT_USER_LESSONS, SAVE_CARDS, SAVE_ERROR, UPDATE_META, SET_MODAL_STATE, SET_MODAL_XP_DISPLAY, LOGOUT, SET_LESSON_DETAILS } from "../actions/actions.js";
 import { calculateNextDueDate } from "../game/sm.js";
 import cleanState from "../state.js";
 
@@ -134,6 +134,18 @@ function gameState(state = {}, action) {
             return Object.assign({}, state, {
                 modal: action.modalState
             });
+            
+        case SET_MODAL_XP_DISPLAY:
+            return Object.assign({}, state, {
+                modalXpDisplay: { start: action.start, end: action.end }
+            })
+            
+        case SET_WRONG_PAUSE:
+            let value = action.wrong ? {right: action.right, wrong: action.wrong } : false;
+            
+            return Object.assign({}, state, {
+                wrongPause: value
+            })
             
         case SET_LESSON_DETAILS:
             return Object.assign({}, state, {

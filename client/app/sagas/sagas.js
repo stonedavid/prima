@@ -28,6 +28,8 @@ import {
     releaseKey,
     advanceCard,
     setModalState,
+    setModalXpDisplay,
+    setWrongPause,
     updateXp,
     GET_USER_LESSONS
 }
@@ -67,11 +69,11 @@ export function* pressKeySaga(action) {
     const currentCard = yield select(state => state.gameState.currentCard);
     const correctMIDI = currentCard.midiValue;
     const difficulty = currentCard.difficulty;
-    
     const evaluation = correctMIDI == action.midiValue;
-    if (!evaluation && (difficulty > .99)) {
+    if (!evaluation && (difficulty > .66)) {
         yield put(pressKey(action.midiValue, evaluation, action.xOffset, action.yOffset));
         yield put(hintKey(correctMIDI, action.xOffset, action.yOffset));
+        yield put(setWrongPause(action.midiValue, correctMIDI));
     } else {
         yield put(pressKey(action.midiValue, evaluation, action.xOffset, action.yOffset));
     }
@@ -80,23 +82,36 @@ export function* pressKeySaga(action) {
 
 export function* releaseKeySaga(action) {
     const correctMIDI = yield select(state => state.gameState.currentCard.midiValue);
+    const wrongPause = yield select(state => state.gameState.wrongPause);
     const evaluation = correctMIDI == action.midiValue;
-    yield put(evalNote(action.midiValue));
+    
     yield put(releaseKey(action.midiValue));
-    if (evaluation) {
-        yield put(advanceCard());
-    } else {
-        //yield delay(1000);
+    if (!wrongPause) {
+        yield put(evalNote(action.midiValue));
         yield put(advanceCard());
     }
     yield call(pollScoreAndSave);
     
 }
 
+export function* clearWrongPauseSaga() {
+    const right = yield select(state => state.gameState.wrongPause.right);
+    const wrong = yield select(state => state.gameState.wrongPause.wrong);
+    yield put(evalNote(wrong));
+    yield put(setWrongPause(false));
+    yield put(releaseKey(right));
+    yield put(releaseKey(wrong));
+    yield put(advanceCard());
+}
+
 
 export function* pollScoreAndSave() {
     const score = yield select(state => state.gameState.currentScore);
-    if (score === 10) {
+    const currentDayXp = yield select(state => state.gameState.player.xpHistory[new Date().toDateString()] || 0);
+    const gameValue = yield select(state => state.gameState.gameValue);
+    if (score === gameValue) {
+        yield put(setModalXpDisplay(currentDayXp, currentDayXp + gameValue));
+        yield put(setModalState(true));
         yield put({ type: "SAVE_CARDS" });
     }
 }
@@ -117,7 +132,7 @@ export function* saveCards() {
         const response = yield call(API.saveCards,form);
         console.log("SAVE RESPONSE", response);
         yield put(updateXp(response.totalXp,response.xpHistory));
-        yield put(setModalState(true));
+        
     }
     catch (e) {
         const errors = e.errors ? e.errors : {};
@@ -152,4 +167,5 @@ export default function* rootSaga() {
     yield takeEvery("PRESS_KEY_SAGA", pressKeySaga);
     yield takeEvery("RELEASE_KEY_SAGA", releaseKeySaga);
     yield takeEvery("GET_USER_LESSONS", getUserLessons);
+    yield takeEvery("CLEAR_WRONG_PAUSE_SAGA", clearWrongPauseSaga)
 }

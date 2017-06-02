@@ -10,7 +10,7 @@ import reducers from './reducers/reducers.js';
 import mySaga from './sagas/sagas.js';
 import initialState from "./state.js";
 
-import { generateKeys, setPlayer, pressKeySaga, releaseKeySaga } from "./actions/actions.js";
+import { generateKeys, setPlayer, pressKeySaga, releaseKeySaga, clearWrongPauseSaga } from "./actions/actions.js";
 import App from './app.js';
 
 
@@ -44,12 +44,22 @@ Soundfont.instrument(ac, 'acoustic_grand_piano')
             store.dispatch(generateKeys(persistedState.gameState.size,persistedState.gameState.offset));
             store.dispatch(setPlayer(piano,ac));
             
+            window.onkeyup = function (e) {
+                if (store.getState().navigation.currentPage === "/interface"
+                    && store.getState().gameState.wrongPause) {
+                    store.dispatch(clearWrongPauseSaga());
+                }
+                
+            };
+            
             if (input) {
             
                 input.addListener('noteon', "all",
                     function (e) {
                     console.log("Received 'noteon' message (" + e.note.number + ").");
-                    if (store.getState().navigation.currentPage === "/interface") {
+                    if (store.getState().navigation.currentPage === "/interface" 
+                        && !store.getState().gameState.modal
+                        && !store.getState().gameState.wrongPause) {
                         store.dispatch(pressKeySaga(parseInt(e.note.number), 20, 150));
                         }
                     }
@@ -58,7 +68,9 @@ Soundfont.instrument(ac, 'acoustic_grand_piano')
                 input.addListener('noteoff', "all",
                     function (e) {
                     console.log("Received 'noteoff' message (" + e.note.number + ").");
-                    if (store.getState().navigation.currentPage === "/interface") {
+                    if (store.getState().navigation.currentPage === "/interface"
+                        && !store.getState().gameState.modal
+                        && !store.getState().gameState.wrongPause) {
                         store.dispatch(releaseKeySaga(parseInt(e.note.number)));
                         }
                     }

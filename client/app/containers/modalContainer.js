@@ -7,8 +7,8 @@ import { setModalState, changeUrl } from "../actions/actions.js";
 const mapStateToProps = (state) => {
     return {
         open: state.gameState.modal,
-        startValue: state.gameState.player.xpHistory[new Date().toDateString()] - state.gameState.gameValue,
-        endValue: state.gameState.player.xpHistory[new Date().toDateString()]
+        startValue: state.gameState.modalXpDisplay.start,
+        endValue: state.gameState.modalXpDisplay.end
     };
 };
 

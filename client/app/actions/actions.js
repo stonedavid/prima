@@ -49,10 +49,13 @@ export const EVAL_NOTE = "EVAL_NOTE";
 export const EVAL_SAGA = "EVAL_SAGA";
 export const SET_LESSON_DETAILS = "SET_LESSON_DETAILS";
 export const ADVANCE_CARD = "ADVANCE_CARD";
+export const SET_WRONG_PAUSE = "SET_WRONG_PAUSE";
+export const CLEAR_WRONG_PAUSE_SAGA = "CLEAR_WRONG_PAUSE_SAGA";
 export const SET_GAME_USER = "SET_GAME_USER";
 export const UPDATE_XP = "UPDATE_XP";
 export const SET_CLOCK = "SET_CLOCK";
 export const SET_MODAL_STATE = "SET_MODAL_STATE";
+export const SET_MODAL_XP_DISPLAY = "SET_MODAL_XP_DISPLAY";
 
 /*
  * action creators
@@ -154,6 +157,14 @@ export function releaseKeySaga(midiValue) {
     return { type: RELEASE_KEY_SAGA, midiValue }
 }
 
+export function setWrongPause(wrong,right) {
+    return { type: SET_WRONG_PAUSE, wrong, right }
+} 
+
+export function clearWrongPauseSaga() {
+    return { type: CLEAR_WRONG_PAUSE_SAGA };
+}
+
 export function advanceCard() {
     return { type: ADVANCE_CARD };
 }
@@ -176,4 +187,7 @@ export function setClock() {
 
 export function setModalState(modalState) {
     return { type: SET_MODAL_STATE, modalState }
+}
+export function setModalXpDisplay(start,end) {
+    return { type: SET_MODAL_XP_DISPLAY, start, end }
 }
